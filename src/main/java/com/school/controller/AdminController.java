@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -29,11 +30,14 @@ public class AdminController {
 
     @RequestMapping(value = "/adminLogin")
     public String adminLogin(@RequestParam("adminUserName") String adminUserName,
-                            @RequestParam("adminPassword") String adminPassword,
-                            HttpSession session){
+                             @RequestParam("adminPassword") String adminPassword,
+                             HttpSession session,
+                             HttpServletRequest request){
         Admin admin = adminService.login(adminUserName, adminPassword);
         if (admin != null){
             session.setAttribute("admin", admin);
+            List<User> list = userService.getAllUser();
+            request.setAttribute("list", list);
             return "forward:/page/adminTable";
         }
         return "redirect:/page/adminLogin";
