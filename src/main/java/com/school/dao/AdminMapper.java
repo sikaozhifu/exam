@@ -10,7 +10,9 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.type.JdbcType;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface AdminMapper {
     @Delete({
         "delete from admin",
@@ -65,4 +67,23 @@ public interface AdminMapper {
         "where adminId = #{adminid,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(Admin record);
+
+    @Select({
+            "select",
+            "adminId, adminUserName, adminName, adminPassword, adminEmail, createupdate, ",
+            "updatetime",
+            "from admin",
+            "where adminUserName = #{adminUserName,jdbcType=VARCHAR}",
+            "and adminPassword = #{adminPassword,jdbcType=VARCHAR}"
+    })
+    @Results({
+            @Result(column="adminId", property="adminid", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="adminUserName", property="adminusername", jdbcType=JdbcType.VARCHAR),
+            @Result(column="adminName", property="adminname", jdbcType=JdbcType.VARCHAR),
+            @Result(column="adminPassword", property="adminpassword", jdbcType=JdbcType.VARCHAR),
+            @Result(column="adminEmail", property="adminemail", jdbcType=JdbcType.VARCHAR),
+            @Result(column="createupdate", property="createupdate", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="updatetime", property="updatetime", jdbcType=JdbcType.TIMESTAMP)
+    })
+    Admin login(String adminUserName,String adminPassword);
 }
