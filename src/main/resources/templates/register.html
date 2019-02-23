@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>英语在线考试系统</title>
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+	<!--<meta name="description" content="Free HTML5 Template by FreeHTML5.co" />-->
+	<!--<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />-->
+  	<!--&lt;!&ndash; Facebook and Twitter integration &ndash;&gt;-->
+	<!--<meta property="og:title" content=""/>-->
+	<!--<meta property="og:image" content=""/>-->
+	<!--<meta property="og:url" content=""/>-->
+	<!--<meta property="og:site_name" content=""/>-->
+	<!--<meta property="og:description" content=""/>-->
+	<!--<meta name="twitter:title" content="" />-->
+	<!--<meta name="twitter:image" content="" />-->
+	<!--<meta name="twitter:url" content="" />-->
+	<!--<meta name="twitter:card" content="" />-->
+
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<!--<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>-->
+
+		<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css" type="text/css">
+		<link rel="stylesheet" th:href="@{/css/animate.css}" href="../static/css/animate.css" type="text/css">
+		<link rel="stylesheet" th:href="@{~/css/sign.css}" href="../static/css/sign.css" type="text/css">
+
+		<!-- Modernizr JS -->
+		<script th:src="@{/js/modernizr-2.6.2.min.js}" src="../static/js/modernizr-2.6.2.min.js"></script>
+		<!-- FOR IE9 below -->
+		<!--[if lt IE 9]>
+		<script th:src="@{/js/respond.min.js}" type="javascript" src="../static/js/respond.min.js"></script>
+	<![endif]-->
+	<!--<script type="javascript">-->
+		<!--$("#register").onclick = function () {-->
+			<!--alert("111");-->
+			<!--var password = $("#password").val();-->
+			<!--var rePassword = $("#re-password").val();-->
+			<!--if (password != rePassword){-->
+				<!--alert("两次密码不同，请重新输入");-->
+				<!--return false;-->
+			<!--}-->
+			<!--$.ajax({-->
+				<!--type:"POST",-->
+				<!--url:"/user/register",-->
+				<!--data:{-->
+					<!--name:$("#name").val(),-->
+					<!--username:$("#username").val(),-->
+					<!--password:$("#password").val(),-->
+					<!--role:$("#role option:selected").val()-->
+				<!--},-->
+				<!--success:function (data) {-->
+					<!--alert(data);-->
+				<!--}-->
+			<!--});-->
+			<!--return true;-->
+		<!--}-->
+	<!--</script>-->
+	</head>
+	<body>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<ul class="menu">
+						<li class="active"><a href="index.html"></a></li>
+<!-- 						<li><a href="index2.html">Style 2</a></li>
+						<li><a href="index3.html">Style 3</a></li> -->
+					</ul>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 col-md-offset-4">
+					
+
+					<!-- Start Sign In Form -->
+					<form th:action="@{/user/register}" class="fh5co-form animate-box" data-animate-effect="fadeIn" th:method="post">
+						<h2>Sign Up</h2>
+						<div class="form-group">
+							<label for="username" class="sr-only">UserName</label>
+							<input type="text" class="form-control" id="username" placeholder="学号" autocomplete="off" name="username">
+						</div>
+						<div class="form-group">
+							<label for="name" class="sr-only">Name</label>
+							<input type="text" class="form-control" id="name" placeholder="姓名" autocomplete="off" name="name">
+						</div>
+						<div class="form-group">
+							<label for="email" class="sr-only">Email</label>
+							<input type="email" class="form-control" id="email" placeholder="邮箱" autocomplete="off" name="email">
+						</div>
+						<div class="form-group">
+							<label for="password" class="sr-only">Password</label>
+							<input type="password" class="form-control" id="password" placeholder="密码" autocomplete="off" name="password">
+						</div>
+						<div class="form-group">
+							<label for="re-password" class="sr-only">Re-type Password</label>
+							<input type="password" class="form-control" id="re-password" placeholder="确认密码" autocomplete="off" name="rePassword">
+						</div>
+						<div class="form-group">
+							<label class="sr-only">Role</label>
+							<select class="form-control" name="role" autocomplete="off">
+									<option value="0">学生</option>
+									<option value="0">教师</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="remember"><input type="checkbox" id="remember"> Remember Me</label>
+						</div>
+						<div class="form-group">
+							<p>Already registered? <a href="login.html" th:href="@{/page/login}">&nbsp;&nbsp;&nbsp;&nbsp;Sign In</a></p>
+						</div>
+						<div class="form-group">
+							<button type="submit" value="" class="btn btn-primary" id="register">Sign Up</button>
+						</div>
+					</form>
+					<!-- END Sign In Form -->
+
+				</div>
+			</div>
+			<div class="row" style="margin-top: 40px;">
+		        <p class="col-xs-12 col-sm-12 text-center slogan">
+		            英语考试，就用轻考试！        </p>
+		        <p class="col-xs-12 col-sm-12 text-center copyright">
+		            版权所有 &copy;2019 北京轻考试信息技术有限公司 保留所有权利 粤ICP备1507084220号        </p>
+		    </div>
+		</div>
+
+		<!-- jQuery -->
+		<script th:src="@{/js/jquery.min.js}" type="javascript" src="../static/js/jquery.min.js"></script>
+		<!-- Bootstrap -->
+		<script th:src="@{/js/bootstrap.min.js}" type="javascript" src="../static/js/bootstrap.min.js"></script>
+		<!-- Placeholder -->
+		<script th:src="@{/js/jquery.placeholder.min.js}" type="javascript" src="../static/js/jquery.placeholder.min.js"></script>
+		<!-- Waypoints -->
+		<script th:src="@{/js/jquery.waypoints.min.js}" type="javascript" src="../static/js/jquery.waypoints.min.js"></script>
+		<!-- Main JS -->
+		<script th:src="@{/js/main.js}" type="javascript" src="../static/js/main.js"></script>
+
+	</body>
+</html>
+
