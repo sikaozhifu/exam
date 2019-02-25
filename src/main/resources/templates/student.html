@@ -1,13 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Student - Admin Template</title>
-    <link rel="stylesheet" href="../static/vendor/simple-line-icons/css/simple-line-icons.css" th:href="@{/vendor/simple-line-icons/css/simple-line-icons.css}">
-    <link rel="stylesheet" href="../static/vendor/font-awesome/css/fontawesome-all.min.css" th:href="@{/vendor/font-awesome/css/fontawesome-all.min.css}">
-    <link rel="stylesheet" href="../static/css/styles.css">
+<head th:include="common/admin::header">
 </head>
 <body class="sidebar-fixed header-fixed">
 <div class="page-wrapper">
@@ -41,7 +34,7 @@
 
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img src="../static/imgs/avatar-1.png" th:src="@{/imgs/avatar-1.png}" class="avatar avatar-sm" alt="logo">
+                    <img src="../static/imgs/avatar-1.png" class="avatar avatar-sm" alt="logo">
                     <span class="small ml-1 d-md-down-none">Student</span>
                 </a>
 
@@ -198,11 +191,5 @@
         </div>
     </div>
 </div>
-<script src="../static/vendor/jquery/jquery.min.js" th:href="@{/vendor/jquery/jquery.min.js}"></script>
-<script src="../static/vendor/popper.js/popper.min.js" th:href="@{/vendor/popper.js/popper.min.js}"></script>
-<script src="../static/vendor/bootstrap/js/bootstrap.min.js" th:href="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
-<script src="../static/vendor/chart.js/chart.min.js" th:href="@{/vendor/chart.js/chart.min.js}"></script>
-<script src="../static/js/carbon.js" th:href="@{/js/carbon.js}"></script>
-<script src="../static/js/demo.js" th:href="@{/js/demo.js}"></script>
 </body>
 </html>

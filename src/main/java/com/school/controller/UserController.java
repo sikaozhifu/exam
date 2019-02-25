@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/user")
@@ -23,19 +24,29 @@ public class UserController {
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
-                        @RequestParam("role") Integer role){
+                        @RequestParam("role") Integer role,
+                        HttpServletRequest request,
+                        HttpSession session){
         User user = userService.login(username, password);
         if (user == null){
-            return "redirect:/page/login";
+            request.setAttribute("loginMessage", "用户名或密码错误");
+            return "forward:/page/login";
         }
         if (role.equals(0)){
             //学生
+            session.setAttribute("login", user);
             return "redirect:/page/studentIndex";
         }else if (role.equals(1)){
-            //老师
-            return "redirect:/page/teacherIndex";
+            //可能为教师
+            //查找数据库中该用户是否为教师
+            if (user.getRole().equals(1)){
+                session.setAttribute("login", user);
+                return "redirect:/page/teacherIndex";
+            }else {
+                request.setAttribute("loginMessage", "您不是教师");
+            }
         }
-        return "redirect:/page/login";
+        return "forward:/page/login";
     }
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
