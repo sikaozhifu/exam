@@ -17,6 +17,11 @@ public class PageController {
         return "register";
     }
 
+    @RequestMapping(value = "/forgot")
+    public String toForgot(){
+        return "forgot";
+    }
+
     @RequestMapping(value = "/adminLogin")
     public String toAdminLogin(){
         return "adminLogin";
