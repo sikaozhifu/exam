@@ -29,4 +29,12 @@ public class PageController {
     public String toAdminIndex(){
         return "adminIndex";
     }
+    @RequestMapping(value = "/studentIndex")
+    public String toStudentIndex(){
+        return "student";
+    }
+    @RequestMapping(value = "/teacherIndex")
+    public String toTeacherIndex(){
+        return "teacher_index";
+    }
 }

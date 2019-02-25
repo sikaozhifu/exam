@@ -21,20 +21,21 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    @ResponseBody
-    public User login(@RequestParam("username") String username,
+    public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
                         @RequestParam("role") Integer role){
+        User user = userService.login(username, password);
+        if (user == null){
+            return "redirect:/page/login";
+        }
         if (role.equals(0)){
             //学生
+            return "redirect:/page/studentIndex";
         }else if (role.equals(1)){
             //老师
+            return "redirect:/page/teacherIndex";
         }
-        User user = userService.login(username, password);
-        if (user != null){
-            return user;
-        }
-        return null;
+        return "redirect:/page/login";
     }
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
