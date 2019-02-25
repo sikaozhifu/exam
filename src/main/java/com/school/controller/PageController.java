@@ -25,4 +25,8 @@ public class PageController {
     public String toAdminTable(){
         return "adminTable";
     }
+    @RequestMapping(value = "/adminIndex")
+    public String toAdminIndex(){
+        return "adminIndex";
+    }
 }
