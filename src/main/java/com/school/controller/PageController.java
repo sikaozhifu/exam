@@ -8,38 +8,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PageController {
 
     @RequestMapping(value = "/login")
-    public String toLogin(){
+    public String toLogin() {
         return "login";
     }
 
     @RequestMapping(value = "/register")
-    public String toRegister(){
+    public String toRegister() {
         return "register";
     }
 
     @RequestMapping(value = "/forgot")
-    public String toForgot(){
+    public String toForgot() {
         return "forgot";
     }
 
     @RequestMapping(value = "/adminLogin")
-    public String toAdminLogin(){
+    public String toAdminLogin() {
         return "adminLogin";
     }
+
+    @RequestMapping(value = "/adminForgot")
+    public String toAdminForgot() {
+        return "adminForgot";
+    }
+
     @RequestMapping(value = "/adminTable")
-    public String toAdminTable(){
+    public String toAdminTable() {
         return "adminTable";
     }
+
     @RequestMapping(value = "/adminIndex")
-    public String toAdminIndex(){
+    public String toAdminIndex() {
         return "adminIndex";
     }
+
     @RequestMapping(value = "/studentIndex")
-    public String toStudentIndex(){
+    public String toStudentIndex() {
         return "student";
     }
+
     @RequestMapping(value = "/teacherIndex")
-    public String toTeacherIndex(){
+    public String toTeacherIndex() {
         return "teacher_index";
     }
 }
