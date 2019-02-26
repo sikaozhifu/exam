@@ -1,125 +1,87 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="common/admin::header">
+<head th:include="admin::header">
 </head>
+<section>
+    <script>
+        //修改user
+        updateUser = function (id) {
+            $.ajax({
+                type: "POST",
+                data: {id: id},
+                url: "/exam/user/getUser",
+                dataType: "json",
+                success: function (data) {
+                    if (data == null) {
+                        window.location.href = ("/exam/admin/getAllUser");
+                    } else {
+                        $("#id").val(data.id);
+                        $("#username").val(data.username);
+                        $("#name").val(data.name);
+                        $("#email").val(data.email);
+                        $("#role").val(data.role);
+                        $("#modal-update").modal();
+                    }
+                }
+            });
+        }
+        updateConfirm = function () {
+            $.ajax({
+                type: "POST",
+                url: "/exam/user/update",
+                data: {
+                    id: $("#id").val(),
+                    username: $("#username").val(),
+                    name: $("#name").val(),
+                    email: $("#email").val(),
+                    role: $("#role").val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data == null) {
+                        alert("修改失败！请联系管理员...");
+                    } else {
+                        $.each(data, function (key, value) {
+                            alert(value);
+                        })
+                    }
+                    $("#modal-update").modal('hide');
+                    window.location.href = ("/exam/admin/getAllUser");
+                }
+            });
+        }
+        //删除user
+        deleteUser = function (id) {
+            $("#deleteId").val(id);
+            $("#modal-delete").modal();
+        }
+        deleteConfirm = function () {
+            $.ajax({
+                type: "POST",
+                data: {id: $("#deleteId").val()},
+                url: "/exam/user/delete",
+                dataType: "json",
+                success: function (data) {
+                    if (data == null) {
+                        alert("删除失败！请联系管理员...");
+                    } else {
+                        alert("删除成功！");
+                    }
+                    $("#modal-delete").modal('hide');
+                    window.location.href = ("/exam/admin/getAllUser");
+                }
+            });
+        }
+
+    </script>
+</section>
 <body class="sidebar-fixed header-fixed">
 <div class="page-wrapper">
-    <nav class="navbar page-header">
-        <a href="#" class="btn btn-link sidebar-mobile-toggle d-md-none mr-auto">
-            <i class="fa fa-bars"></i>
-        </a>
-
-        <a class="navbar-brand" href="#">
-            <img src="../static/imgs/logo.png" alt="logo">
-        </a>
-
-        <a href="#" class="btn btn-link sidebar-toggle d-md-down-none">
-            <i class="fa fa-bars"></i>
-        </a>
-
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item d-md-down-none">
-                <a href="#">
-                    <i class="fa fa-bell"></i>
-                    <span class="badge badge-pill badge-danger">5</span>
-                </a>
-            </li>
-
-            <li class="nav-item d-md-down-none">
-                <a href="#">
-                    <i class="fa fa-envelope-open"></i>
-                    <span class="badge badge-pill badge-danger">5</span>
-                </a>
-            </li>
-
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                   aria-expanded="false">
-                    <img src="../static/imgs/avatar-1.png" class="avatar avatar-sm" alt="logo">
-                    <span class="small ml-1 d-md-down-none">Teacher</span>
-                </a>
-
-                <div class="dropdown-menu dropdown-menu-right">
-                    <div class="dropdown-header">Account</div>
-
-                    <a href="#" class="dropdown-item">
-                        <i class="fa fa-user"></i> Profile
-                    </a>
-
-                    <a href="#" class="dropdown-item">
-                        <i class="fa fa-envelope"></i> Messages
-                    </a>
-
-                    <div class="dropdown-header">Settings</div>
-
-                    <a href="#" class="dropdown-item">
-                        <i class="fa fa-bell"></i> Notifications
-                    </a>
-
-                    <a href="#" class="dropdown-item">
-                        <i class="fa fa-wrench"></i> Settings
-                    </a>
-
-                    <a href="#" class="dropdown-item">
-                        <i class="fa fa-lock"></i> Logout
-                    </a>
-                </div>
-            </li>
-        </ul>
-    </nav>
-
+    <!--导入上边栏-->
+    <nav class="navbar page-header" th:include="admin::admin-navbar"></nav>
+    <!--导入侧边栏-->
     <div class="main-container">
-        <div class="sidebar">
-            <nav class="sidebar-nav">
-                <ul class="nav">
-                    <li class="nav-title">Navigation</li>
-
-                    <li class="nav-item">
-                        <a href="index.html" class="nav-link">
-                            <i class="icon icon-speedometer"></i> 试卷管理
-                        </a>
-                    </li>
-
-                    <li class="nav-item nav-dropdown">
-                        <a href="#" class="nav-link nav-dropdown-toggle">
-                            <i class="icon icon-target"></i> 题库管理 <i class="fa fa-caret-left"></i>
-                        </a>
-
-                        <ul class="nav-dropdown-items">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="icon icon-target"></i> 新增试题
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="container.html" class="nav-link">
-                                    <i class="icon icon-target"></i> 试题分类
-                                </a>
-
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="icon icon-target"></i> 导入试题
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active">
-                            <i class="icon icon-energy"></i> 考生管理
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="icon icon-graph"></i> 统计分析
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+        <div class="sidebar" th:include="admin::admin-sidebar">
         </div>
 
         <div class="content">
@@ -151,8 +113,12 @@
                                         <td th:text="${user.email}">$800</td>
                                         <td th:text="${user.role}==0?'学生':'教师'"></td>
                                         <td>
-                                            <button class="btn btn-sm btn-primary">修改</button>
-                                            <button class="btn btn-sm btn-danger">删除</button>
+                                            <button id="update-btn" class="btn btn-outline-primary"
+                                                    th:onclick="'javascript:updateUser('+${user.id}+');'">修改
+                                            </button>
+                                            <button id="delete-btn" class="btn btn-outline-danger" data-toggle="modal"
+                                                    th:onclick="'javascript:deleteUser('+${user.id}+');'">删除
+                                            </button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -161,6 +127,77 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary border-0">
+                <h5 class="modal-title text-white">用户修改</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!--输入框-->
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="id" class="form-control-label">序号</label>
+                            <input id="id" class="form-control" value="" readonly/>
+                        </div>
+                        <div class="form-group">
+                            <label for="username" class="form-control-label">学号</label>
+                            <input id="username" class="form-control" value=""/>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="form-control-label">姓名</label>
+                            <input id="name" class="form-control" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-control-label">邮箱</label>
+                            <input id="email" class="form-control" value="" type="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="role">角色</label>
+                            <select id="role" class="form-control">
+                                <option value="0">学生</option>
+                                <option value="1">教师</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" th:onclick="'javascript:updateConfirm()'">Continue
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger border-0">
+                <h5 class="modal-title text-white">用户删除</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body p-5">
+                您确认要删除该用户吗？
+                <input type="hidden" id="deleteId" name="deleteId"/>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" th:onclick="'javascript:deleteConfirm()'">Continue</button>
             </div>
         </div>
     </div>

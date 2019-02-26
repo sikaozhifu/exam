@@ -30,7 +30,7 @@ public class AdminController {
                              HttpSession session) {
         Admin admin = adminService.login(adminUserName, adminPassword);
         if (admin != null) {
-            session.setAttribute("login", admin);
+            session.setAttribute("admin", admin);
             return "redirect:/page/adminIndex";
         }
         return "redirect:/page/adminLogin";
@@ -38,12 +38,12 @@ public class AdminController {
 
     @RequestMapping(value = "/getAllUser")
     public String adminGetAllUser(HttpSession session, HttpServletRequest request) {
-        Admin admin = (Admin) session.getAttribute("login");
+        Admin admin = (Admin) session.getAttribute("admin");
         if (admin != null){
             List<User> list = userService.getAllUser();
             request.setAttribute("list", list);
             return "forward:/page/adminTable";
         }
-        return "redirect:/page/adminIndex";
+        return "redirect:/page/adminLogin";
     }
 }

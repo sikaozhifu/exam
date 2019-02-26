@@ -14,4 +14,8 @@ public interface UserService {
     Integer register(User user);
 
     User getUserByUserName(String username);
+
+    Integer deleteUserById(Integer id);
+
+    Integer updateUser(User user);
 }

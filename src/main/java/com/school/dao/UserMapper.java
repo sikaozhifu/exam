@@ -42,7 +42,6 @@ public interface UserMapper {
         @Result(column="password", property="password", jdbcType=JdbcType.VARCHAR),
         @Result(column="email", property="email", jdbcType=JdbcType.VARCHAR),
         @Result(column="role", property="role", jdbcType=JdbcType.INTEGER),
-        @Result(column="createtime", property="createtime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="updatetime", property="updatetime", jdbcType=JdbcType.TIMESTAMP)
     })
     User selectByPrimaryKey(Integer id);
@@ -57,7 +56,6 @@ public interface UserMapper {
           "password = #{password,jdbcType=VARCHAR},",
           "email = #{email,jdbcType=VARCHAR},",
           "role = #{role,jdbcType=INTEGER},",
-          "createtime = #{createtime,jdbcType=TIMESTAMP},",
           "updatetime = now()",
         "where id = #{id,jdbcType=INTEGER}"
     })
