@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/page")
 public class PageController {
 
+    //first
+
     @RequestMapping(value = "/login")
     public String toLogin() {
         return "login";
@@ -21,6 +23,8 @@ public class PageController {
     public String toForgot() {
         return "forgot";
     }
+
+    //admin
 
     @RequestMapping(value = "/adminLogin")
     public String toAdminLogin() {
@@ -42,6 +46,8 @@ public class PageController {
         return "adminIndex";
     }
 
+    //student
+
     @RequestMapping(value = "/studentIndex")
     public String toStudentIndex() {
         return "studentIndex";
@@ -57,6 +63,14 @@ public class PageController {
         return "studentTable";
     }
 
+    @RequestMapping(value = "/indexPage")
+    public String toIndexPage(){
+        return "indexPage";
+    }
+    @RequestMapping(value = "/examPage")
+    public String toExamPage(){
+        return "examPage";
+    }
     @RequestMapping(value = "/teacherIndex")
     public String toTeacherIndex() {
         return "teacher_index";

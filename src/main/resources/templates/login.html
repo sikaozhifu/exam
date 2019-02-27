@@ -1,33 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head th:include="first::header">
-    <script type="javascript">
-        $("#login").onclick = function () {
-            alert("hello");
-            // $.ajax({
-            //    type:"POST",
-            //     url:"/user/login",
-            //     data:{
-            //         username:$("#username").val(),
-            //         password:$("#password").val(),
-            //         role:$("#role option:selected").val()
-            //     },
-            //     success:function (data) {
-            //         alert(data);
-            //     }
-            // });
-        }
-
-    </script>
-</head>
+<head th:include="first::header"></head>
 <body>
 
 <div class="container">
     <div class="row">
         <div class="col-md-12 text-center">
             <ul class="menu">
-                <!--<li class="active"><a href="index.html"></a></li>-->
+                <!--<li class="active"><a href="indexPage.html"></a></li>-->
                 <!-- 						<li><a href="index2.html">Style 2</a></li>
                                         <li><a href="index3.html">Style 3</a></li> -->
             </ul>
