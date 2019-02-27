@@ -1,5 +1,7 @@
 package com.school.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.school.dao.UserMapper;
 import com.school.entity.User;
 import com.school.service.UserService;
@@ -46,5 +48,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer updateUser(User user) {
         return userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public PageInfo<User> getAllUserByPage(Integer currentPage, Integer pageSize) {
+        //设置分页信息保存到threadLocal中
+        PageHelper.startPage(currentPage, pageSize);//一定要放在查询之前
+
+        //紧跟着的第一个select方法会被分页，userMapper会被PageInterceptor截拦,截拦器会从threadLocal中取出分页信息，把分页信息加到sql语句中，实现了分页查旬
+        List<User> list = userMapper.getAllUser();
+        PageInfo<User> pageInfo = new PageInfo<>(list);
+        return pageInfo;
     }
 }

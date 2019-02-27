@@ -1,5 +1,6 @@
 package com.school.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.school.entity.Admin;
 import com.school.entity.User;
 import com.school.service.AdminService;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -37,11 +37,13 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/getAllUser")
-    public String adminGetAllUser(HttpSession session, HttpServletRequest request) {
+    public String adminGetAllUser(@RequestParam(value = "currentPage",defaultValue = "1") Integer currentPage,
+                                  @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
+                                  HttpSession session, HttpServletRequest request) {
         Admin admin = (Admin) session.getAttribute("admin");
         if (admin != null){
-            List<User> list = userService.getAllUser();
-            request.setAttribute("list", list);
+            PageInfo<User> pageInfo = userService.getAllUserByPage(currentPage, pageSize);
+            request.setAttribute("pageInfo", pageInfo);
             return "forward:/page/adminTable";
         }
         return "redirect:/page/adminLogin";

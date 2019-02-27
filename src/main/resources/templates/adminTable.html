@@ -105,7 +105,7 @@
                                         <th>操作</th>
                                     </tr>
                                     </thead>
-                                    <tbody th:each="user:${list}">
+                                    <tbody th:each="user:${pageInfo.list}">
                                     <tr>
                                         <td th:text="${user.id}">1</td>
                                         <td class="text-nowrap" th:text="${user.name}">Samsung Galaxy S8</td>
@@ -128,7 +128,49 @@
                     </div>
                 </div>
             </div>
+            <div class="fixed-table-pagination" style="display: block;" >
+                <div class="pull-left pagination-detail">
+                    <span class="pagination-info">显示第 <span th:text="${pageInfo.startRow}"></span> 到第 <span th:text="${pageInfo.endRow}"></span> 条记录，总共 <span th:text="${pageInfo.total}"></span>条记录</span>
+                    <span class="page-list">每页显示
+                        <span class="btn-group dropdown">
+                            <button type="button" class="btn btn-default  dropdown-toggle" data-toggle="dropdown">
+                                <span class="page-size"  th:text="${pageInfo.pageSize}" ></span>
+                                 <span class="caret"></span>
+                             </button>
+                                <ul class="dropdown-menu" role="menu">
+                                <li  th:class="${pageInfo.pageSize== 5 }?'active':''"><a th:href="@{/admin/getAllUser(pageSize=5)}" >5</a></li>
+                                <li  th:class="${pageInfo.pageSize== 8 }?'active':''"><a th:href="@{/admin/getAllUser(pageSize=8)}" >8</a></li>
+                             </ul>
+                         </span>条记录
+	                </span>
+
+                </div>
+            </div>
+            <nav aria-label="Page navigation">
+                <ul class="pager">
+                    <li th:class="${pageInfo.hasPreviousPage}?'':'previous disabled'">
+                        <a th:href="@{/admin/getAllUser(currentPage=${pageInfo.prePage})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <!--← Previous-->
+                        </a>
+                    </li>
+                    <th:block th:each="nav:${pageInfo.navigatepageNums}">
+                        <li th:class="${nav==pageInfo.pageNum}?'active':''">
+                            <a th:href="@{/admin/getAllUser(currentPage=${nav})}" th:text="${nav}"></a>
+                        </li>
+                    </th:block>
+                    <li th:class="${pageInfo.hasNextPage}?'':'next disabled'">
+                        <a th:href="@{/admin/getAllUser(currentPage=${pageInfo.nextPage})}" aria-label="Next">
+                            <!--Next →-->
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
+
+    </div>
+
     </div>
 </div>
 <div class="modal fade" id="modal-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

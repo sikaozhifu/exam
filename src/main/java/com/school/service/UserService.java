@@ -1,5 +1,6 @@
 package com.school.service;
 
+import com.github.pagehelper.PageInfo;
 import com.school.entity.User;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface UserService {
     Integer deleteUserById(Integer id);
 
     Integer updateUser(User user);
+
+    PageInfo<User> getAllUserByPage(Integer currentPage, Integer pageSize);
 }
