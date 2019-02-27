@@ -44,7 +44,17 @@ public class PageController {
 
     @RequestMapping(value = "/studentIndex")
     public String toStudentIndex() {
-        return "student";
+        return "studentIndex";
+    }
+
+    @RequestMapping(value = "/studentStart")
+    public String toStudentStart() {
+        return "studentStart";
+    }
+
+    @RequestMapping(value = "/studentTable")
+    public String toStudentTable() {
+        return "studentTable";
     }
 
     @RequestMapping(value = "/teacherIndex")
