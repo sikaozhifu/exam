@@ -71,6 +71,10 @@ public class PageController {
     public String toExamPage(){
         return "examPage";
     }
+    @RequestMapping(value = "/addQuestion")
+    public String toAddQuestion(){
+        return "addQuestion";
+    }
     @RequestMapping(value = "/teacherIndex")
     public String toTeacherIndex() {
         return "teacher_index";
