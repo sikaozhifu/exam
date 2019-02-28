@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin::header"></head>
+<section>
+    <script>
+        //修改user
+        updateUser = function (id) {
+            $.ajax({
+                type: "POST",
+                data: {id: id},
+                url: "/exam/user/getUser",
+                dataType: "json",
+                success: function (data) {
+                    if (data == null) {
+                        window.location.href = ("/exam/admin/getAllUser");
+                    } else {
+                        $("#id").val(data.id);
+                        $("#username").val(data.username);
+                        $("#name").val(data.name);
+                        $("#email").val(data.email);
+                        $("#role").val(data.role);
+                        $("#modal-update").modal();
+                    }
+                }
+            });
+        }
+        updateConfirm = function () {
+            $.ajax({
+                type: "POST",
+                url: "/exam/user/update",
+                data: {
+                    id: $("#id").val(),
+                    username: $("#username").val(),
+                    name: $("#name").val(),
+                    email: $("#email").val(),
+                    role: $("#role").val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data == null) {
+                        alert("修改失败！请联系管理员...");
+                    } else {
+                        $.each(data, function (key, value) {
+                            alert(value);
+                        })
+                    }
+                    $("#modal-update").modal('hide');
+                    window.location.href = ("/exam/admin/getAllUser");
+                }
+            });
+        }
+        //删除user
+        deleteUser = function (id) {
+            $("#deleteId").val(id);
+            $("#modal-delete").modal();
+        }
+        deleteConfirm = function () {
+            $.ajax({
+                type: "POST",
+                data: {id: $("#deleteId").val()},
+                url: "/exam/user/delete",
+                dataType: "json",
+                success: function (data) {
+                    if (data == null) {
+                        alert("删除失败！请联系管理员...");
+                    } else {
+                        alert("删除成功！");
+                    }
+                    $("#modal-delete").modal('hide');
+                    window.location.href = ("/exam/admin/getAllUser");
+                }
+            });
+        }
+
+    </script>
+</section>
+<body class="sidebar-fixed header-fixed">
+<div class="page-wrapper">
+    <!--导入上边栏-->
+    <nav class="navbar page-header" th:include="admin::admin-navbar"></nav>
+
+    <div class="main-container">
+        <!--导入侧边栏-->
+        <div class="sidebar" th:include="admin::admin-sidebar"></div>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card p-4">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <!-- <span class="h4 d-block font-weight-normal mb-2">54</span> -->
+                                    <span class="font-weight-light">选词填空</span>
+                                </div>
+
+                                <div class="h2 text-muted">
+                                    <i class="icon icon-people"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card p-4">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <!-- <span class="h4 d-block font-weight-normal mb-2">$32,400</span> -->
+                                    <span class="font-weight-light">长篇阅读</span>
+                                </div>
+
+                                <div class="h2 text-muted">
+                                    <i class="icon icon-clock"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card p-4">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <!-- <span class="h4 d-block font-weight-normal mb-2">900</span> -->
+                                    <span class="font-weight-light">仔细阅读</span>
+                                </div>
+
+                                <div class="h2 text-muted">
+                                    <i class="icon icon-wallet"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					
+					<div class="col-md-3">
+					    <div class="card p-4">
+					        <div class="card-body d-flex justify-content-between align-items-center">
+					            <div>
+					                <!-- <span class="h4 d-block font-weight-normal mb-2">900</span> -->
+					                <span class="font-weight-light">汉译英</span>
+					            </div>
+					
+					            <div class="h2 text-muted">
+					                <i class="icon icon-wallet"></i>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+					
+					<div class="col-md-3">
+					    <div class="card p-4">
+					        <div class="card-body d-flex justify-content-between align-items-center">
+					            <div>
+					                <!-- <span class="h4 d-block font-weight-normal mb-2">900</span> -->
+					                <span class="font-weight-light">写作</span>
+					            </div>
+					
+					            <div class="h2 text-muted">
+					                <i class="icon icon-wallet"></i>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+					
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                题库列表
+                            </div>
+
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>标题</th>
+                                            <th>类型</th>
+                                            <th>难度</th>
+                                            <th>作者</th>
+                                            <th>分值</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody th:each="model:${list}">
+                                        <tr>
+                                            <td th:text="${model.modelId}">1</td>
+                                            <td class="text-nowrap" th:text="${model.title}">Samsung Galaxy S8</td>
+                                            <td th:text="${model.type}">31,589</td>
+                                            <td th:text="${model.difficulty}">$800</td>
+                                            <td th:text="${model.author}"></td>
+                                            <td th:text="${model.grade}"></td>
+                                            <td>
+                                                <button id="update-btn" class="btn btn-outline-primary"
+                                                        th:onclick="'javascript:updateUser('+${model.modelId}+');'">修改
+                                                </button>
+                                                <button id="delete-btn" class="btn btn-outline-danger" data-toggle="modal"
+                                                        th:onclick="'javascript:deleteUser('+$${model.modelId}+');'">删除
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary border-0">
+                <h5 class="modal-title text-white">用户修改</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!--输入框-->
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="id" class="form-control-label">序号</label>
+                            <input id="id" class="form-control" value="" readonly/>
+                        </div>
+                        <div class="form-group">
+                            <label for="username" class="form-control-label">学号</label>
+                            <input id="username" class="form-control" value=""/>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="form-control-label">姓名</label>
+                            <input id="name" class="form-control" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-control-label">邮箱</label>
+                            <input id="email" class="form-control" value="" type="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="role">角色</label>
+                            <select id="role" class="form-control">
+                                <option value="0">学生</option>
+                                <option value="1">教师</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" th:onclick="'javascript:updateConfirm()'">Continue
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger border-0">
+                <h5 class="modal-title text-white">用户删除</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body p-5">
+                您确认要删除该用户吗？
+                <input type="hidden" id="deleteId" name="deleteId"/>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" th:onclick="'javascript:deleteConfirm()'">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

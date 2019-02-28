@@ -23,44 +23,44 @@
                   <!--</div>-->
                     <div class="col-md-4" style="font-size: 20px">
                       <div class="form-group">
-                          <label for="normal-input" class="form-control-label">标题</label>
-                          <input id="normal-input" class="form-control" value="" placeholder="请输入标题" required>
+                          <label for="title" class="form-control-label">标题</label>
+                          <input name="title" id="title" class="form-control" value="" placeholder="请输入标题" required>
                       </div>
                       <div class="form-group">
-                          <label for="textarea1" >试题</label>
-                          <textarea id="textarea1" class="form-control" rows="10" placeholder="请输入试题" required></textarea>
+                          <label for="content" >试题</label>
+                          <textarea name="content" id="content" class="form-control" rows="10" placeholder="请输入试题" required></textarea>
                       </div>
                       <div class="form-group">
-                          <label for="textarea2">答案顺序</label>
-                          <textarea id="textarea2" class="form-control" rows="6" placeholder="答案顺序用 | 隔开" required></textarea>
+                          <label for="answer">答案顺序</label>
+                          <textarea name="answer" id="answer" class="form-control" rows="6" placeholder="答案顺序用 | 隔开" required></textarea>
                       </div>
                       <div class="form-group">
-                          <label for="question-type">试题类别</label>
-                          <select id="question-type" class="form-control" required>
-                              <option>选词填空</option>
-                              <option>阅读理解</option>
-                              <option>写作</option>
-                              <option>翻译</option>
-                              <option>段落匹配</option>
+                          <label for="type">试题类别</label>
+                          <select name="type" id="type" class="form-control" required>
+                              <option value="0">选词填空</option>
+                              <option value="1">阅读理解</option>
+                              <option value="2">写作</option>
+                              <option value="3">翻译</option>
+                              <option value="4">段落匹配</option>
                           </select>
                       </div>
                       <div class="form-group">
-                          <label for="textarea3">解析</label>
-                          <textarea id="textarea3" class="form-control" rows="10" placeholder="请输入解析"></textarea>
+                          <label for="analysis">解析</label>
+                          <textarea name="analysis" id="analysis" class="form-control" rows="10" placeholder="请输入解析"></textarea>
                       </div>
                       <div class="form-group">
-                          <label for="question-grade">试题分值</label>
-                          <select id="question-grade" class="form-control" required>
-                              <option>5</option>
-                              <option>7.5</option>
-                              <option>10</option>
-                              <option>14.5</option>
-                              <option>15</option>
+                          <label for="grade">试题分值</label>
+                          <select name="grade" id="grade" class="form-control" required>
+                              <option>35.5</option>
+                              <option>71</option>
+                              <option>106.5</option>
+                              <option>106.5</option>
+                              <option>142</option>
                           </select>
                       </div>
                       <div class="form-group">
-                          <label for="question-difficulty">试题难度</label>
-                          <select id="question-difficulty" class="form-control" required>
+                          <label for="difficulty">试题难度</label>
+                          <select name="difficulty" id="difficulty" class="form-control" required>
                               <option value="0">简单</option>
                               <option value="1">一般</option>
                               <option value="2">困难</option>

@@ -64,17 +64,25 @@ public class PageController {
     }
 
     @RequestMapping(value = "/indexPage")
-    public String toIndexPage(){
+    public String toIndexPage() {
         return "indexPage";
     }
+
     @RequestMapping(value = "/examPage")
-    public String toExamPage(){
+    public String toExamPage() {
         return "examPage";
     }
-    @RequestMapping(value = "/addQuestion")
-    public String toAddQuestion(){
-        return "addQuestion";
+
+    @RequestMapping(value = "/addModel")
+    public String toAddQuestion() {
+        return "addModel";
     }
+
+    @RequestMapping(value = "/modelList")
+    public String toModelList() {
+        return "modelList";
+    }
+
     @RequestMapping(value = "/teacherIndex")
     public String toTeacherIndex() {
         return "teacher_index";
