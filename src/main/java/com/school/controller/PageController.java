@@ -74,7 +74,7 @@ public class PageController {
     }
 
     @RequestMapping(value = "/addModel")
-    public String toAddQuestion() {
+    public String toAddModel() {
         return "addModel";
     }
 
@@ -86,5 +86,10 @@ public class PageController {
     @RequestMapping(value = "/teacherIndex")
     public String toTeacherIndex() {
         return "teacher_index";
+    }
+
+    @RequestMapping(value = "/addExam")
+    public String toAddExam() {
+        return "add_exam";
     }
 }

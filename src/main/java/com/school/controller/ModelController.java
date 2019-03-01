@@ -58,6 +58,15 @@ public class ModelController {
         return "forward:/page/modelList";
     }
 
+    @RequestMapping(value = "/getALLModel",method = RequestMethod.POST)
+    @ResponseBody
+    public List<ModelVo> getALLModel(@RequestParam("type") Integer type){
+        if (type == null||type.equals("")||type == 0){
+            return modelService.selectAll();
+        }
+        return modelService.selectByType(type);
+    }
+
     @RequestMapping(value = "/getModel",method = RequestMethod.POST)
     @ResponseBody
     public ModelVo getModel(@RequestParam("modelId") Integer modelId){

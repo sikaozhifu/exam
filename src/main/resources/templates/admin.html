@@ -99,10 +99,25 @@
         <ul class="nav">
             <li class="nav-title">Navigation</li>
 
-            <li class="nav-item">
-                <a href="indexPage.html" class="nav-link">
-                    <i class="icon icon-speedometer"></i> 试卷管理
+            <li class="nav-item nav-dropdown">
+                <a href="#" class="nav-link nav-dropdown-toggle">
+                    <i class="icon icon-target"></i> 试卷管理 <i class="fa fa-caret-left"></i>
                 </a>
+
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                        <a href="add_exam.html" th:href="@{/page/addExam}" class="nav-link">
+                            <i class="icon icon-target"></i> 新增试卷
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="modelList.html" class="nav-link">
+                            <i class="icon icon-target"></i> 查看试卷
+                        </a>
+
+                    </li>
+                </ul>
             </li>
 
             <li class="nav-item nav-dropdown">
