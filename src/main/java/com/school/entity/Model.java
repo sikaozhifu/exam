@@ -7,7 +7,7 @@ public class Model {
 
     private String title;
 
-    private String type;
+    private Integer type;
 
     private String content;
 
@@ -41,12 +41,12 @@ public class Model {
         this.title = title == null ? null : title.trim();
     }
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public String getContent() {

@@ -38,9 +38,14 @@ public class UserController {
             return "forward:/page/login";
         }
         if (role.equals(0)){
-            //学生
-            session.setAttribute("user", user);
-            return "redirect:/page/studentIndex";
+            //可能为学生
+            //查询数据库中该用户是否为学生
+            if (user.getRole().equals(0)){
+                session.setAttribute("user", user);
+                return "redirect:/page/studentIndex";
+            }else {
+                request.setAttribute("loginMessage", "您不是学生");
+            }
         }else if (role.equals(1)){
             //可能为教师
             //查找数据库中该用户是否为教师

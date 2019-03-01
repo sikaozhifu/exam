@@ -18,7 +18,7 @@ public class ModelSqlProvider {
         }
         
         if (record.getType() != null) {
-            sql.VALUES("type", "#{type,jdbcType=VARCHAR}");
+            sql.VALUES("type", "#{type,jdbcType=INTEGER}");
         }
         
         if (record.getContent() != null) {
@@ -65,7 +65,7 @@ public class ModelSqlProvider {
         }
         
         if (record.getType() != null) {
-            sql.SET("type = #{type,jdbcType=VARCHAR}");
+            sql.SET("type = #{type,jdbcType=INTEGER}");
         }
         
         if (record.getContent() != null) {

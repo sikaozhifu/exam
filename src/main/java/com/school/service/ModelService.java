@@ -1,6 +1,7 @@
 package com.school.service;
 
 import com.school.entity.Model;
+import com.school.entity.ModelVo;
 
 import java.util.List;
 
@@ -9,8 +10,14 @@ public interface ModelService {
     Integer insert(Model model);
 
     //查询所有
-    List<Model> selectAll();
+    List<ModelVo> selectAll();
 
     //根据type查询
-    List<Model> selectByType(String type);
+    List<ModelVo> selectByType(Integer type);
+
+    ModelVo getModelVo(Integer modelId);
+
+    Integer updateModel(Model model);
+
+    Integer deleteModel(Integer modelId);
 }

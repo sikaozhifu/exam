@@ -54,6 +54,7 @@
         <table tableName="model" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
             <columnOverride column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="answer" javaType="java.lang.String" jdbcType="VARCHAR" />
             <columnOverride column="analysis" javaType="java.lang.String" jdbcType="VARCHAR" />
         </table>
         <!--<table tableName="type" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->

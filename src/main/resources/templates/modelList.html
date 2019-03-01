@@ -3,22 +3,23 @@
 <head th:include="admin::header"></head>
 <section>
     <script>
-        //修改user
-        updateUser = function (id) {
+        //修改model
+        updateModel = function (modelId) {
             $.ajax({
                 type: "POST",
-                data: {id: id},
-                url: "/exam/user/getUser",
+                data: {modelId: modelId},
+                url: "/exam/model/getModel",
                 dataType: "json",
                 success: function (data) {
                     if (data == null) {
-                        window.location.href = ("/exam/admin/getAllUser");
+                        window.location.href = ("/exam/model/select");
                     } else {
-                        $("#id").val(data.id);
-                        $("#username").val(data.username);
-                        $("#name").val(data.name);
-                        $("#email").val(data.email);
-                        $("#role").val(data.role);
+                        $("#modelId").val(data.model.modelId);
+                        $("#title").val(data.model.title);
+                        $("#type").val(data.model.type);
+                        $("#answer").val(data.model.answer);
+                        $("#difficulty").val(data.model.difficulty);
+                        $("#grade").val(data.model.grade);
                         $("#modal-update").modal();
                     }
                 }
@@ -27,13 +28,12 @@
         updateConfirm = function () {
             $.ajax({
                 type: "POST",
-                url: "/exam/user/update",
+                url: "/exam/model/update",
                 data: {
-                    id: $("#id").val(),
-                    username: $("#username").val(),
-                    name: $("#name").val(),
-                    email: $("#email").val(),
-                    role: $("#role").val()
+                    modelId: $("#modelId").val(),
+                    title: $("#title").val(),
+                    answer: $("#answer").val(),
+                    difficulty: $("#difficulty").val(),
                 },
                 dataType: "json",
                 success: function (data) {
@@ -45,29 +45,31 @@
                         })
                     }
                     $("#modal-update").modal('hide');
-                    window.location.href = ("/exam/admin/getAllUser");
+                    window.location.href = ("/exam/model/select?type=");
                 }
             });
         }
-        //删除user
-        deleteUser = function (id) {
-            $("#deleteId").val(id);
+        //删除model
+        deleteModel = function (modelId) {
+            $("#deleteId").val(modelId);
             $("#modal-delete").modal();
         }
         deleteConfirm = function () {
             $.ajax({
                 type: "POST",
-                data: {id: $("#deleteId").val()},
-                url: "/exam/user/delete",
+                data: {modelId: $("#deleteId").val()},
+                url: "/exam/model/delete",
                 dataType: "json",
                 success: function (data) {
                     if (data == null) {
                         alert("删除失败！请联系管理员...");
                     } else {
-                        alert("删除成功！");
+                        $.each(data, function (key, value) {
+                            alert(value);
+                        })
                     }
                     $("#modal-delete").modal('hide');
-                    window.location.href = ("/exam/admin/getAllUser");
+                    window.location.href = ("/exam/model/select?type=");
                 }
             });
         }
@@ -90,7 +92,7 @@
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div>
                                     <!-- <span class="h4 d-block font-weight-normal mb-2">54</span> -->
-                                    <span class="font-weight-light">选词填空</span>
+                                    <span class="font-weight-light"><a th:href="@{/model/select(type=1)}">选词填空</a></span>
                                 </div>
 
                                 <div class="h2 text-muted">
@@ -105,7 +107,7 @@
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div>
                                     <!-- <span class="h4 d-block font-weight-normal mb-2">$32,400</span> -->
-                                    <span class="font-weight-light">长篇阅读</span>
+                                    <span class="font-weight-light"><a th:href="@{/model/select(type=2)}">段落匹配</a></span>
                                 </div>
 
                                 <div class="h2 text-muted">
@@ -120,7 +122,7 @@
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div>
                                     <!-- <span class="h4 d-block font-weight-normal mb-2">900</span> -->
-                                    <span class="font-weight-light">仔细阅读</span>
+                                    <span class="font-weight-light"><a th:href="@{/model/select(type=3)}">仔细阅读</a></span>
                                 </div>
 
                                 <div class="h2 text-muted">
@@ -135,7 +137,7 @@
 					        <div class="card-body d-flex justify-content-between align-items-center">
 					            <div>
 					                <!-- <span class="h4 d-block font-weight-normal mb-2">900</span> -->
-					                <span class="font-weight-light">汉译英</span>
+					                <span class="font-weight-light"><a th:href="@{/model/select(type=4)}">翻译</a></span>
 					            </div>
 					
 					            <div class="h2 text-muted">
@@ -150,7 +152,7 @@
 					        <div class="card-body d-flex justify-content-between align-items-center">
 					            <div>
 					                <!-- <span class="h4 d-block font-weight-normal mb-2">900</span> -->
-					                <span class="font-weight-light">写作</span>
+					                <span class="font-weight-light"><a th:href="@{/model/select(type=5)}">写作</a></span>
 					            </div>
 					
 					            <div class="h2 text-muted">
@@ -183,20 +185,20 @@
                                             <th>操作</th>
                                         </tr>
                                         </thead>
-                                        <tbody th:each="model:${list}">
+                                        <tbody th:each="modelVo:${list}">
                                         <tr>
-                                            <td th:text="${model.modelId}">1</td>
-                                            <td class="text-nowrap" th:text="${model.title}">Samsung Galaxy S8</td>
-                                            <td th:text="${model.type}">31,589</td>
-                                            <td th:text="${model.difficulty}">$800</td>
-                                            <td th:text="${model.author}"></td>
-                                            <td th:text="${model.grade}"></td>
+                                            <td th:text="${modelVo.model.modelId}">1</td>
+                                            <td class="text-nowrap" th:text="${modelVo.model.title}">Samsung Galaxy S8</td>
+                                            <td th:text="${modelVo.type}">31,589</td>
+                                            <td th:text="${modelVo.difficulty}">$800</td>
+                                            <td th:text="${modelVo.model.author}"></td>
+                                            <td th:text="${modelVo.model.grade}"></td>
                                             <td>
                                                 <button id="update-btn" class="btn btn-outline-primary"
-                                                        th:onclick="'javascript:updateUser('+${model.modelId}+');'">修改
+                                                        th:onclick="'javascript:updateModel('+${modelVo.model.modelId}+');'">修改
                                                 </button>
                                                 <button id="delete-btn" class="btn btn-outline-danger" data-toggle="modal"
-                                                        th:onclick="'javascript:deleteUser('+$${model.modelId}+');'">删除
+                                                        th:onclick="'javascript:deleteModel('+${modelVo.model.modelId}+');'">删除
                                                 </button>
                                             </td>
                                         </tr>
@@ -216,7 +218,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary border-0">
-                <h5 class="modal-title text-white">用户修改</h5>
+                <h5 class="modal-title text-white">试题修改</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -226,27 +228,38 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="id" class="form-control-label">序号</label>
-                            <input id="id" class="form-control" value="" readonly/>
+                            <label for="modelId" class="form-control-label">序号</label>
+                            <input id="modelId" class="form-control" value="" readonly/>
                         </div>
                         <div class="form-group">
-                            <label for="username" class="form-control-label">学号</label>
-                            <input id="username" class="form-control" value=""/>
+                            <label for="title" class="form-control-label">标题</label>
+                            <input id="title" class="form-control" value=""/>
                         </div>
                         <div class="form-group">
-                            <label for="name" class="form-control-label">姓名</label>
-                            <input id="name" class="form-control" value="">
-                        </div>
-                        <div class="form-group">
-                            <label for="email" class="form-control-label">邮箱</label>
-                            <input id="email" class="form-control" value="" type="email">
-                        </div>
-                        <div class="form-group">
-                            <label for="role">角色</label>
-                            <select id="role" class="form-control">
-                                <option value="0">学生</option>
-                                <option value="1">教师</option>
+                            <label for="type">类型</label>
+                            <select name="type" id="type" class="form-control" required>
+                                <option value="1">选词填空</option>
+                                <option value="2">段落匹配</option>
+                                <option value="3">仔细阅读</option>
+                                <option value="4">翻译</option>
+                                <option value="5">写作</option>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="answer" class="form-control-label">答案</label>
+                            <textarea id="answer" class="form-control" value=""></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="difficulty">难度</label>
+                            <select id="difficulty" class="form-control">
+                                <option value="0">简单</option>
+                                <option value="1">一般</option>
+                                <option value="2">困难</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="grade" class="form-control-label">分值</label>
+                            <input id="grade" class="form-control" value="" readonly>
                         </div>
                     </div>
                 </div>
@@ -264,14 +277,14 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-danger border-0">
-                <h5 class="modal-title text-white">用户删除</h5>
+                <h5 class="modal-title text-white">试题删除</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
             <div class="modal-body p-5">
-                您确认要删除该用户吗？
+                您确认要删除该试题吗？
                 <input type="hidden" id="deleteId" name="deleteId"/>
             </div>
 

@@ -11,20 +11,12 @@
         <div class="content">
             <div class="container-fluid">
                 <h1 style="text-align: center">新增试题</h1>
-                <form>
-              <div class="row">
-                  <!--<div class="editor-container">-->
-                      <!--<div class="btn-toolbar" role="toolbar" data-role="editor-toolbar"-->
-                           <!--data-target="#editor" th:include="wysiwyg-demo::wysiwyg-demo-toolbar">-->
-                      <!--</div>-->
-                      <!--<div id="editor">-->
-
-                      <!--</div>-->
-                  <!--</div>-->
-                    <div class="col-md-4" style="font-size: 20px">
+                <form th:action="@{/model/add}" method="post">
+                    <div class="row">
+                        <div class="col-md-4" style="font-size: 20px">
                       <div class="form-group">
                           <label for="title" class="form-control-label">标题</label>
-                          <input name="title" id="title" class="form-control" value="" placeholder="请输入标题" required>
+                          <input name="title" id="title" class="form-control" value="" placeholder="请输入标题">
                       </div>
                       <div class="form-group">
                           <label for="content" >试题</label>
@@ -32,16 +24,17 @@
                       </div>
                       <div class="form-group">
                           <label for="answer">答案顺序</label>
+                          <label for="answer" style="font-size: 15px">(写作翻译可直接粘贴参考答案)</label>
                           <textarea name="answer" id="answer" class="form-control" rows="6" placeholder="答案顺序用 | 隔开" required></textarea>
                       </div>
                       <div class="form-group">
                           <label for="type">试题类别</label>
                           <select name="type" id="type" class="form-control" required>
-                              <option value="0">选词填空</option>
-                              <option value="1">阅读理解</option>
-                              <option value="2">写作</option>
-                              <option value="3">翻译</option>
-                              <option value="4">段落匹配</option>
+                              <option value="1">选词填空</option>
+                              <option value="2">段落匹配</option>
+                              <option value="3">仔细阅读</option>
+                              <option value="4">翻译</option>
+                              <option value="5">写作</option>
                           </select>
                       </div>
                       <div class="form-group">
@@ -51,11 +44,9 @@
                       <div class="form-group">
                           <label for="grade">试题分值</label>
                           <select name="grade" id="grade" class="form-control" required>
-                              <option>35.5</option>
-                              <option>71</option>
-                              <option>106.5</option>
-                              <option>106.5</option>
-                              <option>142</option>
+                              <option value="35.5">35.5分</option>
+                              <option value="71">71分</option>
+                              <option value="106.5">106.5分</option>
                           </select>
                       </div>
                       <div class="form-group">
@@ -72,7 +63,7 @@
                           </div>
                       </div>
                   </div>
-              </div>
+                    </div>
                 </form>
             </div>
         </div>

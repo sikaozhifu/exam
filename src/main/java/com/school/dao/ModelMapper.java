@@ -29,7 +29,7 @@ public interface ModelMapper {
         "author, grade, create_time, ",
         "update_time)",
         "values (#{modelId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, ",
-        "#{type,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR}, ",
+        "#{type,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR}, ",
         "#{analysis,jdbcType=VARCHAR}, #{difficulty,jdbcType=INTEGER}, ",
         "#{author,jdbcType=VARCHAR}, #{grade,jdbcType=REAL}, now(), ",
         "now())"
@@ -49,7 +49,7 @@ public interface ModelMapper {
     @Results({
         @Result(column="model_id", property="modelId", jdbcType=JdbcType.INTEGER, id=true),
         @Result(column="title", property="title", jdbcType=JdbcType.VARCHAR),
-        @Result(column="type", property="type", jdbcType=JdbcType.VARCHAR),
+        @Result(column="type", property="type", jdbcType=JdbcType.INTEGER),
         @Result(column="content", property="content", jdbcType=JdbcType.VARCHAR),
         @Result(column="answer", property="answer", jdbcType=JdbcType.VARCHAR),
         @Result(column="analysis", property="analysis", jdbcType=JdbcType.VARCHAR),
@@ -67,7 +67,7 @@ public interface ModelMapper {
     @Update({
         "update model",
         "set title = #{title,jdbcType=VARCHAR},",
-          "type = #{type,jdbcType=VARCHAR},",
+          "type = #{type,jdbcType=INTEGER},",
           "content = #{content,jdbcType=VARCHAR},",
           "answer = #{answer,jdbcType=VARCHAR},",
           "analysis = #{analysis,jdbcType=VARCHAR},",
@@ -90,7 +90,7 @@ public interface ModelMapper {
     @Results({
             @Result(column="model_id", property="modelId", jdbcType=JdbcType.INTEGER, id=true),
             @Result(column="title", property="title", jdbcType=JdbcType.VARCHAR),
-            @Result(column="type", property="type", jdbcType=JdbcType.VARCHAR),
+            @Result(column="type", property="type", jdbcType=JdbcType.INTEGER),
             @Result(column="content", property="content", jdbcType=JdbcType.VARCHAR),
             @Result(column="answer", property="answer", jdbcType=JdbcType.VARCHAR),
             @Result(column="analysis", property="analysis", jdbcType=JdbcType.VARCHAR),
@@ -101,7 +101,7 @@ public interface ModelMapper {
             @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
     })
     //根据type查询
-    List<Model> selectByType(String type);
+    List<Model> selectByType(Integer type);
 
     @Select({
             "select",
@@ -113,7 +113,7 @@ public interface ModelMapper {
     @Results({
             @Result(column="model_id", property="modelId", jdbcType=JdbcType.INTEGER, id=true),
             @Result(column="title", property="title", jdbcType=JdbcType.VARCHAR),
-            @Result(column="type", property="type", jdbcType=JdbcType.VARCHAR),
+            @Result(column="type", property="type", jdbcType=JdbcType.INTEGER),
             @Result(column="content", property="content", jdbcType=JdbcType.VARCHAR),
             @Result(column="answer", property="answer", jdbcType=JdbcType.VARCHAR),
             @Result(column="analysis", property="analysis", jdbcType=JdbcType.VARCHAR),
