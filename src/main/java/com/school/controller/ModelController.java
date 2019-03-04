@@ -48,7 +48,7 @@ public class ModelController {
 
     @RequestMapping(value = "/select",method = RequestMethod.GET)
     public String selectModel(@RequestParam("type") Integer type, HttpServletRequest request){
-        if (type == null){
+        if (type == null||type.equals("")||type == 0){
             List<ModelVo> list = modelService.selectAll();
             request.setAttribute("list", list);
         }else {
