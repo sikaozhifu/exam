@@ -2,7 +2,7 @@ package com.school.controller;
 
 import com.school.entity.Exam;
 import com.school.entity.ModelVo;
-import com.school.service.ExamServcie;
+import com.school.service.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -17,17 +18,16 @@ import java.util.List;
 public class ExamController {
 
     @Autowired
-    private ExamServcie examServcie;
+    private ExamService examService;
     @RequestMapping(value = "/add",method = RequestMethod.POST)
-    @ResponseBody
-    public Exam addExam(
+    public String addExam(
             @RequestParam("ids")String ids,
             @RequestParam("exam_name")String exam_name,
             @RequestParam("exam_type")String exam_type,
             @RequestParam("need_time")String need_time,
             @RequestParam("exam_author")String exam_author
             ){
-        List<ModelVo> modelVoList = examServcie.manageModel(ids);
+        List<ModelVo> modelVoList = examService.manageModel(ids);
         Exam exam = new Exam();
         exam.setExamName(exam_name);//试卷名称
         exam.setExamType(Integer.parseInt(exam_type));//试卷类型
@@ -50,6 +50,17 @@ public class ExamController {
         exam.setExamAnswer(exam_answer);
         exam.setExamAnalysis(exam_analysis);
         exam.setExamGrade(exam_grade);
-        return exam;
+        Integer result = examService.insertExam(exam);
+        if (result == 1){
+            return "redirect:/exam/select";
+        }
+        return "redirect:/page/exam/add";
+    }
+
+    @RequestMapping(value = "/select",method = RequestMethod.GET)
+    public String toExamList(HttpServletRequest request){
+        List<Exam> examList = examService.getAllExam();
+        request.setAttribute("list", examList);
+        return "forward:/page/examList";
     }
 }

@@ -94,6 +94,6 @@ public class PageController {
     }
     @RequestMapping(value = "/examList")
     public String toExamList(){
-        return "examList";
+        return "exam_list";
     }
 }

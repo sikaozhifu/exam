@@ -3,7 +3,7 @@ package com.school.service.impl;
 import com.school.dao.ExamMapper;
 import com.school.entity.Exam;
 import com.school.entity.ModelVo;
-import com.school.service.ExamServcie;
+import com.school.service.ExamService;
 import com.school.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class ExamServiceImpl implements ExamServcie {
+public class ExamServiceImpl implements ExamService {
 
     @Autowired
     private ExamMapper examMapper;
@@ -44,5 +44,10 @@ public class ExamServiceImpl implements ExamServcie {
         }
         Collections.sort(modelList,comparator);
         return modelList;
+    }
+
+    @Override
+    public List<Exam> getAllExam() {
+        return examMapper.getAllExam();
     }
 }

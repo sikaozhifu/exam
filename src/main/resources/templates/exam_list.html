@@ -101,7 +101,7 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header bg-light">
-                                题库列表
+                                试卷列表
                             </div>
 
                             <div class="card-body">
@@ -110,28 +110,28 @@
                                         <thead>
                                         <tr>
                                             <th>序号</th>
-                                            <th>标题</th>
-                                            <th>类型</th>
-                                            <th>难度</th>
-                                            <th>作者</th>
-                                            <th>分值</th>
+                                            <th>试卷名称</th>
+                                            <th>组卷类型</th>
+                                            <th>所需时间</th>
+                                            <th>发布者</th>
+                                            <th>试卷总分</th>
                                             <th>操作</th>
                                         </tr>
                                         </thead>
-                                        <tbody th:each="modelVo:${list}">
+                                        <tbody th:each="exam:${list}">
                                         <tr>
-                                            <td th:text="${modelVo.model.modelId}">1</td>
-                                            <td class="text-nowrap" th:text="${modelVo.model.title}">Samsung Galaxy S8</td>
-                                            <td th:text="${modelVo.type}">31,589</td>
-                                            <td th:text="${modelVo.difficulty}">$800</td>
-                                            <td th:text="${modelVo.model.author}"></td>
-                                            <td th:text="${modelVo.model.grade}"></td>
+                                            <td th:text="${exam.exam_id}">1</td>
+                                            <td class="text-nowrap" th:text="${exam.exam_name}">Samsung Galaxy S8</td>
+                                            <td th:text="${exam.exam_type}==0?'随机':'导入'">31,589</td>
+                                            <td th:text="${exam.need_time}">$800</td>
+                                            <td th:text="${exam.exam_author}"></td>
+                                            <td th:text="${exam.exam_grade}"></td>
                                             <td>
                                                 <button id="update-btn" class="btn btn-outline-primary"
-                                                        th:onclick="'javascript:updateModel('+${modelVo.model.modelId}+');'">修改
+                                                        th:onclick="'javascript:updateModel('+${exam.exam_id}+');'">修改
                                                 </button>
                                                 <button id="delete-btn" class="btn btn-outline-danger" data-toggle="modal"
-                                                        th:onclick="'javascript:deleteModel('+${modelVo.model.modelId}+');'">删除
+                                                        th:onclick="'javascript:deleteModel('+${exam.exam_id}+');'">删除
                                                 </button>
                                             </td>
                                         </tr>
