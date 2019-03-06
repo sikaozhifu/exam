@@ -85,11 +85,30 @@
         </div>
 
         <div class="content">
+            <div class="container" style="margin-top:100px;text-align: center;margin-bottom: 100px">
+                <div class="col-md-5">
+                    <form th:action="@{/user/getAllUser}" th:method="post">
+                        <div class="input-group">
+                            <!--<label style="font-size: 20px">考生&nbsp;&nbsp;&nbsp;</label>-->
+                            <select id="condition" name="condition">
+                                <option value="0">姓名</option>
+                                <option value="1">学号</option>
+                                <option value="2">邮箱</option>
+                                <option value="3">角色</option>
+                            </select>
+                            <input type="text" id="input-group-2" name="info" class="form-control" placeholder="请输入用户信息">&nbsp;&nbsp;
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary"><i class="fa "></i> 搜索用户</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header bg-light">
-                            Hoverable Table
+                            考生列表
                         </div>
 
                         <div class="card-body">

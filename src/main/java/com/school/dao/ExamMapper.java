@@ -104,4 +104,27 @@ public interface ExamMapper {
             @Result(column="model_ids", property="modelIds", jdbcType=JdbcType.VARCHAR)
     })
     List<Exam> getAllExam();
+
+    @Select({
+            "select",
+            "exam_id, exam_name, exam_content, exam_type, need_time, exam_author, create_time, ",
+            "update_time, exam_answer, exam_analysis, exam_grade, model_ids",
+            "from exam",
+            "where exam_name like concat(concat('%',#{exam_name}),'%')"
+    })
+    @Results({
+            @Result(column="exam_id", property="examId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="exam_name", property="examName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="exam_content", property="examContent", jdbcType=JdbcType.VARCHAR),
+            @Result(column="exam_type", property="examType", jdbcType=JdbcType.INTEGER),
+            @Result(column="need_time", property="needTime", jdbcType=JdbcType.VARCHAR),
+            @Result(column="exam_author", property="examAuthor", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="exam_answer", property="examAnswer", jdbcType=JdbcType.VARCHAR),
+            @Result(column="exam_analysis", property="examAnalysis", jdbcType=JdbcType.VARCHAR),
+            @Result(column="exam_grade", property="examGrade", jdbcType=JdbcType.REAL),
+            @Result(column="model_ids", property="modelIds", jdbcType=JdbcType.VARCHAR)
+    })
+    List<Exam> getExamByCondition(String exam_name);
 }

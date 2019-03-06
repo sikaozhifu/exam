@@ -58,6 +58,18 @@ public class ModelController {
         return "forward:/page/modelList";
     }
 
+    @RequestMapping(value = "/select",method = RequestMethod.POST)
+    public String getModelList(@RequestParam("title") String title, HttpServletRequest request){
+        if (title == null || title.equals("")){
+            List<ModelVo> list = modelService.selectAll();
+            request.setAttribute("list", list);
+        }else {
+            List<ModelVo> list = modelService.selectByTitle(title);
+            request.setAttribute("list", list);
+        }
+        return "forward:/page/modelList";
+    }
+
     @RequestMapping(value = "/getALLModel",method = RequestMethod.POST)
     @ResponseBody
     public List<ModelVo> getALLModel(@RequestParam("type") Integer type){

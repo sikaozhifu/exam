@@ -15,4 +15,11 @@ public interface ExamService {
 
     //获取所有exam
     List<Exam> getAllExam();
+
+    //获取examById
+    Exam getExamById(Integer exam_id);
+
+    Integer deleteExam(Integer exam_id);
+    //模糊查询
+    List<Exam> getExamByCondition(String exam_name);
 }

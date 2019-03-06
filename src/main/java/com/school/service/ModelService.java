@@ -20,4 +20,6 @@ public interface ModelService {
     Integer updateModel(Model model);
 
     Integer deleteModel(Integer modelId);
+
+    List<ModelVo> selectByTitle(String title);
 }

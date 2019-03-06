@@ -20,5 +20,6 @@ public interface UserService {
 
     Integer updateUser(User user);
 
-    PageInfo<User> getAllUserByPage(Integer currentPage, Integer pageSize);
+    //根据条件查询
+    PageInfo<User> getAllUserByCondition(Integer currentPage, Integer pageSize,String condition,String info);
 }

@@ -3,6 +3,7 @@ package com.school.controller;
 import com.school.entity.Exam;
 import com.school.entity.ModelVo;
 import com.school.service.ExamService;
+import com.school.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/exam")
@@ -19,6 +23,8 @@ public class ExamController {
 
     @Autowired
     private ExamService examService;
+    @Autowired
+    private ModelService modelService;
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public String addExam(
             @RequestParam("ids")String ids,
@@ -57,10 +63,55 @@ public class ExamController {
         return "redirect:/page/exam/add";
     }
 
+    @RequestMapping(value = "/select",method = RequestMethod.POST)
+    public String getExamList(@RequestParam("exam_name")String exam_name, HttpServletRequest request){
+        if (exam_name == null || exam_name.equals("")){
+            List<Exam> examList = examService.getAllExam();
+            request.setAttribute("list", examList);
+        }else {
+            List<Exam> examList = examService.getExamByCondition(exam_name);
+            request.setAttribute("list", examList);
+        }
+        return "forward:/page/exam_list";
+    }
+
     @RequestMapping(value = "/select",method = RequestMethod.GET)
-    public String toExamList(HttpServletRequest request){
+    public String getAllExam(HttpServletRequest request){
         List<Exam> examList = examService.getAllExam();
         request.setAttribute("list", examList);
-        return "forward:/page/examList";
+        return "forward:/page/exam_list";
+    }
+
+    @RequestMapping(value = "/getModelVoList",method = RequestMethod.POST)
+    @ResponseBody
+    public List<ModelVo> getModelVoList(@RequestParam("examId")Integer examId){
+        Exam exam = examService.getExamById(examId);
+        if (exam == null){
+            return null;
+        }
+        String[] ids = exam.getModelIds().split(",");
+        List<ModelVo> modelVoList = new ArrayList<>();
+        for (String s:ids){
+            ModelVo modelVo = modelService.getModelVo(Integer.parseInt(s));
+            modelVoList.add(modelVo);
+        }
+        return modelVoList;
+    }
+
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> deleteExam(@RequestParam("examId")Integer examId){
+        Map<String,Object> map = new HashMap<>();
+        if (examId == null||examId.equals("")){
+            map.put("deleteExam", "删除失败！请联系管理员...");
+            return map;
+        }
+        Integer result = examService.deleteExam(examId);
+        if (result == 1){
+            map.put("deleteExam", "试卷删除成功！");
+        }else {
+            map.put("deleteExam", "删除失败！请联系管理员...");
+        }
+        return map;
     }
 }

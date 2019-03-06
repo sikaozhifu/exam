@@ -5,9 +5,11 @@ import com.github.pagehelper.PageInfo;
 import com.school.dao.UserMapper;
 import com.school.entity.User;
 import com.school.service.UserService;
+import com.school.utils.RoleUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -51,12 +53,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageInfo<User> getAllUserByPage(Integer currentPage, Integer pageSize) {
+    public PageInfo<User> getAllUserByCondition(Integer currentPage, Integer pageSize,String condition,String info) {
         //设置分页信息保存到threadLocal中
         PageHelper.startPage(currentPage, pageSize);//一定要放在查询之前
-
-        //紧跟着的第一个select方法会被分页，userMapper会被PageInterceptor截拦,截拦器会从threadLocal中取出分页信息，把分页信息加到sql语句中，实现了分页查旬
-        List<User> list = userMapper.getAllUser();
+        List<User> list = new ArrayList<>();
+        if (info == null || info.equals("")||condition == null || condition.equals("")){
+            //查询条件为空
+            list = userMapper.getAllUser();
+        }
+        //紧跟着的第一个select方法会被分页，userMapper会被PageInterceptor截拦,
+        // 截拦器会从threadLocal中取出分页信息，把分页信息加到sql语句中，实现了分页查旬
+        if (condition.equals("0")){
+            //姓名
+            list = userMapper.getUserListByName(info);
+        }else if (condition.equals("1")){
+            //学号
+            list = userMapper.getUserListByUserName(info);
+        }else if (condition.equals("2")){
+            //邮箱
+            list = userMapper.getUserListByEmail(info);
+        }else if (condition.equals("3")){
+            //角色
+            Integer role = RoleUtil.getRole(info);
+            if (role != null){
+                list = userMapper.getUserListByRole(role);
+            }
+        }
         PageInfo<User> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }

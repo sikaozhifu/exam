@@ -35,17 +35,4 @@ public class AdminController {
         }
         return "redirect:/page/adminLogin";
     }
-
-    @RequestMapping(value = "/getAllUser")
-    public String adminGetAllUser(@RequestParam(value = "currentPage",defaultValue = "1") Integer currentPage,
-                                  @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
-                                  HttpSession session, HttpServletRequest request) {
-        Admin admin = (Admin) session.getAttribute("admin");
-        if (admin != null){
-            PageInfo<User> pageInfo = userService.getAllUserByPage(currentPage, pageSize);
-            request.setAttribute("pageInfo", pageInfo);
-            return "forward:/page/adminTable";
-        }
-        return "redirect:/page/adminLogin";
-    }
 }

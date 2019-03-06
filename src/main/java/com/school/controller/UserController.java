@@ -1,5 +1,7 @@
 package com.school.controller;
 
+import com.github.pagehelper.PageInfo;
+import com.school.entity.Admin;
 import com.school.entity.User;
 import com.school.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,8 +91,8 @@ public class UserController {
         if (id == null){
             return null;
         }
-//        return userService.deleteUserById(deleteId);
-        return 1;
+        return userService.deleteUserById(id);
+//        return 1;
     }
 
     @RequestMapping(value = "/update",method = RequestMethod.POST)
@@ -124,5 +126,19 @@ public class UserController {
         }
         map.put("update_user", "修改失败！请联系管理员...");
         return map;
+    }
+    @RequestMapping(value = "/getAllUser",method = {RequestMethod.GET,RequestMethod.POST})
+    public String getUserList(@RequestParam(value = "currentPage",defaultValue = "1") Integer currentPage,
+                                  @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
+                                  @RequestParam("condition")String condition,
+                                  @RequestParam("info")String info,
+                                  HttpSession session, HttpServletRequest request) {
+        Admin admin = (Admin) session.getAttribute("admin");
+        if (admin == null){
+            return "redirect:/page/adminLogin";
+        }
+        PageInfo<User> pageInfo = userService.getAllUserByCondition(currentPage, pageSize,condition,info);
+        request.setAttribute("pageInfo", pageInfo);
+        return "forward:/page/adminTable";
     }
 }

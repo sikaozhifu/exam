@@ -19,7 +19,7 @@ public class ExamServiceImpl implements ExamService {
     private ModelService modelService;
     @Override
     public Integer insertExam(Exam exam) {
-        return examMapper.insert(exam);
+        return examMapper.insertSelective(exam);
     }
 
     @Override
@@ -49,5 +49,20 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public List<Exam> getAllExam() {
         return examMapper.getAllExam();
+    }
+
+    @Override
+    public Exam getExamById(Integer exam_id) {
+        return examMapper.selectByPrimaryKey(exam_id);
+    }
+
+    @Override
+    public Integer deleteExam(Integer exam_id) {
+        return examMapper.deleteByPrimaryKey(exam_id);
+    }
+
+    @Override
+    public List<Exam> getExamByCondition(String exam_name) {
+        return examMapper.getExamByCondition(exam_name);
     }
 }

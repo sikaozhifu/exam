@@ -61,6 +61,16 @@ public class ModelServiceImpl implements ModelService {
         return modelMapper.deleteByPrimaryKey(modelId);
     }
 
+    @Override
+    public List<ModelVo> selectByTitle(String title) {
+        List<ModelVo> modelVoList = new ArrayList<>();
+        List<Model> list = modelMapper.selectByTitle(title);
+        for (Model model:list){
+            modelVoList.add(modelToModelVo(model));
+        }
+        return modelVoList;
+    }
+
     /**
      * //转化为包装类ModelVo
      * @param model

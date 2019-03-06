@@ -1,64 +1,98 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="admin::header"></head>
+<head th:include="admin::header">
+</head>
 <section>
     <script>
-        //修改model
-        updateModel = function (modelId) {
+        //查看model
+        updateModel = function (examId) {
             $.ajax({
                 type: "POST",
-                data: {modelId: modelId},
-                url: "/exam/model/getModel",
+                data: {examId: examId},
+                url: "/exam/exam/getModelVoList",
                 dataType: "json",
                 success: function (data) {
                     if (data == null) {
-                        window.location.href = ("/exam/model/select");
+                        window.location.href = ("/exam/exam/select");
                     } else {
-                        $("#modelId").val(data.model.modelId);
-                        $("#title").val(data.model.title);
-                        $("#type").val(data.model.type);
-                        $("#answer").val(data.model.answer);
-                        $("#difficulty").val(data.model.difficulty);
-                        $("#grade").val(data.model.grade);
+                        //清空内容
+                        $("#modelList").empty();
+                        $("#modelTemp").find("li").remove();
+                        $("#modelTemp").append("<li class='active'></li>");
+                        var str = "";
+                        var temp = "";
+                        $.each(data,function (index,value) {
+                            if (index > 0){
+                                temp += "<li></li>";
+                            }
+                        var contentHtml = "<li>"+
+                            "<div class='row'>"+
+                                "<div class='col-md-12' style='font-size: 20px'>"+
+                                "<div class='form-group' style='font-size: 25px;margin-bottom: 30px'>"+
+                                    "<label for='type'>"+value.type+"</label>"+
+                                    // "<input name='type' id='type' class='form-control' value="+value.type+" readonly>"+
+                                "</div>"+
+                                "<div class='form-group'>"+
+                                    "<label for='title' class='form-control-label'>标题</label>"+
+                                    "<input name='title' id='title' class='form-control' value="+value.model.title+" readonly>"+
+                                "</div>"+
+                                "<div class='form-group'>"+
+                                    "<label for='content'>试题</label>"+
+                                    "<textarea name='content' id='content' class='form-control' rows='10' value='' readonly>"+value.model.content+"</textarea>"+
+                                "</div>"+
+                            "<div class='form-group'>"+
+                                "<label for='answer'>答案顺序</label>"+
+                                "<textarea name='answer' id='answer' class='form-control' rows='6' value='' readonly>"+value.model.answer+"</textarea>"+
+                            "</div>"+
+                            "<div class='form-group'>"+
+                                "<label for='analysis'>解析</label>"+
+                                "<textarea name='analysis' id='analysis' class='form-control' rows='10' value='' readonly>"+value.model.analysis+"</textarea>"+
+                            "</div>"+
+                            "<div class='form-group'>"+
+                                "<label for='grade'>试题分值</label>"+
+                                "<input name='grade' id='grade' class='form-control' value="+value.model.grade+" readonly>"+
+                            "</div>"+
+                            "<div class='form-group'>"+
+                                "<label for='difficulty'>试题难度</label>"+
+                                "<input name='grade' id='grade' class='form-control' value="+value.difficulty+" readonly>"+
+                            "</div>"+
+                                "</div>"+
+                                "</div>"+
+                        "</li>";
+                        str += contentHtml;
+                            // alert(str);
+                        });
+                        $("#modelList").html(str);
+                        $("#modelTemp").append(temp);
+                        //轮播图调用
+                        $("#slider").easySlider( {
+                            slideSpeed: 500,
+                            paginationSpacing: "15px",
+                            paginationDiameter: "12px",
+                            paginationPositionFromBottom: "20px",
+                            slidesClass: ".slides",
+                            controlsClass: ".controls",
+                            paginationClass: ".pagination"
+                        });
                         $("#modal-update").modal();
                     }
                 }
             });
         }
         updateConfirm = function () {
-            $.ajax({
-                type: "POST",
-                url: "/exam/model/update",
-                data: {
-                    modelId: $("#modelId").val(),
-                    title: $("#title").val(),
-                    answer: $("#answer").val(),
-                    difficulty: $("#difficulty").val(),
-                },
-                dataType: "json",
-                success: function (data) {
-                    if (data == null) {
-                        alert("修改失败！请联系管理员...");
-                    } else {
-                        $.each(data, function (key, value) {
-                            alert(value);
-                        })
-                    }
-                    $("#modal-update").modal('hide');
-                    window.location.href = ("/exam/model/select?type=");
-                }
-            });
+            $("#modal-update").modal('hide');
+            window.location.href = ("/exam/exam/select");
         }
         //删除model
-        deleteModel = function (modelId) {
-            $("#deleteId").val(modelId);
+        deleteModel = function (examId) {
+            $("#deleteId").val(examId);
             $("#modal-delete").modal();
         }
         deleteConfirm = function () {
             $.ajax({
                 type: "POST",
-                data: {modelId: $("#deleteId").val()},
-                url: "/exam/model/delete",
+                data: {examId: $("#deleteId").val()},
+                url: "/exam/exam/delete",
                 dataType: "json",
                 success: function (data) {
                     if (data == null) {
@@ -69,12 +103,17 @@
                         })
                     }
                     $("#modal-delete").modal('hide');
-                    window.location.href = ("/exam/model/select?type=");
+                    window.location.href = ("/exam/exam/select");
                 }
             });
         }
-
     </script>
+    <!--<script type="text/javascript">-->
+
+        <!--window.onload = function() {-->
+           <!---->
+        <!--}-->
+    <!--</script>-->
 </section>
 <body class="sidebar-fixed header-fixed">
 <div class="page-wrapper">
@@ -87,13 +126,15 @@
         <div class="content">
             <div class="container" style="margin-top:150px;text-align: center;margin-bottom: 100px">
                 <div class="col-md-5">
-                    <div class="input-group">
-                        <label style="font-size: 20px">试卷&nbsp;&nbsp;&nbsp;</label>
-                        <input type="text" id="input-group-2" name="input1-group2" class="form-control" placeholder="搜索试卷">&nbsp;
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary"><i class="fa "></i> 搜索试卷</button>
-                        </span>
-                    </div>
+                    <form th:action="@{/exam/select}" th:method="post">
+                        <div class="input-group">
+                            <label style="font-size: 20px">试卷&nbsp;&nbsp;&nbsp;</label>
+                            <input type="text" id="input-group-2" name="exam_name" class="form-control" placeholder="请输入试卷名称">&nbsp;
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary"><i class="fa "></i> 搜索试卷</button>
+                            </span>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="container-fluid">
@@ -120,18 +161,18 @@
                                         </thead>
                                         <tbody th:each="exam:${list}">
                                         <tr>
-                                            <td th:text="${exam.exam_id}">1</td>
-                                            <td class="text-nowrap" th:text="${exam.exam_name}">Samsung Galaxy S8</td>
-                                            <td th:text="${exam.exam_type}==0?'随机':'导入'">31,589</td>
-                                            <td th:text="${exam.need_time}">$800</td>
-                                            <td th:text="${exam.exam_author}"></td>
-                                            <td th:text="${exam.exam_grade}"></td>
+                                            <td th:text="${exam.examId}">1</td>
+                                            <td class="text-nowrap" th:text="${exam.examName}">Samsung Galaxy S8</td>
+                                            <td th:text="${exam.examType}==0?'随机':'导入'">31,589</td>
+                                            <td th:text="${exam.needTime}">$800</td>
+                                            <td th:text="${exam.examAuthor}"></td>
+                                            <td th:text="${exam.examGrade}"></td>
                                             <td>
                                                 <button id="update-btn" class="btn btn-outline-primary"
-                                                        th:onclick="'javascript:updateModel('+${exam.exam_id}+');'">修改
+                                                        th:onclick="'javascript:updateModel('+${exam.examId}+');'">查看
                                                 </button>
                                                 <button id="delete-btn" class="btn btn-outline-danger" data-toggle="modal"
-                                                        th:onclick="'javascript:deleteModel('+${exam.exam_id}+');'">删除
+                                                        th:onclick="'javascript:deleteModel('+${exam.examId}+');'">删除
                                                 </button>
                                             </td>
                                         </tr>
@@ -146,78 +187,65 @@
         </div>
     </div>
 </div>
+<!--查看-->
 <div class="modal fade" id="modal-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary border-0">
-                <h5 class="modal-title text-white">试题修改</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title text-white">试卷查看</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" th:onclick="'javascript:updateConfirm()'">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <!--输入框-->
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="modelId" class="form-control-label">序号</label>
-                            <input id="modelId" class="form-control" value="" readonly/>
-                        </div>
-                        <div class="form-group">
-                            <label for="title" class="form-control-label">标题</label>
-                            <input id="title" class="form-control" value=""/>
-                        </div>
-                        <div class="form-group">
-                            <label for="type">类型</label>
-                            <select name="type" id="type" class="form-control" required>
-                                <option value="1">选词填空</option>
-                                <option value="2">段落匹配</option>
-                                <option value="3">仔细阅读</option>
-                                <option value="4">翻译</option>
-                                <option value="5">写作</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="answer" class="form-control-label">答案</label>
-                            <textarea id="answer" class="form-control" value=""></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="difficulty">难度</label>
-                            <select id="difficulty" class="form-control">
-                                <option value="0">简单</option>
-                                <option value="1">一般</option>
-                                <option value="2">困难</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="grade" class="form-control-label">分值</label>
-                            <input id="grade" class="form-control" value="" readonly>
-                        </div>
-                    </div>
+                <div id="slider">
+                    <ul class="slides clearfix" id="modelList">
+                        <!--<li>-->
+                            <!--<img class="responsive" src="../static/imgs/banner001.jpg">-->
+                        <!--</li>-->
+                        <!--<li><img class="responsive" src="../static/imgs/banner002.jpg"></li>-->
+                        <!--<li><img class="responsive" src="../static/imgs/banner003.jpg"></li>-->
+                        <!--<li><img class="responsive" src="../static/imgs/banner004.jpg"></li>-->
+                        <!--<li><img class="responsive" src="../static/imgs/banner005.jpg"></li>-->
+                    </ul>
+                    <ul class="controls">
+                        <li><img src="../static/imgs/prev.png" alt="previous"></li>
+                        <li><img src="../static/imgs/next.png" alt="next"></li>
+                    </ul>
+                    <ul class="pagination" id="modelTemp">
+                        <li class="active"></li>
+                        <!--<li></li>-->
+                        <!--<li></li>-->
+                        <!--<li></li>-->
+                        <!--<li></li>-->
+                    </ul>
                 </div>
+
             </div>
             <div class="modal-footer border-0">
-                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-link" data-dismiss="modal" th:onclick="'javascript:updateConfirm()'">Close</button>
                 <button type="button" class="btn btn-primary" th:onclick="'javascript:updateConfirm()'">Continue
                 </button>
             </div>
         </div>
     </div>
 </div>
+<!--删除-->
 <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-danger border-0">
-                <h5 class="modal-title text-white">试题删除</h5>
+                <h5 class="modal-title text-white">试卷删除</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
             <div class="modal-body p-5">
-                您确认要删除该试题吗？
+                您确认要删除该试卷吗？
                 <input type="hidden" id="deleteId" name="deleteId"/>
             </div>
 
