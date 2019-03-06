@@ -72,6 +72,7 @@
                 }
             });
         }
+        // 添加用户
         addModel = function () {
             if ($("#addName").val()==""){
                 alert("姓名不能为空！");
@@ -119,6 +120,21 @@
                 }
             });
         }
+        //分页查询
+        getUserListByPage = function (currentPage) {
+            var pageSize = $("#pageSize").val(); //每页显示条数
+            var condition = $("#condition").val();//用户信息
+            var info = $("#info").val();//搜索
+            var str = "/exam/user/getAllUser?currentPage="+currentPage+"&pageSize="+ pageSize+"&condition="+ condition+"&info="+ info;
+            window.location.href = (str);
+        }
+        getUserListByPageSize = function (pageSize) {
+            var currentPage = $("#pageNum").val();//当前页
+            var condition = $("#condition").val();//用户信息
+            var info = $("#info").val();//搜索
+            var str = "/exam/user/getAllUser?currentPage="+currentPage+"&pageSize="+ pageSize+"&condition="+ condition+"&info="+ info;
+            window.location.href = (str);
+        }
     </script>
 </section>
 <body class="sidebar-fixed header-fixed">
@@ -142,7 +158,7 @@
                                 <option value="2">邮箱</option>
                                 <option value="3">角色</option>
                             </select>
-                            <input type="text" id="input-group-2" name="info" class="form-control" placeholder="请输入用户信息">&nbsp;&nbsp;
+                            <input type="text" id="info" name="info" class="form-control" placeholder="请输入用户信息">&nbsp;&nbsp;
                             <span class="input-group-btn">
                                 <button type="submit" class="btn btn-primary"><i class="fa "></i> 搜索用户</button>
                             </span>
@@ -194,39 +210,49 @@
                     </div>
                 </div>
             </div>
-            <div class="fixed-table-pagination" style="display: block;" >
+            <div class="fixed-table-pagination" style="display: block;text-align: right" >
                 <div class="pull-left pagination-detail">
-                    <span class="pagination-info">显示第 <span th:text="${pageInfo.startRow}"></span> 到第 <span th:text="${pageInfo.endRow}"></span> 条记录，总共 <span th:text="${pageInfo.total}"></span>条记录</span>
+                    <span class="pagination-info">显示第 <span th:text="${pageInfo.startRow}"></span> 到第 <span th:text="${pageInfo.endRow}"></span> 条记录，总共 <span th:text="${pageInfo.size}"></span>条记录</span>
                     <span class="page-list">每页显示
                         <span class="btn-group dropdown">
                             <button type="button" class="btn btn-default  dropdown-toggle" data-toggle="dropdown">
-                                <span class="page-size"  th:text="${pageInfo.pageSize}" ></span>
+                                <span class="page-size"  th:text="${pageInfo.pageSize}" id="pageSize"></span>
+                                <!--保存当前页-->
+                                <input type="hidden" id="pageNum" th:value="${pageInfo.pageNum}" />
                                  <span class="caret"></span>
                              </button>
                                 <ul class="dropdown-menu" role="menu">
-                                <li  th:class="${pageInfo.pageSize== 5 }?'active':''"><a th:href="@{/admin/getAllUser(pageSize=5)}" >5</a></li>
-                                <li  th:class="${pageInfo.pageSize== 8 }?'active':''"><a th:href="@{/admin/getAllUser(pageSize=8)}" >8</a></li>
+                                <li  th:class="${pageInfo.pageSize== 5 }?'active':''"><a href="javascript:void(0)" th:onclick="'javascript:getUserListByPageSize('+5+')'" >5</a></li>
+                                <li  th:class="${pageInfo.pageSize== 8 }?'active':''"><a href="javascript:void(0)" th:onclick="'javascript:getUserListByPageSize('+8+')'">8</a></li>
                              </ul>
                          </span>条记录
 	                </span>
 
                 </div>
             </div>
-            <nav aria-label="Page navigation">
-                <ul class="pager">
-                    <li th:class="${pageInfo.hasPreviousPage}?'':'previous disabled'">
-                        <a th:href="@{/admin/getAllUser(currentPage=${pageInfo.prePage})}" aria-label="Previous">
+            <nav aria-label="Page navigation" style="font-size: 20px;text-align: center">
+                <ul class="pager" id="page">
+                    <li th:class="${pageInfo.hasPreviousPage}?'':'previous disabled'" style="display: inline">
+                        <!--<a th:href="@{/user/getAllUser(currentPage=${pageInfo.prePage})}" aria-label="Previous">-->
+                            <!--<span aria-hidden="true">&laquo;</span>-->
+                            <!--&lt;!&ndash;← Previous&ndash;&gt;-->
+                        <!--</a>-->
+                        <a href="javascript:void(0)" th:onclick="'javascript:getUserListByPage('+${pageInfo.prePage}+');'" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                             <!--← Previous-->
                         </a>
                     </li>
                     <th:block th:each="nav:${pageInfo.navigatepageNums}">
-                        <li th:class="${nav==pageInfo.pageNum}?'active':''">
-                            <a th:href="@{/admin/getAllUser(currentPage=${nav})}" th:text="${nav}"></a>
+                        <li th:class="${nav==pageInfo.pageNum}?'active':''" style="display: inline">
+                            <a href="javascript:void(0)" th:onclick="'javascript:getUserListByPage('+${nav}+');'" th:text="${nav}"></a>
                         </li>
                     </th:block>
-                    <li th:class="${pageInfo.hasNextPage}?'':'next disabled'">
-                        <a th:href="@{/admin/getAllUser(currentPage=${pageInfo.nextPage})}" aria-label="Next">
+                    <li th:class="${pageInfo.hasNextPage}?'':'next disabled'" style="display: inline">
+                        <!--<a th:href="@{/user/getAllUser(currentPage=${pageInfo.nextPage},condition=null,info=null)}" aria-label="Next">-->
+                            <!--&lt;!&ndash;Next →&ndash;&gt;-->
+                            <!--<span aria-hidden="true">&raquo;</span>-->
+                        <!--</a>-->
+                        <a href="javascript:void(0)" th:onclick="'javascript:getUserListByPage('+${pageInfo.nextPage}+');'" aria-label="Next">
                             <!--Next →-->
                             <span aria-hidden="true">&raquo;</span>
                         </a>

@@ -166,6 +166,7 @@ public class UserController {
             return "redirect:/page/adminLogin";
         }
         PageInfo<User> pageInfo = userService.getAllUserByCondition(currentPage, pageSize,condition,info);
+//        request.setAttribute("pageSize", pageSize);
         request.setAttribute("pageInfo", pageInfo);
         return "forward:/page/adminTable";
     }

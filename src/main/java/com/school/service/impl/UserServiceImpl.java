@@ -60,6 +60,8 @@ public class UserServiceImpl implements UserService {
         if (info == null || info.equals("")||condition == null || condition.equals("")){
             //查询条件为空
             list = userMapper.getAllUser();
+            PageInfo<User> pageInfo = new PageInfo<>(list);
+            return pageInfo;
         }
         //紧跟着的第一个select方法会被分页，userMapper会被PageInterceptor截拦,
         // 截拦器会从threadLocal中取出分页信息，把分页信息加到sql语句中，实现了分页查旬
