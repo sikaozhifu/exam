@@ -208,9 +208,9 @@
                                             <th>操作</th>
                                         </tr>
                                         </thead>
-                                        <tbody th:each="modelVo:${list}">
+                                        <tbody th:each="modelVo,modelVoStat:${list}">
                                         <tr>
-                                            <td th:text="${modelVo.model.modelId}">1</td>
+                                            <td th:text="${modelVoStat.index+1}">1</td>
                                             <td class="text-nowrap" th:text="${modelVo.model.title}">Samsung Galaxy S8</td>
                                             <td th:text="${modelVo.type}">31,589</td>
                                             <td th:text="${modelVo.difficulty}">$800</td>

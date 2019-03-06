@@ -187,9 +187,9 @@
                                         <th>操作</th>
                                     </tr>
                                     </thead>
-                                    <tbody th:each="user:${pageInfo.list}">
+                                    <tbody th:each="user,userStat:${pageInfo.list}">
                                     <tr>
-                                        <td th:text="${user.id}">1</td>
+                                        <td th:text="${userStat.index+1}">1</td>
                                         <td class="text-nowrap" th:text="${user.name}">Samsung Galaxy S8</td>
                                         <td th:text="${user.username}">31,589</td>
                                         <td th:text="${user.email}">$800</td>
@@ -212,20 +212,22 @@
             </div>
             <div class="fixed-table-pagination" style="display: block;text-align: right" >
                 <div class="pull-left pagination-detail">
-                    <span class="pagination-info">显示第 <span th:text="${pageInfo.startRow}"></span> 到第 <span th:text="${pageInfo.endRow}"></span> 条记录，总共 <span th:text="${pageInfo.size}"></span>条记录</span>
+                    <span class="pagination-info">显示第 <span th:text="${pageInfo.startRow}"></span> 到第 <span th:text="${pageInfo.endRow}"></span> 条记录，总共 <span th:text="${pageInfo.total}"></span>条记录</span>
                     <span class="page-list">每页显示
-                        <span class="btn-group dropdown">
-                            <button type="button" class="btn btn-default  dropdown-toggle" data-toggle="dropdown">
-                                <span class="page-size"  th:text="${pageInfo.pageSize}" id="pageSize"></span>
-                                <!--保存当前页-->
-                                <input type="hidden" id="pageNum" th:value="${pageInfo.pageNum}" />
-                                 <span class="caret"></span>
-                             </button>
-                                <ul class="dropdown-menu" role="menu">
-                                <li  th:class="${pageInfo.pageSize== 5 }?'active':''"><a href="javascript:void(0)" th:onclick="'javascript:getUserListByPageSize('+5+')'" >5</a></li>
-                                <li  th:class="${pageInfo.pageSize== 8 }?'active':''"><a href="javascript:void(0)" th:onclick="'javascript:getUserListByPageSize('+8+')'">8</a></li>
-                             </ul>
-                         </span>条记录
+                         <span class="page-size"  th:text="${pageInfo.pageSize}" id="pageSize"></span>
+                        <!--<span class="btn-group dropdown" style="">-->
+                            <!--<button type="button" class="btn btn-default  dropdown-toggle" data-toggle="dropdown">-->
+                                <!--<span class="page-size"  th:text="${pageInfo.pageSize}" id="pageSize"></span>-->
+                                <!--&lt;!&ndash;保存当前页&ndash;&gt;-->
+                                <!--<input type="hidden" id="pageNum" th:value="${pageInfo.pageNum}" />-->
+                                 <!--<span class="caret"></span>-->
+                             <!--</button>-->
+                            <!--<ul class="dropdown-menu" role="menu">-->
+                                <!--<li  th:class="${pageInfo.pageSize== 5 }?'active':''"><a href="javascript:void(0)" th:onclick="'javascript:getUserListByPageSize('+5+')'" >5</a></li>-->
+                                <!--<li  th:class="${pageInfo.pageSize== 8 }?'active':''"><a href="javascript:void(0)" th:onclick="'javascript:getUserListByPageSize('+8+')'">8</a></li>-->
+                            <!--</ul>-->
+                         <!--</span>-->
+                        条记录
 	                </span>
 
                 </div>
