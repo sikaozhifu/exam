@@ -13,7 +13,7 @@
                 dataType: "json",
                 success: function (data) {
                     if (data == null) {
-                        window.location.href = ("/exam/admin/getAllUser");
+                        window.location.href = ("/exam/user/getAllUser?condition&info");
                     } else {
                         $("#id").val(data.id);
                         $("#username").val(data.username);
@@ -46,7 +46,7 @@
                         })
                     }
                     $("#modal-update").modal('hide');
-                    window.location.href = ("/exam/admin/getAllUser");
+                    window.location.href = ("/exam/user/getAllUser?condition&info");
                 }
             });
         }
@@ -68,11 +68,57 @@
                         alert("删除成功！");
                     }
                     $("#modal-delete").modal('hide');
-                    window.location.href = ("/exam/admin/getAllUser");
+                    window.location.href = ("/exam/user/getAllUser?condition&info");
                 }
             });
         }
-
+        addModel = function () {
+            if ($("#addName").val()==""){
+                alert("姓名不能为空！");
+                return;
+            }
+            if ($("#addUsername").val()==""){
+                alert("学号不能为空！");
+                return;
+            }
+            if ($("#addPassword").val()==""){
+                alert("密码不能为空！");
+                return;
+            }
+            if ($("#addEmail").val()==""){
+                alert("邮箱不能为空！");
+                return;
+            }
+            var email = $("#addEmail").val();
+            if(!email.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/))
+            {
+                alert("邮箱格式不正确！请重新输入");
+                return;
+            }
+            $.ajax({
+                type:"POST",
+                url:"/exam/user/addUser",
+                data:{
+                    name:$("#addName").val(),
+                    username:$("#addUsername").val(),
+                    password:$("#addPassword").val(),
+                    email:$("#addEmail").val(),
+                    role:$("#addRole").val()
+                },
+                dataType:"json",
+                success:function (data) {
+                    if (data == null){
+                        alert("添加失败，请联系管理员...");
+                    } else {
+                        $.each(data,function (key,value) {
+                            alert(value);
+                            $("#model-add").modal('hide');
+                            window.location.href = ("/exam/user/getAllUser?condition&info");
+                        })
+                    }
+                }
+            });
+        }
     </script>
 </section>
 <body class="sidebar-fixed header-fixed">
@@ -108,7 +154,8 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header bg-light">
-                            考生列表
+                            用户列表&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button class="btn btn-outline-success" data-toggle="modal" data-target="#modal-add">添加</button>
                         </div>
 
                         <div class="card-body">
@@ -259,6 +306,53 @@
             <div class="modal-footer border-0">
                 <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-danger" th:onclick="'javascript:deleteConfirm()'">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success border-0">
+                <h5 class="modal-title text-white">添加用户</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body p-5">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="addName" class="form-control-label">姓名</label>
+                            <input id="addName" class="form-control" value="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="addUsername" class="form-control-label">学号</label>
+                            <input id="addUsername" class="form-control" value="" required/>
+                        </div>
+                        <div class="form-group">
+                            <label for="addPassword" class="form-control-label">密码</label>
+                            <input type="password" id="addPassword" class="form-control" value="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="addEmail" class="form-control-label">邮箱</label>
+                            <input type="email" id="addEmail" class="form-control" value="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="addRole">角色</label>
+                            <select id="addRole" class="form-control" required>
+                                <option value="0">学生</option>
+                                <option value="1">教师</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" th:onclick="'javascript:addModel()'">Save</button>
             </div>
         </div>
     </div>

@@ -127,6 +127,34 @@ public class UserController {
         map.put("update_user", "修改失败！请联系管理员...");
         return map;
     }
+
+    @RequestMapping(value = "/addUser",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> addUser(@RequestParam("username") String username,
+                           @RequestParam("password") String password,
+                           @RequestParam("role") Integer role,
+                           @RequestParam("name") String name,
+                           @RequestParam("email") String email) {
+        Map<String,Object> map = new HashMap<>();
+        User exist = userService.getUserByUserName(username);
+        if (exist != null) {
+            map.put("addUser", "学号已注册！");
+            return map;
+        }
+        User user = new User();
+        user.setUsername(username);
+        user.setName(name);
+        user.setPassword(password);
+        user.setRole(role);
+        user.setEmail(email);
+        Integer result = userService.register(user);
+        if (result == 1) {
+            map.put("addUser", "用户添加成功！");
+        }else {
+            map.put("addUser", "用户添加失败，请联系管理员...");
+        }
+        return map;
+    }
     @RequestMapping(value = "/getAllUser",method = {RequestMethod.GET,RequestMethod.POST})
     public String getUserList(@RequestParam(value = "currentPage",defaultValue = "1") Integer currentPage,
                                   @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,

@@ -83,7 +83,8 @@ public interface UserMapper {
     @Select({
             "select",
             "id, username, name, password, email, role, createtime, updatetime",
-            "from user"
+            "from user",
+            "order by updatetime desc"
     })
     @Results({
             @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
@@ -119,7 +120,8 @@ public interface UserMapper {
             "select",
             "id, username, name, password, email, role, createtime, updatetime",
             "from user",
-            "where name like concat(concat('%',#{name}),'%')"
+            "where name like concat(concat('%',#{name}),'%')",
+            "order by updatetime desc"
     })
     @Results({
             @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
@@ -137,7 +139,8 @@ public interface UserMapper {
             "select",
             "id, username, name, password, email, role, createtime, updatetime",
             "from user",
-            "where username like concat(concat('%',#{username}),'%')"
+            "where username like concat(concat('%',#{username}),'%')",
+            "order by updatetime desc"
     })
     @Results({
             @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
@@ -155,7 +158,8 @@ public interface UserMapper {
             "select",
             "id, username, name, password, email, role, createtime, updatetime",
             "from user",
-            "where email like concat(concat('%',#{email}),'%')"
+            "where email like concat(concat('%',#{email}),'%')",
+            "order by updatetime desc"
     })
     @Results({
             @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
@@ -173,7 +177,8 @@ public interface UserMapper {
             "select",
             "id, username, name, password, email, role, createtime, updatetime",
             "from user",
-            "where role =#{role,jdbcType=INTEGER}"
+            "where role =#{role,jdbcType=INTEGER}",
+            "order by updatetime desc"
     })
     @Results({
             @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
