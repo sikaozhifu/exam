@@ -18,6 +18,7 @@
                         $("#title").val(data.model.title);
                         $("#type").val(data.model.type);
                         $("#answer").val(data.model.answer);
+                        $("#analysis").val(data.model.analysis);
                         $("#difficulty").val(data.model.difficulty);
                         $("#grade").val(data.model.grade);
                         $("#modal-update").modal();
@@ -33,6 +34,7 @@
                     modelId: $("#modelId").val(),
                     title: $("#title").val(),
                     answer: $("#answer").val(),
+                    analysis:$("#analysis").val(),
                     difficulty: $("#difficulty").val(),
                 },
                 dataType: "json",
@@ -238,7 +240,7 @@
 </div>
 <div class="modal fade" id="modal-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary border-0">
                 <h5 class="modal-title text-white">试题修改</h5>
@@ -249,7 +251,7 @@
             <!--输入框-->
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <div class="form-group">
                             <label for="modelId" class="form-control-label">序号</label>
                             <input id="modelId" class="form-control" value="" readonly/>
@@ -270,7 +272,11 @@
                         </div>
                         <div class="form-group">
                             <label for="answer" class="form-control-label">答案</label>
-                            <textarea id="answer" class="form-control" value=""></textarea>
+                            <textarea id="answer" class="form-control" value="" rows="10"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="analysis" class="form-control-label">解析</label>
+                            <textarea id="analysis" class="form-control" value="" rows="10"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="difficulty">难度</label>
