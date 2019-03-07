@@ -131,4 +131,23 @@ public class PageController {
             return result;
         }
     }
+
+    @RequestMapping(value = "/settings")
+    public String toSettings(HttpSession session){
+        String result = isAdmin(session);
+        if (result.equals("success")){
+            return "settings";
+        }else {
+            return result;
+        }
+    }
+    @RequestMapping(value = "/updatePassword")
+    public String toUpdatePassword(HttpSession session){
+        String result = isAdmin(session);
+        if (result.equals("success")){
+            return "update_password";
+        }else {
+            return result;
+        }
+    }
 }

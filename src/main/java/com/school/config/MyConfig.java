@@ -15,16 +15,16 @@ public class MyConfig extends WebMvcConfigurationSupport {
         super.addResourceHandlers(registry);
     }
 
-//    @Override
-//    protected void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**")
-//                .excludePathPatterns("/page/login")//首页页面
-//                .excludePathPatterns("/static/**")//静态资源
-//                .excludePathPatterns("/page/register")//注册页面
-//                .excludePathPatterns("/user/login")//登录
-//                .excludePathPatterns("/user/register")//注册
-//                .excludePathPatterns("/admin/login")//管理员登录
-//                .excludePathPatterns("/page/adminLogin");//管理员页面
-//        super.addInterceptors(registry);
-//    }
+    @Override
+    protected void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**")
+                .excludePathPatterns("/page/login")//首页页面
+                .excludePathPatterns("/static/**")//静态资源
+                .excludePathPatterns("/page/register")//注册页面
+                .excludePathPatterns("/user/login")//登录
+                .excludePathPatterns("/user/register")//注册
+                .excludePathPatterns("/admin/login")//管理员登录
+                .excludePathPatterns("/page/adminLogin");//管理员页面
+        super.addInterceptors(registry);
+    }
 }
