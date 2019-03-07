@@ -71,6 +71,11 @@ public class ModelServiceImpl implements ModelService {
         return modelVoList;
     }
 
+    @Override
+    public Long getModelCount() {
+        return modelMapper.getModelCount();
+    }
+
     /**
      * //转化为包装类ModelVo
      * @param model

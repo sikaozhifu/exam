@@ -149,4 +149,9 @@ public interface ModelMapper {
     })
     //查询所有
     List<Model> selectAll();
+
+    @Select({
+            "select count(*) from model"
+    })
+    Long getModelCount();
 }

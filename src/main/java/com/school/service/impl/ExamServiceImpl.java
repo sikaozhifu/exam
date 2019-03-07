@@ -65,4 +65,19 @@ public class ExamServiceImpl implements ExamService {
     public List<Exam> getExamByCondition(String exam_name) {
         return examMapper.getExamByCondition(exam_name);
     }
+
+    @Override
+    public List<Exam> getExamRecently() {
+        List<Exam> examList = examMapper.getExamRecently();
+        if (examList.size() >= 3){
+            //取前三条数据
+            return examList.subList(0, 3);
+        }
+        return examList;
+    }
+
+    @Override
+    public Long getExamCount() {
+        return examMapper.getExamCount();
+    }
 }

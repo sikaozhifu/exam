@@ -22,4 +22,10 @@ public interface ExamService {
     Integer deleteExam(Integer exam_id);
     //模糊查询
     List<Exam> getExamByCondition(String exam_name);
+
+    //查询最近七天记录
+    List<Exam> getExamRecently();
+
+    //查询所有记录
+    Long getExamCount();
 }

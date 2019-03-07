@@ -22,4 +22,7 @@ public interface ModelService {
     Integer deleteModel(Integer modelId);
 
     List<ModelVo> selectByTitle(String title);
+
+    //获取所有记录
+    Long getModelCount();
 }

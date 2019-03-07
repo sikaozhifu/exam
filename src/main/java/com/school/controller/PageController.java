@@ -19,7 +19,7 @@ public class PageController {
     }
     //first
 
-    @RequestMapping(value = "/login")
+    @RequestMapping(value = {"/login","/","/page"})
     public String toLogin() {
         return "login";
     }
@@ -38,19 +38,19 @@ public class PageController {
 
     @RequestMapping(value = "/adminLogin")
     public String toAdminLogin() {
-        return "adminLogin";
+        return "admin_login";
     }
 
     @RequestMapping(value = "/adminForgot")
     public String toAdminForgot() {
-        return "adminForgot";
+        return "admin_forgot";
     }
 
     @RequestMapping(value = "/adminTable")
     public String toAdminTable(HttpSession session) {
         String result = isAdmin(session);
         if (result.equals("success")){
-            return "adminTable";
+            return "admin_table";
         }else {
             return result;
         }
@@ -60,7 +60,7 @@ public class PageController {
     public String toAdminIndex(HttpSession session) {
         String result = isAdmin(session);
         if (result.equals("success")){
-            return "adminIndex";
+            return "admin_index";
         }else {
             return result;
         }
@@ -95,14 +95,14 @@ public class PageController {
 
     @RequestMapping(value = "/addModel")
     public String toAddModel() {
-        return "addModel";
+        return "add_model";
     }
 
     @RequestMapping(value = "/modelList")
     public String toModelList(HttpSession session) {
         String result = isAdmin(session);
         if (result.equals("success")){
-            return "modelList";
+            return "model_list";
         }else {
             return result;
         }
