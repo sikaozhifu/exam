@@ -1,6 +1,7 @@
 package com.school.controller;
 
-import com.school.entity.Admin;
+import com.school.entity.Role;
+import com.school.utils.RoleUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -10,11 +11,13 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/page")
 public class PageController {
 
+    //是否有权限操作
     public String isAdmin(HttpSession session){
-        Admin admin = (Admin) session.getAttribute("admin");
-        if (admin == null){
-            //todo 暂时开放权限
-//            return "redirect:/page/adminLogin";
+        Role role = (Role) session.getAttribute("role");
+        if (role == null){
+            return "redirect:/page/login";
+        }else if (role.getType().equals(RoleUtil.RoleType.STUDENT)){
+            return "redirect:/page/login";
         }
         return "success";
     }

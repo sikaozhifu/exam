@@ -1,8 +1,11 @@
 package com.school.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.school.entity.Exam;
 import com.school.entity.Role;
 import com.school.entity.User;
+import com.school.service.ExamService;
+import com.school.service.ModelService;
 import com.school.service.UserService;
 import com.school.utils.MD5Utils;
 import com.school.utils.RoleUtil;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -20,6 +24,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private ExamService examService;
+    @Autowired
+    private ModelService modelService;
 
     @RequestMapping(value = "/getUser",method = RequestMethod.POST)
     @ResponseBody
@@ -64,6 +72,14 @@ public class UserController {
 
                 session.setAttribute("role", r);
                 session.setAttribute("user", user);
+                Map<String,Object> map = new HashMap<>();
+                List<Exam> list = examService.getExamRecently();
+                Long examCount = examService.getExamCount();
+                Long modelCount = modelService.getModelCount();
+                map.put("examCount",examCount);
+                map.put("modelCount", modelCount);
+                session.setAttribute("map", map);
+                session.setAttribute("list", list);
                 return "redirect:/page/teacherIndex";
             }else {
                 request.setAttribute("loginMessage", "您不是教师");
