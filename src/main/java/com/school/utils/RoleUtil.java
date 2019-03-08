@@ -1,17 +1,18 @@
 package com.school.utils;
 
 public class RoleUtil {
-    enum Role{
+    public enum RoleType{
         STUDENT(0,"学生"),
-        TEACHER(1,"教师")
+        TEACHER(1,"教师"),
+        ADMIN(100,"管理员")
         ;
         private Integer value;
         private String desc;
 
-        Role() {
+        RoleType() {
         }
 
-        Role(Integer value, String desc) {
+        RoleType(Integer value, String desc) {
             this.value = value;
             this.desc = desc;
         }
@@ -34,11 +35,20 @@ public class RoleUtil {
     }
     public static Integer getRole(String info){
         if (info.contains("教师")||info.contains("教")||info.contains("师")){
-            return Role.TEACHER.getValue();
+            return RoleType.TEACHER.getValue();
         }
         if (info.contains("学生")||info.contains("学")||info.contains("生")){
-            return Role.TEACHER.getValue();
+            return RoleType.STUDENT.getValue();
         }
         return null;
+    }
+
+    public static String getRoleDesc(Integer value){
+        if (value == 0){
+            return RoleType.STUDENT.getDesc();
+        }else if (value == 1){
+            return RoleType.TEACHER.getDesc();
+        }
+        return RoleType.STUDENT.getDesc();
     }
 }

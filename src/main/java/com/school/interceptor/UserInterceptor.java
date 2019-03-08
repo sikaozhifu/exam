@@ -1,29 +1,29 @@
 package com.school.interceptor;
 
-import com.school.entity.Admin;
 import com.school.entity.User;
+import com.school.utils.RoleUtil;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class LoginInterceptor implements HandlerInterceptor {
+public class UserInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Object login = request.getSession().getAttribute("admin");
-        if (login == null){
-//            response.sendRedirect("page/login");
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null){
+            response.sendRedirect(request.getContextPath() + "/page/login");
             return false;
         }
-        if (login instanceof User){
-            //学生或者老师
+        if (user.getRole()== RoleUtil.getRole("教师")){
             return true;
-        }else if (login instanceof Admin){
-            //管理员
+        }else if (user.getRole()==RoleUtil.getRole("学生")){
             return true;
+        }else {
+            response.sendRedirect(request.getContextPath() + "/page/login");
+            return false;
         }
-        return false;
     }
 
     @Override

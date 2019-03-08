@@ -1,9 +1,11 @@
 package com.school.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.school.entity.Admin;
+import com.school.entity.Role;
 import com.school.entity.User;
 import com.school.service.UserService;
+import com.school.utils.MD5Utils;
+import com.school.utils.RoleUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +36,8 @@ public class UserController {
                         @RequestParam("role") Integer role,
                         HttpServletRequest request,
                         HttpSession session){
-        User user = userService.login(username, password);
+        String md5_password = MD5Utils.md5(password);
+        User user = userService.login(username, md5_password);
         if (user == null){
             request.setAttribute("loginMessage", "用户名或密码错误");
             return "forward:/page/login";
@@ -43,6 +46,10 @@ public class UserController {
             //可能为学生
             //查询数据库中该用户是否为学生
             if (user.getRole().equals(0)){
+                //前端显示
+                Role r = new Role(user, RoleUtil.RoleType.STUDENT);
+
+                session.setAttribute("role", r);
                 session.setAttribute("user", user);
                 return "redirect:/page/studentIndex";
             }else {
@@ -52,6 +59,10 @@ public class UserController {
             //可能为教师
             //查找数据库中该用户是否为教师
             if (user.getRole().equals(1)){
+                //前端显示
+                Role r = new Role(user, RoleUtil.RoleType.TEACHER);
+
+                session.setAttribute("role", r);
                 session.setAttribute("user", user);
                 return "redirect:/page/teacherIndex";
             }else {
@@ -75,7 +86,7 @@ public class UserController {
         User user = new User();
         user.setUsername(username);
         user.setName(name);
-        user.setPassword(password);
+        user.setPassword(MD5Utils.md5(password));
         user.setRole(role);
         user.setEmail(email);
         Integer result = userService.register(user);
@@ -144,7 +155,7 @@ public class UserController {
         User user = new User();
         user.setUsername(username);
         user.setName(name);
-        user.setPassword(password);
+        user.setPassword(MD5Utils.md5(password));
         user.setRole(role);
         user.setEmail(email);
         Integer result = userService.register(user);
@@ -161,13 +172,29 @@ public class UserController {
                                   @RequestParam("condition")String condition,
                                   @RequestParam("info")String info,
                                   HttpSession session, HttpServletRequest request) {
-        Admin admin = (Admin) session.getAttribute("admin");
-        if (admin == null){
-            return "redirect:/page/adminLogin";
+        Role role = (Role) session.getAttribute("role");
+        if (role == null){
+            return "redirect:/page/login";
         }
-        PageInfo<User> pageInfo = userService.getAllUserByCondition(currentPage, pageSize,condition,info);
+        if (role.getType() == RoleUtil.RoleType.STUDENT){
+            return "redirect:/page/login";
+        }
+
+        if (role.getType() == RoleUtil.RoleType.TEACHER){
+            //教师
+            if (info == null||info.equals("")){
+                info = "学生";
+            }
+            PageInfo<User> pageInfo = userService.getAllUserByCondition(currentPage, pageSize,"3",info);
 //        request.setAttribute("pageSize", pageSize);
-        request.setAttribute("pageInfo", pageInfo);
-        return "forward:/page/adminTable";
+            request.setAttribute("pageInfo", pageInfo);
+            return "forward:/page/teacherTable";
+        }else {
+            //管理员
+            PageInfo<User> pageInfo = userService.getAllUserByCondition(currentPage, pageSize,condition,info);
+//        request.setAttribute("pageSize", pageSize);
+            request.setAttribute("pageInfo", pageInfo);
+            return "forward:/page/adminTable";
+        }
     }
 }

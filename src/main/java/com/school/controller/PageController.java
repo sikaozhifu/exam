@@ -13,7 +13,8 @@ public class PageController {
     public String isAdmin(HttpSession session){
         Admin admin = (Admin) session.getAttribute("admin");
         if (admin == null){
-            return "redirect:/page/adminLogin";
+            //todo 暂时开放权限
+//            return "redirect:/page/adminLogin";
         }
         return "success";
     }
@@ -111,6 +112,16 @@ public class PageController {
     @RequestMapping(value = "/teacherIndex")
     public String toTeacherIndex() {
         return "teacher_index";
+    }
+
+    @RequestMapping(value = "/teacherTable")
+    public String toTeacherTable(HttpSession session) {
+        String result = isAdmin(session);
+        if (result.equals("success")){
+            return "teacher_table";
+        }else {
+            return result;
+        }
     }
 
     @RequestMapping(value = "/addExam")

@@ -34,7 +34,7 @@
     </div>
 </div>
 <!--上边栏-->
-<nav class="navbar page-header" th:fragment="admin-navbar">
+<nav class="navbar page-header" th:fragment="teacher-navbar">
     <a href="#" class="btn btn-link sidebar-mobile-toggle d-md-none mr-auto">
         <i class="fa fa-bars"></i>
     </a>
@@ -66,7 +66,7 @@
                     <i class="fa fa-wrench"></i> 修改密码
                 </a>
 
-                <a href="#" th:href="@{/common/logout}" class="dropdown-item">
+                <a href="#" th:href="@{/admin/logout}" class="dropdown-item">
                     <i class="fa fa-lock"></i> 退出登录
                 </a>
             </div>
@@ -75,7 +75,7 @@
 </nav>
 
 <!--侧边栏-->
-<div th:fragment="admin-sidebar">
+<div th:fragment="teacher-sidebar">
     <nav class="sidebar-nav">
         <ul class="nav">
             <li class="nav-title">Navigation</li>
@@ -129,8 +129,8 @@
             </li>
 
             <li class="nav-item">
-                <a href="table.html" th:href="@{/user/getAllUser(condition=null,info=null)}" class="nav-link">
-                    <i class="icon icon-energy"></i> 用户管理
+                <a href="table.html" th:href="@{/user/getAllUser(condition=3,info=null)}" class="nav-link">
+                    <i class="icon icon-energy"></i> 考生管理
                 </a>
             </li>
 
