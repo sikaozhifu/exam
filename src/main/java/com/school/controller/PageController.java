@@ -50,6 +50,8 @@ public class PageController {
         return "admin_forgot";
     }
 
+    //admin、teacher
+
     @RequestMapping(value = "/adminTable")
     public String toAdminTable(HttpSession session) {
         String result = isAdmin(session);
@@ -70,36 +72,14 @@ public class PageController {
         }
     }
 
-    //student
-
-    @RequestMapping(value = "/studentIndex")
-    public String toStudentIndex() {
-        return "studentIndex";
-    }
-
-    @RequestMapping(value = "/studentStart")
-    public String toStudentStart() {
-        return "studentStart";
-    }
-
-    @RequestMapping(value = "/studentTable")
-    public String toStudentTable() {
-        return "studentTable";
-    }
-
-    @RequestMapping(value = "/indexPage")
-    public String toIndexPage() {
-        return "indexPage";
-    }
-
-    @RequestMapping(value = "/examPage")
-    public String toExamPage() {
-        return "examPage";
-    }
-
     @RequestMapping(value = "/addModel")
-    public String toAddModel() {
-        return "add_model";
+    public String toAddModel(HttpSession session) {
+        String result = isAdmin(session);
+        if (result.equals("success")){
+            return "add_model";
+        }else {
+            return result;
+        }
     }
 
     @RequestMapping(value = "/modelList")
@@ -155,6 +135,7 @@ public class PageController {
             return result;
         }
     }
+
     @RequestMapping(value = "/updatePassword")
     public String toUpdatePassword(HttpSession session){
         String result = isAdmin(session);
@@ -163,5 +144,42 @@ public class PageController {
         }else {
             return result;
         }
+    }
+
+    //student
+
+    @RequestMapping(value = "/studentIndex")
+    public String toStudentIndex() {
+        return "studentIndex";
+    }
+
+    @RequestMapping(value = "/studentStart")
+    public String toStudentStart() {
+        return "studentStart";
+    }
+
+    @RequestMapping(value = "/studentTable")
+    public String toStudentTable() {
+        return "studentTable";
+    }
+
+    @RequestMapping(value = "/indexPage")
+    public String toIndexPage() {
+        return "indexPage";
+    }
+
+    @RequestMapping(value = "/examPage")
+    public String toExamPage() {
+        return "examPage";
+    }
+
+    @RequestMapping(value = "/student_settings")
+    public String toStudentSettings(){
+        return "student_settings";
+    }
+
+    @RequestMapping(value = "/student_update_password")
+    public String toStudentUpdatePassword(){
+        return "student_update_password";
     }
 }

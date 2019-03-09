@@ -46,7 +46,10 @@ public class CommonController {
             Integer result = adminService.updateAdmin(admin);
             if (result == 1){
                 map.put("commonUpdateInfo", "信息修改成功！");
-                //role是否会变化
+                //需要更新session的信息
+                Admin a = adminService.getAdminById(role.getId());
+                Role r = new Role(a, role.getType());
+                session.setAttribute("role", r);
                 return map;
             }else {
                 map.put("commonUpdateInfo", "信息修改失败！请联系管理员...");
@@ -59,7 +62,10 @@ public class CommonController {
             Integer result = userService.updateUser(user);
             if (result == 1){
                 map.put("commonUpdateInfo", "信息修改成功！");
-                //role是否会变化
+                //需要更新session的信息
+                User u = userService.getUserById(role.getId());
+                Role r = new Role(u, role.getType());
+                session.setAttribute("role", r);
                 return map;
             }else {
                 map.put("commonUpdateInfo", "信息修改失败！请联系管理员...");
