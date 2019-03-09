@@ -9,7 +9,7 @@
         <div class="sidebar" th:include="student::student-sidebar"></div>
         <div class="content">
             <div class="container-fluid">
-                <div class="row">
+                <div class="row" style="margin-top: 25px">
                     <div class="col-md-3">
                         <div class="card p-4">
                             <div class="card-body d-flex justify-content-between align-items-center">
@@ -24,7 +24,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-3">
                         <div class="card p-4">
                             <div class="card-body d-flex justify-content-between align-items-center">
@@ -39,7 +38,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-3">
                         <div class="card p-4">
                             <div class="card-body d-flex justify-content-between align-items-center">
@@ -54,14 +52,13 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="margin-top: 30px">
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header bg-light">
-                            我的试卷
+                            最近考试
                         </div>
 
                         <div class="card-body">
@@ -69,54 +66,20 @@
                                 <table class="table table-hover">
                                     <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Sales</th>
-                                        <th>Price</th>
-                                        <th>Discount</th>
-                                        <th>操作</th>
+                                        <th>试卷名称</th>
+                                        <th>组卷类型</th>
+                                        <th>所需时间</th>
+                                        <th>发布者</th>
+                                        <th>试卷总分</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody th:each="exam:${session.list}">
                                     <tr>
-                                        <td>1</td>
-                                        <td class="text-nowrap">Samsung Galaxy S8</td>
-                                        <td>31,589</td>
-                                        <td>$800</td>
-                                        <td>5%</td>
-                                        <td><a href="indexPage.html" th:href="@{/page/indexPage}">开始做题</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td class="text-nowrap">Google Pixel XL</td>
-                                        <td>99,542</td>
-                                        <td>$750</td>
-                                        <td>3%</td>
-                                        <td>已结束</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td class="text-nowrap">iPhone X</td>
-                                        <td>62,220</td>
-                                        <td>$1,200</td>
-                                        <td>0%</td>
-                                        <td><a href="#">开始做题</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td class="text-nowrap">OnePlus 5T</td>
-                                        <td>50,000</td>
-                                        <td>$650</td>
-                                        <td>5%</td>
-                                        <td>已结束</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td class="text-nowrap">Google Nexus 6</td>
-                                        <td>400</td>
-                                        <td>$400</td>
-                                        <td>7%</td>
-                                        <td>已结束</td>
+                                        <td class="text-nowrap" th:text="${exam.examName}">Samsung Galaxy S8</td>
+                                        <td th:text="${exam.examType}==0?'随机':'导入'">31,589</td>
+                                        <td th:text="${exam.needTime}">$800</td>
+                                        <td th:text="${exam.examAuthor}"></td>
+                                        <td th:text="${exam.examGrade}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -124,6 +87,12 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row" style="margin-top: 60px;">
+                <p class="col-xs-12 col-sm-12 text-center slogan" style="margin-bottom: 20px">
+                    英语考试，就用轻考试！ </p>
+                <p class="col-xs-12 col-sm-12 text-center copyright" style="margin-bottom: 20px">
+                    版权所有 &copy;2019 北京轻考试信息技术有限公司 保留所有权利 粤ICP备1507084220号 </p>
             </div>
         </div>
     </div>

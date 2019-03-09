@@ -57,6 +57,10 @@ public class ExamSqlProvider {
             sql.VALUES("model_ids", "#{modelIds,jdbcType=VARCHAR}");
         }
         
+        if (record.getExamFlag() != null) {
+            sql.VALUES("exam_flag", "#{examFlag,jdbcType=INTEGER}");
+        }
+        
         return sql.toString();
     }
 
@@ -106,6 +110,10 @@ public class ExamSqlProvider {
         
         if (record.getModelIds() != null) {
             sql.SET("model_ids = #{modelIds,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getExamFlag() != null) {
+            sql.SET("exam_flag = #{examFlag,jdbcType=INTEGER}");
         }
         
         sql.WHERE("exam_id = #{examId,jdbcType=INTEGER}");

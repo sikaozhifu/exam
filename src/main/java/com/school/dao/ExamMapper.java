@@ -28,13 +28,15 @@ public interface ExamMapper {
         "need_time, exam_author, ",
         "create_time, update_time, ",
         "exam_answer, exam_analysis, ",
-        "exam_grade, model_ids)",
+        "exam_grade, model_ids, ",
+        "exam_flag)",
         "values (#{examId,jdbcType=INTEGER}, #{examName,jdbcType=VARCHAR}, ",
         "#{examContent,jdbcType=VARCHAR}, #{examType,jdbcType=INTEGER}, ",
         "#{needTime,jdbcType=VARCHAR}, #{examAuthor,jdbcType=VARCHAR}, ",
         "now(), now(), ",
         "#{examAnswer,jdbcType=VARCHAR}, #{examAnalysis,jdbcType=VARCHAR}, ",
-        "#{examGrade,jdbcType=REAL}, #{modelIds,jdbcType=VARCHAR})"
+        "#{examGrade,jdbcType=REAL}, #{modelIds,jdbcType=VARCHAR}, ",
+        "#{examFlag,jdbcType=INTEGER})"
     })
     int insert(Exam record);
 
@@ -44,7 +46,7 @@ public interface ExamMapper {
     @Select({
         "select",
         "exam_id, exam_name, exam_content, exam_type, need_time, exam_author, create_time, ",
-        "update_time, exam_answer, exam_analysis, exam_grade, model_ids",
+        "update_time, exam_answer, exam_analysis, exam_grade, model_ids, exam_flag",
         "from exam",
         "where exam_id = #{examId,jdbcType=INTEGER}"
     })
@@ -60,7 +62,8 @@ public interface ExamMapper {
         @Result(column="exam_answer", property="examAnswer", jdbcType=JdbcType.VARCHAR),
         @Result(column="exam_analysis", property="examAnalysis", jdbcType=JdbcType.VARCHAR),
         @Result(column="exam_grade", property="examGrade", jdbcType=JdbcType.REAL),
-        @Result(column="model_ids", property="modelIds", jdbcType=JdbcType.VARCHAR)
+        @Result(column="model_ids", property="modelIds", jdbcType=JdbcType.VARCHAR),
+        @Result(column="exam_flag", property="examFlag", jdbcType=JdbcType.INTEGER)
     })
     Exam selectByPrimaryKey(Integer examId);
 
@@ -78,7 +81,8 @@ public interface ExamMapper {
           "exam_answer = #{examAnswer,jdbcType=VARCHAR},",
           "exam_analysis = #{examAnalysis,jdbcType=VARCHAR},",
           "exam_grade = #{examGrade,jdbcType=REAL},",
-          "model_ids = #{modelIds,jdbcType=VARCHAR}",
+          "model_ids = #{modelIds,jdbcType=VARCHAR},",
+          "exam_flag = #{examFlag,jdbcType=INTEGER}",
         "where exam_id = #{examId,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(Exam record);
@@ -86,7 +90,7 @@ public interface ExamMapper {
     @Select({
             "select",
             "exam_id, exam_name, exam_content, exam_type, need_time, exam_author, create_time, ",
-            "update_time, exam_answer, exam_analysis, exam_grade, model_ids",
+            "update_time, exam_answer, exam_analysis, exam_grade, model_ids, exam_flag",
             "from exam"
     })
     @Results({
@@ -101,14 +105,15 @@ public interface ExamMapper {
             @Result(column="exam_answer", property="examAnswer", jdbcType=JdbcType.VARCHAR),
             @Result(column="exam_analysis", property="examAnalysis", jdbcType=JdbcType.VARCHAR),
             @Result(column="exam_grade", property="examGrade", jdbcType=JdbcType.REAL),
-            @Result(column="model_ids", property="modelIds", jdbcType=JdbcType.VARCHAR)
+            @Result(column="model_ids", property="modelIds", jdbcType=JdbcType.VARCHAR),
+            @Result(column="exam_flag", property="examFlag", jdbcType=JdbcType.INTEGER)
     })
     List<Exam> getAllExam();
 
     @Select({
             "select",
             "exam_id, exam_name, exam_content, exam_type, need_time, exam_author, create_time, ",
-            "update_time, exam_answer, exam_analysis, exam_grade, model_ids",
+            "update_time, exam_answer, exam_analysis, exam_grade, model_ids, exam_flag",
             "from exam",
             "where exam_name like concat(concat('%',#{exam_name}),'%')"
     })
@@ -124,14 +129,15 @@ public interface ExamMapper {
             @Result(column="exam_answer", property="examAnswer", jdbcType=JdbcType.VARCHAR),
             @Result(column="exam_analysis", property="examAnalysis", jdbcType=JdbcType.VARCHAR),
             @Result(column="exam_grade", property="examGrade", jdbcType=JdbcType.REAL),
-            @Result(column="model_ids", property="modelIds", jdbcType=JdbcType.VARCHAR)
+            @Result(column="model_ids", property="modelIds", jdbcType=JdbcType.VARCHAR),
+            @Result(column="exam_flag", property="examFlag", jdbcType=JdbcType.INTEGER)
     })
     List<Exam> getExamByCondition(String exam_name);
 
     @Select({
             "select",
             "exam_id, exam_name, exam_content, exam_type, need_time, exam_author, create_time, ",
-            "update_time, exam_answer, exam_analysis, exam_grade, model_ids",
+            "update_time, exam_answer, exam_analysis, exam_grade, model_ids, exam_flag",
             "from exam",
             "where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(update_time)"
     })
@@ -147,9 +153,9 @@ public interface ExamMapper {
             @Result(column="exam_answer", property="examAnswer", jdbcType=JdbcType.VARCHAR),
             @Result(column="exam_analysis", property="examAnalysis", jdbcType=JdbcType.VARCHAR),
             @Result(column="exam_grade", property="examGrade", jdbcType=JdbcType.REAL),
-            @Result(column="model_ids", property="modelIds", jdbcType=JdbcType.VARCHAR)
+            @Result(column="model_ids", property="modelIds", jdbcType=JdbcType.VARCHAR),
+            @Result(column="exam_flag", property="examFlag", jdbcType=JdbcType.INTEGER)
     })
-
     List<Exam> getExamRecently();
 
     @Select({

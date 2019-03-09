@@ -116,7 +116,7 @@
         }
         saveExam = function () {
             $("#ids").val(ids);
-            $("#exam_type").val(0);
+            // $("#exam_type").val(0);//默认组卷类型
             $("#modal-2").modal('hide');
 
         }
@@ -157,7 +157,8 @@
                                 <input name="exam_name" id="exam_name" class="form-control" value=""
                                        placeholder="请输入试卷名称" required>
                                 <input name="ids" type="hidden" id="ids" />
-                                <input name="exam_type" type="hidden" id="exam_type" />
+                                //默认组卷类型
+                                <!--<input name="exam_type" type="hidden" id="exam_type" />-->
                             </div>
                             <div class="form-group">
                                 <label for="exam_name" class="form-control-label">组卷类型</label>

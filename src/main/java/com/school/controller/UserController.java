@@ -59,6 +59,9 @@ public class UserController {
 
                 session.setAttribute("role", r);
                 session.setAttribute("user", user);
+                //获取最近三条考试记录
+                List<Exam> list = examService.getExamRecently();
+                session.setAttribute("list", list);
                 return "redirect:/page/studentIndex";
             }else {
                 request.setAttribute("loginMessage", "您不是学生");

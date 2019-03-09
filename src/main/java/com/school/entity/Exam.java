@@ -27,6 +27,8 @@ public class Exam {
 
     private String modelIds;
 
+    private Integer examFlag;
+
     public Integer getExamId() {
         return examId;
     }
@@ -121,5 +123,13 @@ public class Exam {
 
     public void setModelIds(String modelIds) {
         this.modelIds = modelIds == null ? null : modelIds.trim();
+    }
+
+    public Integer getExamFlag() {
+        return examFlag;
+    }
+
+    public void setExamFlag(Integer examFlag) {
+        this.examFlag = examFlag;
     }
 }

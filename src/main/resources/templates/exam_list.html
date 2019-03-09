@@ -107,13 +107,33 @@
                 }
             });
         }
-    </script>
-    <!--<script type="text/javascript">-->
 
-        <!--window.onload = function() {-->
-           <!---->
-        <!--}-->
-    <!--</script>-->
+        //操作model
+        operateModel = function (examId) {
+            $("#operateId").val(examId);
+            $("#modal-operate").modal();
+        }
+        operateConfirm = function () {
+            $.ajax({
+                type: "POST",
+                data: {examId: $("#operateId").val()},
+                url: "/exam/exam/update",
+                dataType: "json",
+                success: function (data) {
+                    if (data == null) {
+                        alert("操作失败！请联系管理员...");
+                    } else {
+                        $.each(data, function (key, value) {
+                            alert(value);
+                        })
+                    }
+                    $("#modal-operate").modal('hide');
+                    window.location.href = ("/exam/exam/select");
+                }
+            });
+        }
+    </script>
+
 </section>
 <body class="sidebar-fixed header-fixed">
 <div class="page-wrapper">
@@ -171,9 +191,14 @@
                                                 <button id="update-btn" class="btn btn-outline-primary"
                                                         th:onclick="'javascript:updateModel('+${exam.examId}+');'">查看
                                                 </button>
+                                                <button id="operate-btn" class="btn btn-outline-success" data-toggle="modal"
+                                                        th:text="${exam.examFlag}==0?'开始考试':'停止考试'"
+                                                        th:onclick="'javascript:operateModel('+${exam.examId}+');'">开始
+                                                </button>
                                                 <button id="delete-btn" class="btn btn-outline-danger" data-toggle="modal"
                                                         th:onclick="'javascript:deleteModel('+${exam.examId}+');'">删除
                                                 </button>
+
                                             </td>
                                         </tr>
                                         </tbody>
@@ -252,6 +277,30 @@
             <div class="modal-footer border-0">
                 <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-danger" th:onclick="'javascript:deleteConfirm()'">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--开始-->
+<div class="modal fade" id="modal-operate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger border-0">
+                <h5 class="modal-title text-white">操作试卷</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body p-5">
+                您确认要操作该试卷吗？
+                <input type="hidden" id="operateId" name="operateId"/>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" th:onclick="'javascript:operateConfirm()'">Continue</button>
             </div>
         </div>
     </div>

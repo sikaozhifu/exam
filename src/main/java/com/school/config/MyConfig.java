@@ -1,6 +1,6 @@
 package com.school.config;
 
-import com.school.interceptor.AdminInterceptor;
+import com.school.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -17,7 +17,7 @@ public class MyConfig extends WebMvcConfigurationSupport {
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AdminInterceptor()).addPathPatterns("/**")
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**")
                 .excludePathPatterns("/page/login")//首页页面
                 .excludePathPatterns("/static/**")//静态资源
                 .excludePathPatterns("/page/register")//注册页面

@@ -158,6 +158,11 @@ public class PageController {
         return "studentStart";
     }
 
+    @RequestMapping(value = "/studentMistakes")
+    public String toStudentMistake() {
+        return "studentMistakes";
+    }
+
     @RequestMapping(value = "/studentTable")
     public String toStudentTable() {
         return "studentTable";

@@ -28,4 +28,8 @@ public interface ExamService {
 
     //查询所有记录
     Long getExamCount();
+
+    //更新Exam
+    Integer updateExam(Exam exam);
+
 }

@@ -19,7 +19,7 @@ public class ExamServiceImpl implements ExamService {
     private ModelService modelService;
     @Override
     public Integer insertExam(Exam exam) {
-        return examMapper.insertSelective(exam);
+        return examMapper.insert(exam);
     }
 
     @Override
@@ -79,5 +79,10 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public Long getExamCount() {
         return examMapper.getExamCount();
+    }
+
+    @Override
+    public Integer updateExam(Exam exam) {
+        return examMapper.updateByPrimaryKey(exam);
     }
 }

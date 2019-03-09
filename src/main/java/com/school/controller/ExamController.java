@@ -2,8 +2,10 @@ package com.school.controller;
 
 import com.school.entity.Exam;
 import com.school.entity.ModelVo;
+import com.school.entity.Role;
 import com.school.service.ExamService;
 import com.school.service.ModelService;
+import com.school.utils.RoleUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,14 +32,13 @@ public class ExamController {
     public String addExam(
             @RequestParam("ids")String ids,
             @RequestParam("exam_name")String exam_name,
-            @RequestParam("exam_type")String exam_type,
             @RequestParam("need_time")String need_time,
             @RequestParam("exam_author")String exam_author
             ){
         List<ModelVo> modelVoList = examService.manageModel(ids);
         Exam exam = new Exam();
         exam.setExamName(exam_name);//试卷名称
-        exam.setExamType(Integer.parseInt(exam_type));//试卷类型
+        exam.setExamType(0);//默认组卷类型
         exam.setNeedTime(need_time);//所需时间
         exam.setExamAuthor(exam_author);//发布者
         String model_ids = "";//试题ids
@@ -56,6 +58,7 @@ public class ExamController {
         exam.setExamAnswer(exam_answer);
         exam.setExamAnalysis(exam_analysis);
         exam.setExamGrade(exam_grade);
+        exam.setExamFlag(0);//默认考试未开启
         Integer result = examService.insertExam(exam);
         if (result == 1){
             return "redirect:/exam/select";
@@ -76,9 +79,13 @@ public class ExamController {
     }
 
     @RequestMapping(value = "/select",method = RequestMethod.GET)
-    public String getAllExam(HttpServletRequest request){
+    public String getAllExam(HttpServletRequest request, HttpSession session){
         List<Exam> examList = examService.getAllExam();
         request.setAttribute("list", examList);
+        Role role = (Role) session.getAttribute("role");
+        if (role.getType() == RoleUtil.RoleType.STUDENT){
+            return "forward:/page/studentStart";
+        }
         return "forward:/page/exam_list";
     }
 
@@ -113,5 +120,36 @@ public class ExamController {
             map.put("deleteExam", "删除失败！请联系管理员...");
         }
         return map;
+    }
+
+    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> updateExam(@RequestParam("examId")Integer examId){
+        Map<String,Object> map = new HashMap<>();
+        if (examId == null||examId.equals("")){
+            map.put("deleteExam", "操作失败！请联系管理员...");
+            return map;
+        }
+        Exam exam = examService.getExamById(examId);
+        if (exam.getExamFlag() == 0){
+            exam.setExamFlag(1);
+        }else {
+            exam.setExamFlag(0);
+        }
+        Integer result = examService.updateExam(exam);
+        if (result == 1){
+            map.put("deleteExam", "试卷操作成功！");
+        }else {
+            map.put("deleteExam", "操作失败！请联系管理员...");
+        }
+        return map;
+    }
+
+    @RequestMapping(value = "/getExam",method = RequestMethod.GET)
+    public String getExam(@RequestParam("exam_id")Integer exam_id, HttpServletRequest request){
+
+        Exam exam = examService.getExamById(exam_id);
+        request.setAttribute("exam", exam);
+        return "forward:/page/indexPage";
     }
 }
