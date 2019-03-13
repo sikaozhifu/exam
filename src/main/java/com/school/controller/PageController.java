@@ -187,4 +187,9 @@ public class PageController {
     public String toStudentUpdatePassword(){
         return "student_update_password";
     }
+
+    @RequestMapping(value = "edit")
+    public String toDemo(){
+        return "edit";
+    }
 }

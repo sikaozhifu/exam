@@ -29,12 +29,19 @@ public class ExamController {
     @Autowired
     private ModelService modelService;
     @RequestMapping(value = "/add",method = RequestMethod.POST)
-    public String addExam(
+    @ResponseBody
+    public Map<String,Object> addExam(
             @RequestParam("ids")String ids,
             @RequestParam("exam_name")String exam_name,
             @RequestParam("need_time")String need_time,
             @RequestParam("exam_author")String exam_author
             ){
+        Map<String,Object> map = new HashMap<>();
+        List<Exam> examExist = examService.getExamByCondition(exam_name);
+        if (examExist.size()>0){
+            map.put("addExam", "试卷名称已存在！");
+            return map;
+        }
         List<ModelVo> modelVoList = examService.manageModel(ids);
         Exam exam = new Exam();
         exam.setExamName(exam_name);//试卷名称
@@ -48,7 +55,7 @@ public class ExamController {
         float exam_grade = 0;//试卷总分
         for (ModelVo modelVo:modelVoList){
             model_ids += modelVo.getModel().getModelId() + ",";
-            exam_content += modelVo.getModel().getContent();
+            exam_content += modelVo.getModel().getContent()+modelVo.getModel().getModelOption();
             exam_answer += modelVo.getModel().getAnswer() + "|";
             exam_analysis += modelVo.getModel().getAnalysis();
             exam_grade = exam_grade + modelVo.getModel().getGrade();
@@ -61,9 +68,13 @@ public class ExamController {
         exam.setExamFlag(0);//默认考试未开启
         Integer result = examService.insertExam(exam);
         if (result == 1){
-            return "redirect:/exam/select";
+            map.put("addExam", "试卷添加成功！");
+            return map;
+//            return "redirect:/exam/select";
         }
-        return "redirect:/page/exam/add";
+        map.put("addExam", "试卷添加失败！请联系管理员...");
+//        return "redirect:/page/exam/add";
+        return map;
     }
 
     @RequestMapping(value = "/select",method = RequestMethod.POST)
@@ -148,8 +159,15 @@ public class ExamController {
     @RequestMapping(value = "/getExam",method = RequestMethod.GET)
     public String getExam(@RequestParam("exam_id")Integer exam_id, HttpServletRequest request){
 
+        List<ModelVo> list = new ArrayList<>();
         Exam exam = examService.getExamById(exam_id);
+        String[] modelIds = exam.getModelIds().split(",");
+        for (String s:modelIds){
+            ModelVo modelVo = modelService.getModelVo(Integer.parseInt(s));
+            list.add(modelVo);
+        }
         request.setAttribute("exam", exam);
-        return "forward:/page/indexPage";
+        request.setAttribute("list", list);
+        return "forward:/page/examPage";
     }
 }

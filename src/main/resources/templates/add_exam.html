@@ -120,20 +120,30 @@
             $("#modal-2").modal('hide');
 
         }
-        // saveModel = function(){
-        //     $.ajax({
-        //         type:"POST",
-        //         data:{
-        //             ids:ids,
-        //             exam_name:$("#exam_name").val()
-        //         },
-        //         url:"/exam/exam/add",
-        //         dataType:"json",
-        //         success:function (data) {
-        //             alert(data);
-        //         }
-        //     });
-        // }
+        addExam = function(){
+            $.ajax({
+                type:"POST",
+                data:{
+                    ids:$("#ids").val(),
+                    exam_name:$("#exam_name").val(),
+                    need_time:$("#need_time").val(),
+                    exam_author:$("#exam_author").val()
+                },
+                url:"/exam/exam/add",
+                dataType:"json",
+                success:function (data) {
+                    if (data == null){
+                        alert("添加失败，请联系管理员...");
+                    }else{
+                        $.each(data,function (key,value) {
+                            alert(value);
+
+                        });
+                        window.location.href = ("/exam/page/addExam");
+                    }
+                }
+            });
+        }
 
 
     </script>
@@ -157,7 +167,7 @@
                                 <input name="exam_name" id="exam_name" class="form-control" value=""
                                        placeholder="请输入试卷名称" required>
                                 <input name="ids" type="hidden" id="ids" />
-                                //默认组卷类型
+                                <!--默认组卷类型-->
                                 <!--<input name="exam_type" type="hidden" id="exam_type" />-->
                             </div>
                             <div class="form-group">
@@ -206,7 +216,7 @@
                             </div>
                             <div class="form-group" style="margin-top: 35px">
                                 <div class="mb-4">
-                                    <button class="btn btn-primary" type="submit">保存</button>
+                                    <button class="btn btn-primary" type="button" th:onclick="'javascript:addExam()'">保存</button>
                                 </div>
                             </div>
                         </div>

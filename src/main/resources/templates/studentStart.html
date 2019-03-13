@@ -9,6 +9,8 @@
                 //window.location.href = ("/exam/exam/select");
             }else {
                 // alert("试题开放");
+                $("#examId").val(id);
+                // $("#modal-login").modal();
                 window.location.href = ("/exam/exam/getExam?exam_id=" + id);
             }
         }
@@ -77,6 +79,50 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary border-0">
+                <h5 class="modal-title text-white">用户登录</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body p-7">
+                <!--<div class="row"style="margin-bottom: 50px;">-->
+                    <!--<div class="col-md-12 text-center">-->
+                        <!--<h1 id="title"></h1>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="row" style="margin-bottom: 100px;">
+                    <div class="col-md-6 col-md-offset-12" style="margin:0 auto">
+                        <!-- Start Sign In Form -->
+                        <form th:action="@{/user/login}" data-animate-effect="fadeIn"
+                              th:method="post">
+                            <div class="form-group" style="margin-top: 20px">
+                                <h4 class="form-title">请输入您的身份信息</h4>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <!--<label for="username" class="form-control-label">学号: </label>-->
+                                <input type="hidden" id="examId" value="" name="examId"/>
+                                <input id="username" type="text" class="form-control" placeholder="学号" required="required" autofocus="autofocus"/>
+                            </div>
+                        </form>
+                        <!-- END Sign In Form -->
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" th:onclick="'javascript:addModel()'">Submit</button>
             </div>
         </div>
     </div>

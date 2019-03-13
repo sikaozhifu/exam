@@ -2,6 +2,7 @@ package com.school.service.impl;
 
 import com.school.dao.TypeMapper;
 import com.school.entity.Type;
+import com.school.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

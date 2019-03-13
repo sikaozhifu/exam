@@ -2,8 +2,9 @@ package com.school.controller;
 
 import com.school.entity.Model;
 import com.school.entity.ModelVo;
-import com.school.entity.User;
+import com.school.entity.Role;
 import com.school.service.ModelService;
+import com.school.utils.HtmlUtil;
 import com.school.utils.TitleUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,24 +27,41 @@ public class ModelController {
     private ModelService modelService;
 
     @RequestMapping(value = "/add",method = RequestMethod.POST)
-    public String addModel(Model model, HttpSession session){
-        //TODO添加作者
-        User user = (User) session.getAttribute("user");
-        if (user == null){
-            return "redirect:/page/login";
-        }
-        model.setAuthor(user.getName());
-//        model.setAuthor("tom");
-        if (model.getTitle().equals("")||model.getTitle() == null){
+    @ResponseBody
+    public Map<String,Object> addModel(
+            @RequestParam("title")String title,
+            @RequestParam("content")String content,
+            @RequestParam("modelOption")String modelOption,
+            @RequestParam("answer")String answer,
+            @RequestParam("type")Integer type,
+            @RequestParam("analysis")String analysis,
+            @RequestParam("grade")Float grade,
+            @RequestParam("difficulty")Integer difficulty,
+            HttpSession session){
+        Map<String,Object> map = new HashMap<>();
+        Role role = (Role) session.getAttribute("role");
+        if (title.equals("")||title == null){
             //添加标题
-            String title = TitleUtil.getTitle(model.getContent());
-            model.setTitle(title);
+            title = TitleUtil.getTitle(content);
         }
+
+        Model model = new Model();
+        model.setAuthor(role.getName());
+        model.setTitle(title);
+        model.setContent(content);
+        model.setModelOption(modelOption);
+        model.setAnswer(HtmlUtil.delHTMLTag(answer));
+        model.setType(type);
+        model.setAnalysis(analysis);
+        model.setGrade(grade);
+        model.setDifficulty(difficulty);
         Integer result = modelService.insert(model);
         if (result == 1){
-            return "redirect:/model/select?type";
+            map.put("addModel", "添加成功！");
+            return map;
         }
-        return "redirect:/page/login";
+        map.put("addModel", "添加失败！请联系管理员...");
+        return map;
     }
 
     @RequestMapping(value = "/select",method = RequestMethod.GET)
