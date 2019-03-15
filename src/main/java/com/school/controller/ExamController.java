@@ -220,6 +220,7 @@ public class ExamController {
         answerMap.put(num, answer);
         num = key;
         session.setAttribute("num", num);
+        session.setAttribute("answer", answerMap.get(key));
         session.setAttribute("modelVo", modelMap.get(key));
         map.put("saveAnswer", "答案保存成功！");
         return map;
