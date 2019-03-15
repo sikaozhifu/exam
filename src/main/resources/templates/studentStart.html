@@ -6,13 +6,36 @@
         startExam = function (id,flag) {
             if (flag == 0){
                 alert("试题未开放，等候老师开放！");
+                return;
                 //window.location.href = ("/exam/exam/select");
             }else {
                 // alert("试题开放");
                 $("#examId").val(id);
-                // $("#modal-login").modal();
-                window.location.href = ("/exam/exam/getExam?exam_id=" + id);
+                $("#modal-login").modal();
             }
+        }
+        confirmExam = function () {
+
+            $.ajax({
+                type:"post",
+                url:"/exam/grade/login",
+                dataType:"json",
+                data:{
+                    examId:$("#examId").val(),
+                    username:$("#username").val()
+                },
+                success:function (data) {
+                    if (data == null){
+                        window.location.href = ("/exam/exam/getExam?exam_id=" + $("#examId").val());
+                    }else {
+                        $.each(data,function (key,value) {
+                            alert(value);
+                            $("#modal-login").modal('hide');
+                        });
+                        window.location.href = ("/exam/exam/select");
+                    }
+                }
+            });
         }
     </script>
 </section>
@@ -122,7 +145,7 @@
 
             <div class="modal-footer border-0">
                 <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-success" th:onclick="'javascript:addModel()'">Submit</button>
+                <button type="submit" class="btn btn-success" th:onclick="'javascript:confirmExam()'">Submit</button>
             </div>
         </div>
     </div>

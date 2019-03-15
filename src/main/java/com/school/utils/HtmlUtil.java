@@ -28,4 +28,10 @@ public class HtmlUtil {
         String s = delHTMLTag("<p>F|C|I|E|B|K|H|D|A|G</p>");
         System.out.println(s);
     }
+
+    public static String format(String s){
+        String str=s.replaceAll("[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……& amp;*（）——+|{}【】‘；：”“’。，、？|-]", "");
+        str = str.toUpperCase();
+        return str;
+    }
 }

@@ -36,54 +36,22 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Sales</th>
-                                        <th>Price</th>
-                                        <th>Discount</th>
+                                        <th>试卷名称</th>
+                                        <th>班级名称</th>
+                                        <th>所用时间</th>
+                                        <th>考试时间</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class="text-nowrap">Samsung Galaxy S8</td>
-                                        <td>31,589</td>
-                                        <td>$800</td>
-                                        <td>5%</td>
-                                        <td><a href="#">查看详情</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td class="text-nowrap">Google Pixel XL</td>
-                                        <td>99,542</td>
-                                        <td>$750</td>
-                                        <td>3%</td>
-                                        <td><a href="#">查看详情</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td class="text-nowrap">iPhone X</td>
-                                        <td>62,220</td>
-                                        <td>$1,200</td>
-                                        <td>0%</td>
-                                        <td><a href="#">查看详情</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td class="text-nowrap">OnePlus 5T</td>
-                                        <td>50,000</td>
-                                        <td>$650</td>
-                                        <td>5%</td>
-                                        <td><a href="#">查看详情</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td class="text-nowrap">Google Nexus 6</td>
-                                        <td>400</td>
-                                        <td>$400</td>
-                                        <td>7%</td>
-                                        <td><a href="#">查看详情</a></td>
-                                    </tr>
+                                    <tbody th:each="grade,gradeStat:${list}">
+                                        <tr>
+                                            <td th:text="${gradeStat.index+1}">1</td>
+                                            <td class="text-nowrap" th:text="${grade.title}">Samsung Galaxy S8</td>
+                                            <td th:text="${grade.groupName}">31,589</td>
+                                            <td th:text="${grade.spendTime}">$800</td>
+                                            <td th:text="${#dates.format(grade.createTime,'yyyy-MM-dd HH:mm:ss')}">5%</td>
+                                            <td><a href="#">查看详情</a></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

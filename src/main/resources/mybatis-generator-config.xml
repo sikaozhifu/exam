@@ -51,12 +51,12 @@
                <!--enableUpdateByExample="false"/>-->
         <!--<table tableName="exam" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
                <!--enableUpdateByExample="false"/>-->
-        <table tableName="model" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+        <table tableName="record" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
-            <columnOverride column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
-            <columnOverride column="model_option" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <!--<columnOverride column="content" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+            <!--<columnOverride column="model_option" javaType="java.lang.String" jdbcType="VARCHAR" />-->
             <columnOverride column="answer" javaType="java.lang.String" jdbcType="VARCHAR" />
-            <columnOverride column="analysis" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <!--<columnOverride column="analysis" javaType="java.lang.String" jdbcType="VARCHAR" />-->
         </table>
         <!--<table tableName="type" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
                <!--enableUpdateByExample="false"/>-->
