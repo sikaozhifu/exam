@@ -15,7 +15,6 @@
             }
         }
         confirmExam = function () {
-
             $.ajax({
                 type:"post",
                 url:"/exam/grade/login",
@@ -26,14 +25,18 @@
                 },
                 success:function (data) {
                     if (data == null){
-                        window.location.href = ("/exam/exam/getExam?exam_id=" + $("#examId").val());
+                        alert("系统出现错误，请联系管理员...");
                     }else {
                         $.each(data,function (key,value) {
-                            alert(value);
-                            $("#modal-login").modal('hide');
+                            if (value=="success") {
+                                window.location.href = ("/exam/exam/getExam?exam_id=" + $("#examId").val());
+                            }else {
+                                alert(value);
+                                window.location.href = ("/exam/exam/select");
+                            }
                         });
-                        window.location.href = ("/exam/exam/select");
                     }
+                    $("#modal-login").modal('hide');
                 }
             });
         }

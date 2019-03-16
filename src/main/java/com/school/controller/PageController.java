@@ -126,6 +126,26 @@ public class PageController {
         }
     }
 
+    @RequestMapping(value = "/record_list")
+    public String toRecordList(HttpSession session){
+        String result = isAdmin(session);
+        if (result.equals("success")){
+            return "record_list";
+        }else {
+            return result;
+        }
+    }
+
+    @RequestMapping(value = "/recordPage")
+    public String toRecordPage(HttpSession session){
+        String result = isAdmin(session);
+        if (result.equals("success")){
+            return "recordPage";
+        }else {
+            return result;
+        }
+    }
+
     @RequestMapping(value = "/settings")
     public String toSettings(HttpSession session){
         String result = isAdmin(session);

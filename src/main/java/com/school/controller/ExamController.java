@@ -161,7 +161,7 @@ public class ExamController {
     public Map<String, Object> updateExam(@RequestParam("examId") Integer examId) {
         Map<String, Object> map = new HashMap<>();
         if (examId == null || examId.equals("")) {
-            map.put("deleteExam", "操作失败！请联系管理员...");
+            map.put("updateExam", "操作失败！请联系管理员...");
             return map;
         }
         Exam exam = examService.getExamById(examId);
@@ -172,9 +172,9 @@ public class ExamController {
         }
         Integer result = examService.updateExam(exam);
         if (result == 1) {
-            map.put("deleteExam", "试卷操作成功！");
+            map.put("updateExam", "试卷操作成功！");
         } else {
-            map.put("deleteExam", "操作失败！请联系管理员...");
+            map.put("updateExam", "操作失败！请联系管理员...");
         }
         return map;
     }
@@ -272,7 +272,11 @@ public class ExamController {
 
             //用户提交的answer
             String[] submitAnswer = new String[correctAnswer.length];
-            System.arraycopy(userAnswer, 0, submitAnswer, 0, userAnswer.length);
+            if (userAnswer.length > submitAnswer.length){
+                System.arraycopy(userAnswer, 0, submitAnswer, 0, submitAnswer.length);
+            }else {
+                System.arraycopy(userAnswer, 0, submitAnswer, 0, userAnswer.length);
+            }
             for (int i = 0; i < correctAnswer.length; i++) {
                 if (correctAnswer[i].equals(submitAnswer[i])) {
                     score += perGrade;
@@ -288,6 +292,7 @@ public class ExamController {
         grade.setSpendTime(spendTime);
         grade.setScore(score);
         grade.setExamId(examId);
+        grade.setFlag(0);
         Integer result = gradeService.insertGrade(grade);
         if (result == 1){
             map.put("saveExam", "试卷提交成功！");

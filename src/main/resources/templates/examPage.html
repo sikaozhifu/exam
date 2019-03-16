@@ -115,7 +115,7 @@
                         $.each(data,function (key,value) {
                             alert(value);
                         });
-                        window.location.href = ("/exam/page/studentTable");
+                        window.location.href = ("/exam/grade/getGrade");
                     }
                 }
             });
@@ -156,7 +156,7 @@
 
                                             </div>
                                             <span style="font-size: 15px">请在此输入答案（选择题答案需用 | 隔开）：</span>
-                                            <textarea name="answer" id="answer" class="ckeditor form-control" rows="10" th:value="${session.answer}"></textarea>
+                                            <textarea name="answer" id="answer" class="ckeditor form-control" rows="10" th:text="${session.answer}"></textarea>
                                         </div>
                                     </div>
                                 </div>

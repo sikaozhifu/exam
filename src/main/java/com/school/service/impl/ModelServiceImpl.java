@@ -76,6 +76,11 @@ public class ModelServiceImpl implements ModelService {
         return modelMapper.getModelCount();
     }
 
+    @Override
+    public Model getModelById(Integer id) {
+        return modelMapper.selectByPrimaryKey(id);
+    }
+
     /**
      * //转化为包装类ModelVo
      * @param model

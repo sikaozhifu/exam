@@ -12,6 +12,8 @@ import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface RecordMapper {
     @Delete({
@@ -67,4 +69,24 @@ public interface RecordMapper {
         "where id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(Record record);
+
+
+    @Select({
+            "select",
+            "id, username, name, exam_id, model_id, answer, create_time, update_time",
+            "from record",
+            "where username = #{username,jdbcType=VARCHAR}",
+            "and exam_id = #{exam_id,jdbcType=INTEGER}"
+    })
+    @Results({
+            @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="username", property="username", jdbcType=JdbcType.VARCHAR),
+            @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
+            @Result(column="exam_id", property="examId", jdbcType=JdbcType.INTEGER),
+            @Result(column="model_id", property="modelId", jdbcType=JdbcType.INTEGER),
+            @Result(column="answer", property="answer", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
+    })
+    List<Record> getRecordList(String username, Integer exam_id);
 }

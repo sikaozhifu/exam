@@ -32,4 +32,9 @@ public class GradeServiceImpl implements GradeService {
     public Grade getGradeByExamId(String username,Integer examId) {
         return gradeMapper.getGradeByExamId(username, examId);
     }
+
+    @Override
+    public List<Grade> getAllGrade() {
+        return gradeMapper.getAllGrade();
+    }
 }

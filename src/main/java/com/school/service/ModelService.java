@@ -25,4 +25,6 @@ public interface ModelService {
 
     //获取所有记录
     Long getModelCount();
+
+    Model getModelById(Integer id);
 }
