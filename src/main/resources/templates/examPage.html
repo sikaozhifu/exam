@@ -30,6 +30,7 @@
             } else {
                 clearInterval(timer);
                 alert("考试时间到，结束!");
+                $('#submitBtn').trigger("click");
             }
         }
         timer = setInterval("CountDown()", 1000);
@@ -204,7 +205,7 @@
                             </div>
                             <span style="width: 50px"></span>
                             <div class="pull-right">
-                                <button type="button" class="btn-block btn btn-primary btn-lg" th:onclick="'javascript:saveExam('+${session.num}+','+${session.size}+')'">&nbsp;&nbsp;提交试卷
+                                <button id="submitBtn" type="button" class="btn-block btn btn-primary btn-lg" th:onclick="'javascript:saveExam('+${session.num}+','+${session.size}+')'">&nbsp;&nbsp;提交试卷
                                     <i class="fa  fa-angle-right"></i>
                                 </button>
                             </div>
