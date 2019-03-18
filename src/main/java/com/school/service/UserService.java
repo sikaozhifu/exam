@@ -22,4 +22,7 @@ public interface UserService {
 
     //根据条件查询
     PageInfo<User> getAllUserByCondition(Integer currentPage, Integer pageSize,String condition,String info);
+
+    //根据条件查询student
+    PageInfo<User> getAllStudentByCondition(Integer currentPage, Integer pageSize,String condition,String info);
 }

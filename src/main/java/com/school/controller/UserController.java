@@ -201,10 +201,7 @@ public class UserController {
 
         if (role.getType() == RoleUtil.RoleType.TEACHER){
             //教师
-            if (info == null||info.equals("")){
-                info = "学生";
-            }
-            PageInfo<User> pageInfo = userService.getAllUserByCondition(currentPage, pageSize,"3",info);
+            PageInfo<User> pageInfo = userService.getAllStudentByCondition(currentPage, pageSize,condition,info);
 //        request.setAttribute("pageSize", pageSize);
             request.setAttribute("pageInfo", pageInfo);
             return "forward:/page/teacherTable";
