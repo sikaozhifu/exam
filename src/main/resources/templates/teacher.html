@@ -59,15 +59,15 @@
                 <div class="dropdown-header">Settings</div>
 
                 <a href="settings.html" th:href="@{/page/settings}" class="dropdown-item">
-                    <i class="fa fa-wrench"></i> 账户管理
+                    <i class="fa"></i> 账户管理
                 </a>
 
                 <a href="update_password.html" th:href="@{/page/updatePassword}" class="dropdown-item">
-                    <i class="fa fa-wrench"></i> 修改密码
+                    <i class="fa"></i> 修改密码
                 </a>
 
                 <a href="#" th:href="@{/admin/logout}" class="dropdown-item">
-                    <i class="fa fa-lock"></i> 退出登录
+                    <i class="fa"></i> 退出登录
                 </a>
             </div>
         </li>
@@ -82,19 +82,19 @@
 
             <li class="nav-item nav-dropdown">
                 <a href="#" class="nav-link nav-dropdown-toggle">
-                    <i class="icon icon-target"></i> 试卷管理 <i class="fa fa-caret-left"></i>
+                    <i class="icon"></i> 试卷管理 <i class="fa">&raquo;</i>
                 </a>
 
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
                         <a href="add_exam.html" th:href="@{/page/addExam}" class="nav-link">
-                            <i class="icon icon-target"></i> 新增试卷
+                            <i class="icon"></i> 新增试卷
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a href="model_list.html" th:href="@{/exam/select}" class="nav-link">
-                            <i class="icon icon-target"></i> 查看试卷
+                            <i class="icon"></i> 查看试卷
                         </a>
 
                     </li>
@@ -103,40 +103,46 @@
 
             <li class="nav-item nav-dropdown">
                 <a href="#" class="nav-link nav-dropdown-toggle">
-                    <i class="icon icon-target"></i> 题库管理 <i class="fa fa-caret-left"></i>
+                    <i class="icon"></i> 题库管理 <i class="fa">&raquo;</i>
                 </a>
 
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
                         <a href="add_model.html" th:href="@{/page/addModel}" class="nav-link">
-                            <i class="icon icon-target"></i> 新增试题
+                            <i class="icon"></i> 新增试题
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a href="model_list.html" th:href="@{/model/select(type=)}" class="nav-link">
-                            <i class="icon icon-target"></i> 试题分类
+                            <i class="icon"></i> 试题分类
                         </a>
 
                     </li>
 
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="icon icon-target"></i> 导入试题
+                            <i class="icon"></i> 导入试题
                         </a>
                     </li>
                 </ul>
             </li>
 
             <li class="nav-item">
-                <a href="table.html" th:href="@{/user/getAllUser(condition=3,info=null)}" class="nav-link">
-                    <i class="icon icon-energy"></i> 考生管理
+                <a href="table.html" th:href="@{/user/getAllUser(condition=null,info=null)}" class="nav-link">
+                    <i class="icon"></i> 用户管理
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="table.html" th:href="@{/grade/getGradeVo}" class="nav-link">
+                    <i class="icon"></i> 考试记录
                 </a>
             </li>
 
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="icon icon-graph"></i> 统计分析
+                    <i class="icon"></i> 统计分析
                 </a>
             </li>
         </ul>
