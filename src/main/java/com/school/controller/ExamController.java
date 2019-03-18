@@ -101,13 +101,17 @@ public class ExamController {
     }
 
     @RequestMapping(value = "/select", method = RequestMethod.POST)
-    public String getExamList(@RequestParam("exam_name") String exam_name, HttpServletRequest request) {
+    public String getExamList(@RequestParam("exam_name") String exam_name, HttpServletRequest request,HttpSession session) {
         if (exam_name == null || exam_name.equals("")) {
             List<Exam> examList = examService.getAllExam();
             request.setAttribute("list", examList);
         } else {
             List<Exam> examList = examService.getExamByCondition(exam_name);
             request.setAttribute("list", examList);
+        }
+        Role role = (Role) session.getAttribute("role");
+        if (role.getType() == RoleUtil.RoleType.STUDENT) {
+            return "forward:/page/studentStart";
         }
         return "forward:/page/exam_list";
     }

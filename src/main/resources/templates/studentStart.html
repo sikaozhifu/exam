@@ -53,16 +53,15 @@
 
         <div class="content">
             <div class="col-md-4" style="margin-top: 30px;text-align: center">
-                <div class="input-group">
-                    <label for="input-group-2" style="font-size: 20px">试卷&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                    <input type="text" id="input-group-2" name="input1-group2" class="form-control"
-                           placeholder="搜索试卷">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-lg btn-primary">
-                            <i class="fa fa-search"></i> Search
-                        </button>
-                    </span>
-                </div>
+                <form th:action="@{/exam/select}" th:method="post">
+                    <div class="input-group">
+                        <label for="input-group-2" style="font-size: 20px">试卷&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input type="text" id="input-group-2" name="exam_name" class="form-control" placeholder="搜索试卷">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-lg btn-primary">Search</button>
+                        </span>
+                    </div>
+                </form>
             </div>
             <div class="container-fluid">
                 <div class="row" style="margin-top: 100px">
