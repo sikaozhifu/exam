@@ -198,6 +198,11 @@ public class PageController {
         return "examPage";
     }
 
+    @RequestMapping(value = "/student_record_page")
+    public String toStudentRecordPage() {
+        return "student_record_page";
+    }
+
     @RequestMapping(value = "/student_settings")
     public String toStudentSettings(){
         return "student_settings";

@@ -1,59 +1,8 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head th:include="admin::header"></head>
+<head th:include="student::header"></head>
 <section>
-    <script>
-        //提交试题
-        saveExam = function (num,size) {
-            CKupdate();//在提交表单前需要做以上处理
-            $.ajax({
-                type:"post",
-                url:"/exam/exam/saveExam",
-                dataType:"json",
-                data:{
-                    num:num,
-                    answer:$("#answer").val()
-                },
-                success:function (data) {
-                    if (data == null){
-                        alert("系统异常，请联系管理员...");
-                    }else {
-                        $.each(data,function (key,value) {
-                            alert(value);
-                        });
-                        window.location.href = ("/exam/page/studentTable");
-                    }
-                }
-            });
-        }
-
-        submitExam = function (gradeId) {
-            if ($("#score").val()==""){
-                alert("总分数不能为空！");
-                return;
-            }
-            $.ajax({
-                type:"post",
-                url:"/exam/grade/updateGrade",
-                dataType:"json",
-                data:{
-                    gradeId:gradeId,
-                    score:$("#score").val()
-                },
-                success:function (data) {
-                    if (data == null){
-                        alert("判卷失败，请联系管理员...");
-                    } else {
-                        $.each(data,function (key,value) {
-                            alert(value);
-                            window.location.href = ("/exam/grade/getGradeVo");
-                        });
-                    }
-                }
-            });
-        }
-    </script>
     <style type="text/css">
         p{
             margin-top: 10px;
@@ -62,9 +11,9 @@
 </section>
 <body class="sidebar-fixed header-fixed">
 <div class="page-wrapper">
-    <nav class="navbar page-header" th:include="admin::admin-navbar"></nav>
+    <nav class="navbar page-header" th:include="student::student-navbar"></nav>
     <div class="main-container">
-        <div class="sidebar" th:include="admin::admin-sidebar"></div>
+        <div class="sidebar" th:include="student::student-sidebar"></div>
         <div class="content">
             <div class="row">
                 <div class="col-md-12" style="margin-top: 50px;margin-bottom: 50px;font-size: 30px">
@@ -92,23 +41,20 @@
                 </div>
                 <div class="col-md-2">
                     <div class="card">
+                        <div class="card-header bg-light">开始时间：</div>
+                        <div class="card-body" th:text="${#dates.format(grade.createTime,'yyyy-MM-dd HH:mm:ss')}"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
                         <div class="card-header bg-light">所用时间：</div>
                         <div class="card-body" th:text="${grade.spendTime}"></div>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="card">
-                        <div class="card-header bg-light">当前所得分数：</div>
-                        <div class="card-body" th:text="${grade.score}"></div>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="card">
-                        <div class="card-header bg-light">最终分数：</div>
-                        <div class="card-body">
-                            <input id="score" th:value="${grade.score}" type="text" class="form-control" placeholder="总分数" required="required"/>
-                            <button type="button" class="btn btn-primary" th:onclick="'javascript:submitExam('+${grade.gradeId}+')'">确定</button>
-                        </div>
+                        <div class="card-header bg-light">所得分数：</div>
+                        <div class="card-body" th:text="${grade.flag}==0?'未批阅':${grade.score}"></div>
                     </div>
                 </div>
             </div>

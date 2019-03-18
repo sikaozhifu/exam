@@ -55,9 +55,10 @@
                                             <th>序号</th>
                                             <th>试卷名称</th>
                                             <th>班级名称</th>
-                                            <th>用户名</th>
+                                            <th>学号</th>
                                             <th>姓名</th>
                                             <th>所用时间</th>
+                                            <th>分数</th>
                                             <th>操作</th>
                                         </tr>
                                         </thead>
@@ -69,6 +70,7 @@
                                             <td class="text-nowrap" th:text="${grade.username}">Samsung Galaxy S8</td>
                                             <td th:text="${grade.name}">31,589</td>
                                             <td th:text="${grade.spendTime}"></td>
+                                            <td th:text="${grade.score}"></td>
                                             <td class="form-inline">
                                                 <button id="update-btn" class="btn btn-outline-primary" data-toggle="modal"
                                                         th:onclick="'javascript:updateRecord('+${grade.gradeId}+','+${grade.flag}+');'">判卷

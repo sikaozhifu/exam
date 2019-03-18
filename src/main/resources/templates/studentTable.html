@@ -50,7 +50,7 @@
                                             <td th:text="${grade.groupName}">31,589</td>
                                             <td th:text="${grade.spendTime}">$800</td>
                                             <td th:text="${#dates.format(grade.createTime,'yyyy-MM-dd HH:mm:ss')}">5%</td>
-                                            <td><a href="#">查看详情</a></td>
+                                            <td><a th:href="@{/record/getRecordVo(gradeId=${grade.gradeId})}" style="color: #42A5F5">查看详情</a></td>
                                         </tr>
                                     </tbody>
                                 </table>

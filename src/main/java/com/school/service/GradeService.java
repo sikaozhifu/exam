@@ -19,4 +19,7 @@ public interface GradeService {
     Grade getGradeByExamId(String username,Integer examId);
 
     List<Grade> getAllGrade();
+
+    //更新考试记录，修改考试成绩
+    Integer updateGradeById(Grade grade);
 }

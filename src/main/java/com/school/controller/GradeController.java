@@ -74,4 +74,25 @@ public class GradeController {
         return "forward:/page/record_list";
     }
 
+    @RequestMapping(value = "/updateGrade",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> updateGrade(@RequestParam("gradeId")Integer gradeId,@RequestParam("score")Float score){
+        Map<String,Object> map = new HashMap<>();
+        Grade grade = gradeService.getGradeById(gradeId);
+        Float examScore = 0f;
+        if (grade.getScore() > score){
+            examScore = grade.getScore() + score;
+        }else {
+            examScore = score;
+        }
+        grade.setScore(examScore);
+        grade.setFlag(1);//修改判卷标识符
+        Integer result = gradeService.updateGradeById(grade);
+        if (result == 1){
+            map.put("updateGrade", "判卷成功！");
+        }else {
+            map.put("updateGrade", "判卷失败！请联系管理员...");
+        }
+        return map;
+    }
 }

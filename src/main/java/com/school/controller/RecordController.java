@@ -1,12 +1,10 @@
 package com.school.controller;
 
-import com.school.entity.Grade;
-import com.school.entity.ModelVo;
-import com.school.entity.Record;
-import com.school.entity.RecordVo;
+import com.school.entity.*;
 import com.school.service.GradeService;
 import com.school.service.ModelService;
 import com.school.service.RecordService;
+import com.school.utils.RoleUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +29,9 @@ public class RecordController {
 
 
     @RequestMapping(value = "/getRecordVo", method = RequestMethod.GET)
-    public String getRecordVo(@RequestParam("gradeId") Integer gradeId, HttpServletRequest request) {
+    public String getRecordVo(@RequestParam("gradeId") Integer gradeId, HttpServletRequest request, HttpSession session) {
 
+        Role role = (Role) session.getAttribute("role");
         //显示考生记录
         Grade grade = gradeService.getGradeById(gradeId);//考生记录
         List<RecordVo> recordVoList = new ArrayList<>();//试题内容记录
@@ -49,6 +49,9 @@ public class RecordController {
         }
         request.setAttribute("grade", grade);
         request.setAttribute("recordVoList",recordVoList);
+        if (role.getType() == RoleUtil.RoleType.STUDENT){
+            return "forward:/page/student_record_page";
+        }
         return "forward:/page/recordPage";
     }
 }

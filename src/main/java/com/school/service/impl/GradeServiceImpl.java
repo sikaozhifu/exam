@@ -37,4 +37,9 @@ public class GradeServiceImpl implements GradeService {
     public List<Grade> getAllGrade() {
         return gradeMapper.getAllGrade();
     }
+
+    @Override
+    public Integer updateGradeById(Grade grade) {
+        return gradeMapper.updateByPrimaryKey(grade);
+    }
 }
