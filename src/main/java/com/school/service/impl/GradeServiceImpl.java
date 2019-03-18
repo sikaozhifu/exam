@@ -42,4 +42,20 @@ public class GradeServiceImpl implements GradeService {
     public Integer updateGradeById(Grade grade) {
         return gradeMapper.updateByPrimaryKey(grade);
     }
+
+    @Override
+    public List<Grade> getGradeByTitle(String title) {
+        if (title == null || title.equals("")){
+            return gradeMapper.getAllGrade();
+        }
+        return gradeMapper.getGradeByTitle(title);
+    }
+
+    @Override
+    public List<Grade> getGradeByUserNameAndTitle(String username, String title) {
+        if (title == null || title.equals("")){
+            return gradeMapper.getGradeByUserName(username);
+        }
+        return gradeMapper.getGradeByUserNameAndTitle(username, title);
+    }
 }

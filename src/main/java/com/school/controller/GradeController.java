@@ -5,6 +5,7 @@ import com.school.service.ExamService;
 import com.school.service.GradeService;
 import com.school.service.ModelService;
 import com.school.service.RecordService;
+import com.school.utils.RoleUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,6 +64,21 @@ public class GradeController {
         List<Grade> gradeList = gradeService.getGradeByUserName(username);
         request.setAttribute("list", gradeList);
         return "forward:/page/studentTable";
+    }
+
+    @RequestMapping(value = "/getGrade", method = RequestMethod.POST)
+    public String getGradeByCondition(@RequestParam("title") String title,HttpSession session, HttpServletRequest request) {
+        Role role = (Role) session.getAttribute("role");
+        List<Grade> gradeList;
+        if (role.getType() == RoleUtil.RoleType.STUDENT){
+            gradeList = gradeService.getGradeByUserNameAndTitle(role.getUsername(), title);
+            request.setAttribute("list", gradeList);
+            return "forward:/page/studentTable";
+        }else {
+            gradeList = gradeService.getGradeByTitle(title);
+            request.setAttribute("list", gradeList);
+            return "forward:/page/record_list";
+        }
     }
 
     @RequestMapping(value = "/getGradeVo", method = RequestMethod.GET)

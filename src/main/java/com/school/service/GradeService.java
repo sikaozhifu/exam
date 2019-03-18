@@ -22,4 +22,8 @@ public interface GradeService {
 
     //更新考试记录，修改考试成绩
     Integer updateGradeById(Grade grade);
+
+    List<Grade> getGradeByTitle(String title);
+
+    List<Grade> getGradeByUserNameAndTitle(String username,String title);
 }
