@@ -192,4 +192,96 @@ public interface GradeMapper {
             @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
     })
     List<Grade> getGradeByUserNameAndTitle(String username,String title);
+
+    @Select({
+            "select",
+            "grade_id, username, name, title, group_name, spend_time, score, exam_id, flag, ",
+            "create_time, update_time",
+            "from grade",
+            "where group_name like concat(concat('%',#{group_name}),'%')",
+            "order by update_time desc"
+    })
+    @Results({
+            @Result(column="grade_id", property="gradeId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="username", property="username", jdbcType=JdbcType.VARCHAR),
+            @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
+            @Result(column="title", property="title", jdbcType=JdbcType.VARCHAR),
+            @Result(column="group_name", property="groupName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="spend_time", property="spendTime", jdbcType=JdbcType.VARCHAR),
+            @Result(column="score", property="score", jdbcType=JdbcType.REAL),
+            @Result(column="exam_id", property="examId", jdbcType=JdbcType.INTEGER),
+            @Result(column="flag", property="flag", jdbcType=JdbcType.INTEGER),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
+    })
+    List<Grade> getGradeListByGroupName(String group_name);
+
+    @Select({
+            "select",
+            "grade_id, username, name, title, group_name, spend_time, score, exam_id, flag, ",
+            "create_time, update_time",
+            "from grade",
+            "where username like concat(concat('%',#{username}),'%')",
+            "order by update_time desc"
+    })
+    @Results({
+            @Result(column="grade_id", property="gradeId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="username", property="username", jdbcType=JdbcType.VARCHAR),
+            @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
+            @Result(column="title", property="title", jdbcType=JdbcType.VARCHAR),
+            @Result(column="group_name", property="groupName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="spend_time", property="spendTime", jdbcType=JdbcType.VARCHAR),
+            @Result(column="score", property="score", jdbcType=JdbcType.REAL),
+            @Result(column="exam_id", property="examId", jdbcType=JdbcType.INTEGER),
+            @Result(column="flag", property="flag", jdbcType=JdbcType.INTEGER),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
+    })
+    List<Grade> getGradeListByUserName(String username);
+
+    @Select({
+            "select",
+            "grade_id, username, name, title, group_name, spend_time, score, exam_id, flag, ",
+            "create_time, update_time",
+            "from grade",
+            "where title like concat(concat('%',#{title}),'%')",
+            "order by update_time desc"
+    })
+    @Results({
+            @Result(column="grade_id", property="gradeId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="username", property="username", jdbcType=JdbcType.VARCHAR),
+            @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
+            @Result(column="title", property="title", jdbcType=JdbcType.VARCHAR),
+            @Result(column="group_name", property="groupName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="spend_time", property="spendTime", jdbcType=JdbcType.VARCHAR),
+            @Result(column="score", property="score", jdbcType=JdbcType.REAL),
+            @Result(column="exam_id", property="examId", jdbcType=JdbcType.INTEGER),
+            @Result(column="flag", property="flag", jdbcType=JdbcType.INTEGER),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
+    })
+    List<Grade> getGradeListByTitle(String title);
+
+    @Select({
+            "select",
+            "grade_id, username, name, title, group_name, spend_time, score, exam_id, flag, ",
+            "create_time, update_time",
+            "from grade",
+            "where name like concat(concat('%',#{name}),'%')",
+            "order by update_time desc"
+    })
+    @Results({
+            @Result(column="grade_id", property="gradeId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="username", property="username", jdbcType=JdbcType.VARCHAR),
+            @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
+            @Result(column="title", property="title", jdbcType=JdbcType.VARCHAR),
+            @Result(column="group_name", property="groupName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="spend_time", property="spendTime", jdbcType=JdbcType.VARCHAR),
+            @Result(column="score", property="score", jdbcType=JdbcType.REAL),
+            @Result(column="exam_id", property="examId", jdbcType=JdbcType.INTEGER),
+            @Result(column="flag", property="flag", jdbcType=JdbcType.INTEGER),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
+    })
+    List<Grade> getGradeListByName(String name);
 }

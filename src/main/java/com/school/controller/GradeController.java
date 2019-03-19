@@ -1,5 +1,6 @@
 package com.school.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.school.entity.*;
 import com.school.service.ExamService;
 import com.school.service.GradeService;
@@ -80,11 +81,16 @@ public class GradeController {
         }
     }
 
-    @RequestMapping(value = "/getGradeVo", method = RequestMethod.GET)
-    public String getGradeVo(HttpServletRequest request) {
-
-        List<Grade> gradeList = gradeService.getAllGrade();//考生记录列表
-        request.setAttribute("list", gradeList);
+    @RequestMapping(value = "/getGradeVo", method = {RequestMethod.GET,RequestMethod.POST})
+    public String getGradeVo(@RequestParam(value = "currentPage",defaultValue = "1") Integer currentPage,
+                             @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
+                             @RequestParam("condition")String condition,
+                             @RequestParam("info")String info,
+                             HttpServletRequest request) {
+        PageInfo<Grade> pageInfo = gradeService.getAllGradeByCondition(currentPage, pageSize, condition, info);
+        request.setAttribute("pageInfo", pageInfo);
+        request.setAttribute("condition",condition);
+        request.setAttribute("info", info);
 
         return "forward:/page/record_list";
     }
