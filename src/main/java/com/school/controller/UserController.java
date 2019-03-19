@@ -199,6 +199,8 @@ public class UserController {
             return "redirect:/page/login";
         }
 
+        request.setAttribute("condition",condition);
+        request.setAttribute("info", info);
         if (role.getType() == RoleUtil.RoleType.TEACHER){
             //教师
             PageInfo<User> pageInfo = userService.getAllStudentByCondition(currentPage, pageSize,condition,info);

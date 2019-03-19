@@ -1,5 +1,7 @@
 package com.school.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.school.dao.ModelMapper;
 import com.school.dao.TypeMapper;
 import com.school.entity.Model;
@@ -79,6 +81,47 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public Model getModelById(Integer id) {
         return modelMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public PageInfo<ModelVo> selectByTypeAndTitle(Integer currentPage, Integer pageSize,Integer type, String title) {
+        PageHelper.startPage(currentPage, pageSize);
+        List<ModelVo> modelVoList = new ArrayList<>();
+        if ((type==null||type.equals(0)||type.equals(""))&&(title == null|| title.equals(""))){
+            modelVoList = new ArrayList<>();
+            List<Model> list = modelMapper.selectAll();
+            for (Model model:list){
+                modelVoList.add(modelToModelVo(model));
+            }
+            PageInfo<ModelVo> pageInfo = new PageInfo<>(modelVoList);
+            return pageInfo;
+        }
+        if (type != null&&(title == null||title.equals(""))){
+
+            List<Model> list = modelMapper.selectByType(type);
+            for (Model model:list){
+                modelVoList.add(modelToModelVo(model));
+            }
+            PageInfo<ModelVo> pageInfo = new PageInfo<>(modelVoList);
+            return pageInfo;
+        }
+        if ((type==null||type.equals(0)||type.equals(""))&&(title != null)){
+            modelVoList = new ArrayList<>();
+            List<Model> list = modelMapper.selectByTitle(title);
+            for (Model model:list){
+                modelVoList.add(modelToModelVo(model));
+            }
+            PageInfo<ModelVo> pageInfo = new PageInfo<>(modelVoList);
+            return pageInfo;
+        }else {
+            modelVoList = new ArrayList<>();
+            List<Model> list = modelMapper.selectByTypeAndTitle(type, title);
+            for (Model model:list){
+                modelVoList.add(modelToModelVo(model));
+            }
+            PageInfo<ModelVo> pageInfo = new PageInfo<>(modelVoList);
+            return pageInfo;
+        }
     }
 
     /**

@@ -153,12 +153,12 @@
                         <div class="input-group">
                             <!--<label style="font-size: 20px">考生&nbsp;&nbsp;&nbsp;</label>-->
                             <select id="condition" name="condition">
-                                <option value="0">姓名</option>
-                                <option value="1">学号</option>
-                                <option value="2">邮箱</option>
-                                <option value="3">角色</option>
+                                <option value="0" th:selected="${condition}=='0'">姓名</option>
+                                <option value="1" th:selected="${condition}=='1'">学号</option>
+                                <option value="2" th:selected="${condition}=='2'">邮箱</option>
+                                <option value="3" th:selected="${condition}=='3'">角色</option>
                             </select>
-                            <input type="text" id="info" name="info" class="form-control" placeholder="请输入用户信息">&nbsp;&nbsp;
+                            <input type="text" id="info" name="info" th:value="${info}" class="form-control" placeholder="请输入用户信息">&nbsp;&nbsp;
                             <span class="input-group-btn">
                                 <button type="submit" class="btn btn-primary"><i class="fa "></i> 搜索用户</button>
                             </span>

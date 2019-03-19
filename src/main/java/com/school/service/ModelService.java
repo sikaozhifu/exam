@@ -1,5 +1,6 @@
 package com.school.service;
 
+import com.github.pagehelper.PageInfo;
 import com.school.entity.Model;
 import com.school.entity.ModelVo;
 
@@ -27,4 +28,6 @@ public interface ModelService {
     Long getModelCount();
 
     Model getModelById(Integer id);
+
+    PageInfo<ModelVo> selectByTypeAndTitle(Integer currentPage, Integer pageSize,Integer type, String title);
 }

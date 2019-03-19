@@ -88,7 +88,7 @@ public interface ModelMapper {
             "model_id, title, type, content, model_option, answer, analysis, difficulty, author, ",
             "grade, create_time, update_time",
             "from model",
-            "where type = #{type,jdbcType=VARCHAR}",
+            "where type = #{type,jdbcType=INTEGER}",
             "order by update_time desc"
     })
     @Results({
@@ -159,4 +159,30 @@ public interface ModelMapper {
             "select count(*) from model"
     })
     Long getModelCount();
+
+    @Select({
+            "select",
+            "model_id, title, type, content, model_option, answer, analysis, difficulty, author, ",
+            "grade, create_time, update_time",
+            "from model",
+            "where type = #{type,jdbcType=INTEGER}",
+            "and title like concat(concat('%',#{title}),'%')",
+            "order by update_time desc"
+    })
+    @Results({
+            @Result(column="model_id", property="modelId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="title", property="title", jdbcType=JdbcType.VARCHAR),
+            @Result(column="type", property="type", jdbcType=JdbcType.INTEGER),
+            @Result(column="content", property="content", jdbcType=JdbcType.VARCHAR),
+            @Result(column="model_option", property="modelOption", jdbcType=JdbcType.VARCHAR),
+            @Result(column="answer", property="answer", jdbcType=JdbcType.VARCHAR),
+            @Result(column="analysis", property="analysis", jdbcType=JdbcType.VARCHAR),
+            @Result(column="difficulty", property="difficulty", jdbcType=JdbcType.INTEGER),
+            @Result(column="author", property="author", jdbcType=JdbcType.VARCHAR),
+            @Result(column="grade", property="grade", jdbcType=JdbcType.REAL),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
+    })
+        //根据type和title查询
+    List<Model> selectByTypeAndTitle(Integer type,String title);
 }

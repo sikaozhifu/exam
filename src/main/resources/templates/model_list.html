@@ -3,6 +3,16 @@
 <head th:include="admin::header"></head>
 <section>
     <script>
+
+        //分页查询
+        getModelListByPage = function (currentPage) {
+            var pageSize = $("#pageSize").val(); //每页显示条数
+            var title = $("#titlePage").val();//试题标题
+            var type = $("#pageType").val();//试题类型
+            var str = "/exam/model/select?currentPage="+currentPage+"&pageSize="+ pageSize+"&title="+ title+"&type="+ type;
+            window.location.href = (str);
+        }
+
         //修改model
         updateModel = function (modelId) {
             $.ajax({
@@ -92,7 +102,8 @@
                     <form th:action="@{/model/select}" th:method="post">
                         <div class="input-group">
                             <label style="font-size: 20px">试题&nbsp;&nbsp;&nbsp;</label>
-                            <input type="text" id="input-group-2" name="title" class="form-control" placeholder="输入试题标题">&nbsp;
+                            <input type="text" id="titlePage" name="title" class="form-control" placeholder="输入试题标题">&nbsp;
+                            <input type="hidden" th:value="${pageType}" id="pageType" name="type"/>
                             <span class="input-group-btn">
                                 <button type="submit" class="btn btn-primary"><i class="fa "></i> 搜索试题</button>
                             </span>
@@ -107,7 +118,7 @@
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div>
                                     <!-- <span class="h4 d-block font-weight-normal mb-2">54</span> -->
-                                    <span class="font-weight-light"><a th:href="@{/model/select(type=0)}">全部试题</a></span>
+                                    <span class="font-weight-light"><a th:href="@{/model/select(title=null,type=null)}">全部试题</a></span>
                                 </div>
 
                                 <div class="h2 text-muted">
@@ -121,7 +132,7 @@
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div>
                                     <!-- <span class="h4 d-block font-weight-normal mb-2">54</span> -->
-                                    <span class="font-weight-light"><a th:href="@{/model/select(type=1)}">选词填空</a></span>
+                                    <span class="font-weight-light"><a th:href="@{/model/select(title=null,type=1)}">选词填空</a></span>
                                 </div>
 
                                 <div class="h2 text-muted">
@@ -135,7 +146,7 @@
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div>
                                     <!-- <span class="h4 d-block font-weight-normal mb-2">$32,400</span> -->
-                                    <span class="font-weight-light"><a th:href="@{/model/select(type=2)}">段落匹配</a></span>
+                                    <span class="font-weight-light"><a th:href="@{/model/select(title=null,type=2)}">段落匹配</a></span>
                                 </div>
 
                                 <div class="h2 text-muted">
@@ -149,7 +160,7 @@
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div>
                                     <!-- <span class="h4 d-block font-weight-normal mb-2">900</span> -->
-                                    <span class="font-weight-light"><a th:href="@{/model/select(type=3)}">仔细阅读</a></span>
+                                    <span class="font-weight-light"><a th:href="@{/model/select(title=null,type=3)}">仔细阅读</a></span>
                                 </div>
 
                                 <div class="h2 text-muted">
@@ -163,7 +174,7 @@
 					        <div class="card-body d-flex justify-content-between align-items-center">
 					            <div>
 					                <!-- <span class="h4 d-block font-weight-normal mb-2">900</span> -->
-					                <span class="font-weight-light"><a th:href="@{/model/select(type=4)}">翻译</a></span>
+					                <span class="font-weight-light"><a th:href="@{/model/select(title=null,type=4)}">翻译</a></span>
 					            </div>
 					
 					            <div class="h2 text-muted">
@@ -177,7 +188,7 @@
 					        <div class="card-body d-flex justify-content-between align-items-center">
 					            <div>
 					                <!-- <span class="h4 d-block font-weight-normal mb-2">900</span> -->
-					                <span class="font-weight-light"><a th:href="@{/model/select(type=5)}">写作</a></span>
+					                <span class="font-weight-light"><a th:href="@{/model/select(title=null,type=5)}">写作</a></span>
 					            </div>
 					
 					            <div class="h2 text-muted">
@@ -210,7 +221,7 @@
                                             <th>操作</th>
                                         </tr>
                                         </thead>
-                                        <tbody th:each="modelVo,modelVoStat:${list}">
+                                        <tbody th:each="modelVo,modelVoStat:${pageInfo.list}">
                                         <tr>
                                             <td th:text="${modelVoStat.index+1}">1</td>
                                             <td class="text-nowrap" th:text="${modelVo.model.title}">Samsung Galaxy S8</td>
@@ -234,6 +245,57 @@
                         </div>
                     </div>
                 </div>
+                <div class="fixed-table-pagination" style="display: block;text-align: right" >
+                    <div class="pull-left pagination-detail">
+                        <span class="pagination-info">显示第 <span th:text="${pageInfo.startRow}"></span> 到第 <span th:text="${pageInfo.endRow}"></span> 条记录，总共 <span th:text="${pageInfo.total}"></span>条记录</span>
+                        <span class="page-list">每页显示
+                         <span class="page-size"  th:text="${pageInfo.pageSize}" id="pageSize"></span>
+                            <!--<span class="btn-group dropdown" style="">-->
+                            <!--<button type="button" class="btn btn-default  dropdown-toggle" data-toggle="dropdown">-->
+                            <!--<span class="page-size"  th:text="${pageInfo.pageSize}" id="pageSize"></span>-->
+                            <!--&lt;!&ndash;保存当前页&ndash;&gt;-->
+                            <!--<input type="hidden" id="pageNum" th:value="${pageInfo.pageNum}" />-->
+                            <!--<span class="caret"></span>-->
+                            <!--</button>-->
+                            <!--<ul class="dropdown-menu" role="menu">-->
+                            <!--<li  th:class="${pageInfo.pageSize== 5 }?'active':''"><a href="javascript:void(0)" th:onclick="'javascript:getUserListByPageSize('+5+')'" >5</a></li>-->
+                            <!--<li  th:class="${pageInfo.pageSize== 8 }?'active':''"><a href="javascript:void(0)" th:onclick="'javascript:getUserListByPageSize('+8+')'">8</a></li>-->
+                            <!--</ul>-->
+                            <!--</span>-->
+                        条记录
+	                </span>
+
+                    </div>
+                </div>
+                <nav aria-label="Page navigation" style="font-size: 20px;text-align: center">
+                    <ul class="pager" id="page">
+                        <li th:class="${pageInfo.hasPreviousPage}?'':'previous disabled'" style="display: inline">
+                            <!--<a th:href="@{/user/getAllUser(currentPage=${pageInfo.prePage})}" aria-label="Previous">-->
+                            <!--<span aria-hidden="true">&laquo;</span>-->
+                            <!--&lt;!&ndash;← Previous&ndash;&gt;-->
+                            <!--</a>-->
+                            <a href="javascript:void(0)" th:onclick="'javascript:getModelListByPage('+${pageInfo.prePage}+');'" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <!--← Previous-->
+                            </a>
+                        </li>
+                        <th:block th:each="nav:${pageInfo.navigatepageNums}">
+                            <li th:class="${nav==pageInfo.pageNum}?'active':''" style="display: inline">
+                                <a href="javascript:void(0)" th:onclick="'javascript:getModelListByPage('+${nav}+');'" th:text="${nav}"></a>
+                            </li>
+                        </th:block>
+                        <li th:class="${pageInfo.hasNextPage}?'':'next disabled'" style="display: inline">
+                            <!--<a th:href="@{/user/getAllUser(currentPage=${pageInfo.nextPage},condition=null,info=null)}" aria-label="Next">-->
+                            <!--&lt;!&ndash;Next →&ndash;&gt;-->
+                            <!--<span aria-hidden="true">&raquo;</span>-->
+                            <!--</a>-->
+                            <a href="javascript:void(0)" th:onclick="'javascript:getModelListByPage('+${pageInfo.nextPage}+');'" aria-label="Next">
+                                <!--Next →-->
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>

@@ -1,5 +1,6 @@
 package com.school.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.school.entity.Model;
 import com.school.entity.ModelVo;
 import com.school.entity.Role;
@@ -64,27 +65,14 @@ public class ModelController {
         return map;
     }
 
-    @RequestMapping(value = "/select",method = RequestMethod.GET)
-    public String selectModel(@RequestParam("type") Integer type, HttpServletRequest request){
-        if (type == null||type.equals("")||type == 0){
-            List<ModelVo> list = modelService.selectAll();
-            request.setAttribute("list", list);
-        }else {
-            List<ModelVo> list = modelService.selectByType(type);
-            request.setAttribute("list", list);
-        }
-        return "forward:/page/modelList";
-    }
-
-    @RequestMapping(value = "/select",method = RequestMethod.POST)
-    public String getModelList(@RequestParam("title") String title, HttpServletRequest request){
-        if (title == null || title.equals("")){
-            List<ModelVo> list = modelService.selectAll();
-            request.setAttribute("list", list);
-        }else {
-            List<ModelVo> list = modelService.selectByTitle(title);
-            request.setAttribute("list", list);
-        }
+    @RequestMapping(value = "/select",method = {RequestMethod.POST,RequestMethod.GET})
+    public String getModelList(@RequestParam(value = "currentPage",defaultValue = "1") Integer currentPage,
+                               @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
+                               @RequestParam("type") Integer type,
+                               @RequestParam("title") String title, HttpServletRequest request){
+        PageInfo<ModelVo> pageInfo = modelService.selectByTypeAndTitle(currentPage, pageSize, type, title);
+        request.setAttribute("pageInfo", pageInfo);
+        request.setAttribute("pageType", type);
         return "forward:/page/modelList";
     }
 
