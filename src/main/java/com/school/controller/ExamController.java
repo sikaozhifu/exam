@@ -1,5 +1,6 @@
 package com.school.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.school.entity.*;
 import com.school.service.ExamService;
 import com.school.service.GradeService;
@@ -100,15 +101,13 @@ public class ExamController {
         return map;
     }
 
-    @RequestMapping(value = "/select", method = RequestMethod.POST)
-    public String getExamList(@RequestParam("exam_name") String exam_name, HttpServletRequest request,HttpSession session) {
-        if (exam_name == null || exam_name.equals("")) {
-            List<Exam> examList = examService.getAllExam();
-            request.setAttribute("list", examList);
-        } else {
-            List<Exam> examList = examService.getExamByCondition(exam_name);
-            request.setAttribute("list", examList);
-        }
+    @RequestMapping(value = "/select", method = {RequestMethod.GET,RequestMethod.POST})
+    public String getAllExam(@RequestParam(value = "currentPage",defaultValue = "1") Integer currentPage,
+                             @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
+                             @RequestParam("exam_name") String exam_name,
+                             HttpServletRequest request, HttpSession session) {
+        PageInfo<Exam> pageInfo = examService.getAllExamByCondition(currentPage, pageSize, exam_name);
+        request.setAttribute("pageInfo", pageInfo);
         Role role = (Role) session.getAttribute("role");
         if (role.getType() == RoleUtil.RoleType.STUDENT) {
             return "forward:/page/studentStart";
@@ -116,20 +115,8 @@ public class ExamController {
         return "forward:/page/exam_list";
     }
 
-    @RequestMapping(value = "/select", method = RequestMethod.GET)
-    public String getAllExam(HttpServletRequest request, HttpSession session) {
-        List<Exam> examList = examService.getAllExam();
-        request.setAttribute("list", examList);
-        Role role = (Role) session.getAttribute("role");
-        if (role.getType() == RoleUtil.RoleType.STUDENT) {
-            return "forward:/page/studentStart";
-        }
-        return "forward:/page/exam_list";
-    }
-
-    @RequestMapping(value = "/getModelVoList", method = RequestMethod.POST)
-    @ResponseBody
-    public List<ModelVo> getModelVoList(@RequestParam("examId") Integer examId) {
+    @RequestMapping(value = "/getModelVoList", method = RequestMethod.GET)
+    public String getModelVoList(@RequestParam("examId") Integer examId,HttpServletRequest request) {
         Exam exam = examService.getExamById(examId);
         if (exam == null) {
             return null;
@@ -140,7 +127,9 @@ public class ExamController {
             ModelVo modelVo = modelService.getModelVo(Integer.parseInt(s));
             modelVoList.add(modelVo);
         }
-        return modelVoList;
+        request.setAttribute("exam", exam);
+        request.setAttribute("modelVoList",modelVoList);
+        return "forward:/page/examInfo";
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)

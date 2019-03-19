@@ -146,6 +146,16 @@ public class PageController {
         }
     }
 
+    @RequestMapping(value = "/examInfo")
+    public String toExamInfo(HttpSession session){
+        String result = isAdmin(session);
+        if (result.equals("success")){
+            return "examInfo";
+        }else {
+            return result;
+        }
+    }
+
     @RequestMapping(value = "/settings")
     public String toSettings(HttpSession session){
         String result = isAdmin(session);

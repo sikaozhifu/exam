@@ -1,5 +1,6 @@
 package com.school.service;
 
+import com.github.pagehelper.PageInfo;
 import com.school.entity.Exam;
 import com.school.entity.ModelVo;
 
@@ -32,4 +33,6 @@ public interface ExamService {
     //更新Exam
     Integer updateExam(Exam exam);
 
+    //分页查询
+    PageInfo<Exam> getAllExamByCondition(Integer currentPage, Integer pageSize, String condition);
 }

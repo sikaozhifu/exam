@@ -135,10 +135,10 @@
                                             <div class="ques-answers" th:utext="${recordVo.modelOption}">
 
                                             </div>
-                                            <span style="font-size: 15px">参考答案：</span>
-                                            <div name="modelAnswer" id="modelAnswer" class="form-control" th:utext="${recordVo.modelAnswer}"></div>
-                                            <span style="font-size: 15px">考生答案：</span>
-                                            <div name="userAnswer" id="userAnswer" class="form-control" th:utext="${recordVo.userAnswer}"></div>
+                                            <br><span style="font-size: 15px">参考答案：</span>
+                                            <br><textarea name="modelAnswer" id="modelAnswer" class="ckeditor form-control" th:utext="${recordVo.modelAnswer}" readonly></textarea>
+                                            <br><span style="font-size: 15px">考生答案：</span>
+                                            <textarea name="userAnswer" id="userAnswer" class="ckeditor form-control" th:utext="${recordVo.userAnswer}" readonly></textarea>
                                         </div>
                                     </div>
                                 </div>

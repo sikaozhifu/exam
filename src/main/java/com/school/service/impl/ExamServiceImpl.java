@@ -1,5 +1,7 @@
 package com.school.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.school.dao.ExamMapper;
 import com.school.entity.Exam;
 import com.school.entity.ModelVo;
@@ -51,6 +53,7 @@ public class ExamServiceImpl implements ExamService {
         return examMapper.getAllExam();
     }
 
+
     @Override
     public Exam getExamById(Integer exam_id) {
         return examMapper.selectByPrimaryKey(exam_id);
@@ -84,5 +87,21 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public Integer updateExam(Exam exam) {
         return examMapper.updateByPrimaryKey(exam);
+    }
+
+    @Override
+    public PageInfo<Exam> getAllExamByCondition(Integer currentPage, Integer pageSize, String condition) {
+
+        PageHelper.startPage(currentPage, pageSize);
+        List<Exam> list;
+        if (condition == null || condition.equals("")){//都为空
+            list = examMapper.getAllExam();
+            PageInfo<Exam> pageInfo = new PageInfo<>(list);
+            return pageInfo;
+        }else {
+            list = examMapper.getExamByCondition(condition);
+            PageInfo<Exam> pageInfo = new PageInfo<>(list);
+            return pageInfo;
+        }
     }
 }
