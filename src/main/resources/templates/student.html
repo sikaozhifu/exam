@@ -84,13 +84,13 @@
             </li>
 
             <li class="nav-item">
-                <a href="studentStart.html" th:href="@{/exam/select}" class="nav-link">
+                <a href="studentStart.html" th:href="@{/exam/select(exam_name=null)}" class="nav-link">
                     <i class="icon"></i> 开始做题
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="studentTable.html" th:href="@{/grade/getGrade}" class="nav-link">
+                <a href="studentTable.html" th:href="@{/grade/getGrade(title=null)}" class="nav-link">
                     <i class="icon"></i> 我的记录
                 </a>
             </li>

@@ -26,7 +26,7 @@ public interface GradeService {
 
     List<Grade> getGradeByTitle(String title);
 
-    List<Grade> getGradeByUserNameAndTitle(String username,String title);
+    PageInfo<Grade> getGradeByUserNameAndTitle(Integer currentPage, Integer pageSize, String username, String title);
 
     //根据条件查询grade
     PageInfo<Grade> getAllGradeByCondition(Integer currentPage, Integer pageSize, String condition, String info);

@@ -99,6 +99,7 @@ public interface GradeMapper {
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
             @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
     })
+    //查找用户的考试记录
     List<Grade> getGradeByUserName(String username);
 
     @Select({
@@ -237,6 +238,7 @@ public interface GradeMapper {
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
             @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
     })
+    //模糊查找
     List<Grade> getGradeListByUserName(String username);
 
     @Select({

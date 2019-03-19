@@ -1,6 +1,17 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:include="student::header"></head>
+<section>
+    <script>
+        //分页查询
+        getGradeListByPage = function (currentPage) {
+            var pageSize = $("#pageSize").val(); //每页显示条数
+            var title = $("#title").val();//考试记录信息
+            var str = "/exam/grade/getGrade?currentPage="+currentPage+"&pageSize="+ pageSize+"&title="+ title;
+            window.location.href = (str);
+        }
+    </script>
+</section>
 <body class="sidebar-fixed header-fixed">
 <div class="page-wrapper">
     <!--顶部栏-->
@@ -14,8 +25,8 @@
             <div class="col-md-4"  style="margin-top: 30px;text-align: center">
                 <form th:action="@{/grade/getGrade}" th:method="post">
                     <div class="input-group">
-                        <label for="input-group-2" style="font-size: 20px">考卷：&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <input type="text" id="input-group-2" name="title" class="form-control"
+                        <label for="title" style="font-size: 20px">考卷：&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input type="text" th:value="${title}" id="title" name="title" class="form-control"
                                placeholder="试卷名称">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-lg btn-primary">
@@ -46,7 +57,7 @@
                                         <th>操作</th>
                                     </tr>
                                     </thead>
-                                    <tbody th:each="grade,gradeStat:${list}">
+                                    <tbody th:each="grade,gradeStat:${pageInfo.list}">
                                         <tr>
                                             <td th:text="${gradeStat.index+1}">1</td>
                                             <td class="text-nowrap" th:text="${grade.title}">Samsung Galaxy S8</td>
@@ -63,6 +74,57 @@
                     </div>
                 </div>
             </div>
+            <div class="fixed-table-pagination" style="display: block;text-align: right" >
+                <div class="pull-left pagination-detail">
+                    <span class="pagination-info">显示第 <span th:text="${pageInfo.startRow}"></span> 到第 <span th:text="${pageInfo.endRow}"></span> 条记录，总共 <span th:text="${pageInfo.total}"></span>条记录</span>
+                    <span class="page-list">每页显示
+                         <span class="page-size"  th:text="${pageInfo.pageSize}" id="pageSize"></span>
+                        <!--<span class="btn-group dropdown" style="">-->
+                        <!--<button type="button" class="btn btn-default  dropdown-toggle" data-toggle="dropdown">-->
+                        <!--<span class="page-size"  th:text="${pageInfo.pageSize}" id="pageSize"></span>-->
+                        <!--&lt;!&ndash;保存当前页&ndash;&gt;-->
+                        <!--<input type="hidden" id="pageNum" th:value="${pageInfo.pageNum}" />-->
+                        <!--<span class="caret"></span>-->
+                        <!--</button>-->
+                        <!--<ul class="dropdown-menu" role="menu">-->
+                        <!--<li  th:class="${pageInfo.pageSize== 5 }?'active':''"><a href="javascript:void(0)" th:onclick="'javascript:getUserListByPageSize('+5+')'" >5</a></li>-->
+                        <!--<li  th:class="${pageInfo.pageSize== 8 }?'active':''"><a href="javascript:void(0)" th:onclick="'javascript:getUserListByPageSize('+8+')'">8</a></li>-->
+                        <!--</ul>-->
+                        <!--</span>-->
+                        条记录
+	                </span>
+
+                </div>
+            </div>
+            <nav aria-label="Page navigation" style="font-size: 20px;text-align: center">
+                <ul class="pager" id="page">
+                    <li th:class="${pageInfo.hasPreviousPage}?'':'previous disabled'" style="display: inline">
+                        <!--<a th:href="@{/user/getAllUser(currentPage=${pageInfo.prePage})}" aria-label="Previous">-->
+                        <!--<span aria-hidden="true">&laquo;</span>-->
+                        <!--&lt;!&ndash;← Previous&ndash;&gt;-->
+                        <!--</a>-->
+                        <a href="javascript:void(0)" th:onclick="'javascript:getGradeListByPage('+${pageInfo.prePage}+');'" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <!--← Previous-->
+                        </a>
+                    </li>
+                    <th:block th:each="nav:${pageInfo.navigatepageNums}">
+                        <li th:class="${nav==pageInfo.pageNum}?'active':''" style="display: inline">
+                            <a href="javascript:void(0)" th:onclick="'javascript:getGradeListByPage('+${nav}+');'" th:text="${nav}"></a>
+                        </li>
+                    </th:block>
+                    <li th:class="${pageInfo.hasNextPage}?'':'next disabled'" style="display: inline">
+                        <!--<a th:href="@{/user/getAllUser(currentPage=${pageInfo.nextPage},condition=null,info=null)}" aria-label="Next">-->
+                        <!--&lt;!&ndash;Next →&ndash;&gt;-->
+                        <!--<span aria-hidden="true">&raquo;</span>-->
+                        <!--</a>-->
+                        <a href="javascript:void(0)" th:onclick="'javascript:getGradeListByPage('+${pageInfo.nextPage}+');'" aria-label="Next">
+                            <!--Next →-->
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

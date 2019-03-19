@@ -108,6 +108,7 @@ public class ExamController {
                              HttpServletRequest request, HttpSession session) {
         PageInfo<Exam> pageInfo = examService.getAllExamByCondition(currentPage, pageSize, exam_name);
         request.setAttribute("pageInfo", pageInfo);
+        request.setAttribute("exam_name",exam_name);
         Role role = (Role) session.getAttribute("role");
         if (role.getType() == RoleUtil.RoleType.STUDENT) {
             return "forward:/page/studentStart";

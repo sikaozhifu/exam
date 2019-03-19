@@ -41,7 +41,7 @@ public class GradeController {
             HttpSession session) {
         Role role = (Role) session.getAttribute("role");
         Map<String, Object> map = new HashMap<>();
-        if (!role.getUsername().equals(username)){
+        if (!role.getUsername().equals(username)) {
             //信息输入错误
             map.put("loginExam", "信息输入有误！");
             return map;
@@ -53,65 +53,56 @@ public class GradeController {
             map.put("loginExam", "您已参加考试，无法进行第二次考试！");
             return map;
         }
-        map.put("loginExam","success");
+        map.put("loginExam", "success");
         return map;
     }
 
-    @RequestMapping(value = "/getGrade", method = RequestMethod.GET)
-    public String getGrade(HttpSession session, HttpServletRequest request) {
+    //学生查询
+    @RequestMapping(value = "/getGrade", method = {RequestMethod.POST, RequestMethod.GET})
+    public String getGradeByCondition(@RequestParam(value = "currentPage", defaultValue = "1") Integer currentPage,
+                                      @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                      @RequestParam("title") String title,
+                                      HttpSession session,
+                                      HttpServletRequest request) {
         Role role = (Role) session.getAttribute("role");
-        String username = role.getUsername();
-        List<Grade> gradeList = gradeService.getGradeByUserName(username);
-        request.setAttribute("list", gradeList);
+        PageInfo<Grade> pageInfo = gradeService.getGradeByUserNameAndTitle(currentPage, pageSize, role.getUsername(), title);
+        request.setAttribute("pageInfo", pageInfo);
+        request.setAttribute("title", title);
         return "forward:/page/studentTable";
     }
 
-    @RequestMapping(value = "/getGrade", method = RequestMethod.POST)
-    public String getGradeByCondition(@RequestParam("title") String title,HttpSession session, HttpServletRequest request) {
-        Role role = (Role) session.getAttribute("role");
-        List<Grade> gradeList;
-        if (role.getType() == RoleUtil.RoleType.STUDENT){
-            gradeList = gradeService.getGradeByUserNameAndTitle(role.getUsername(), title);
-            request.setAttribute("list", gradeList);
-            return "forward:/page/studentTable";
-        }else {
-            gradeList = gradeService.getGradeByTitle(title);
-            request.setAttribute("list", gradeList);
-            return "forward:/page/record_list";
-        }
-    }
-
-    @RequestMapping(value = "/getGradeVo", method = {RequestMethod.GET,RequestMethod.POST})
-    public String getGradeVo(@RequestParam(value = "currentPage",defaultValue = "1") Integer currentPage,
-                             @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
-                             @RequestParam("condition")String condition,
-                             @RequestParam("info")String info,
+    //admin和teacher查找
+    @RequestMapping(value = "/getGradeVo", method = {RequestMethod.GET, RequestMethod.POST})
+    public String getGradeVo(@RequestParam(value = "currentPage", defaultValue = "1") Integer currentPage,
+                             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                             @RequestParam("condition") String condition,
+                             @RequestParam("info") String info,
                              HttpServletRequest request) {
         PageInfo<Grade> pageInfo = gradeService.getAllGradeByCondition(currentPage, pageSize, condition, info);
         request.setAttribute("pageInfo", pageInfo);
-        request.setAttribute("condition",condition);
+        request.setAttribute("condition", condition);
         request.setAttribute("info", info);
 
         return "forward:/page/record_list";
     }
 
-    @RequestMapping(value = "/updateGrade",method = RequestMethod.POST)
+    @RequestMapping(value = "/updateGrade", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> updateGrade(@RequestParam("gradeId")Integer gradeId,@RequestParam("score")Float score){
-        Map<String,Object> map = new HashMap<>();
+    public Map<String, Object> updateGrade(@RequestParam("gradeId") Integer gradeId, @RequestParam("score") Float score) {
+        Map<String, Object> map = new HashMap<>();
         Grade grade = gradeService.getGradeById(gradeId);
         Float examScore = 0f;
-        if (grade.getScore() > score){
+        if (grade.getScore() > score) {
             examScore = grade.getScore() + score;
-        }else {
+        } else {
             examScore = score;
         }
         grade.setScore(examScore);
         grade.setFlag(1);//修改判卷标识符
         Integer result = gradeService.updateGradeById(grade);
-        if (result == 1){
+        if (result == 1) {
             map.put("updateGrade", "判卷成功！");
-        }else {
+        } else {
             map.put("updateGrade", "判卷失败！请联系管理员...");
         }
         return map;

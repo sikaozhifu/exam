@@ -18,6 +18,7 @@ public class GradeServiceImpl implements GradeService {
 
     @Autowired
     private GradeMapper gradeMapper;
+
     @Override
     public Integer insertGrade(Grade grade) {
         return gradeMapper.insert(grade);
@@ -34,7 +35,7 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public Grade getGradeByExamId(String username,Integer examId) {
+    public Grade getGradeByExamId(String username, Integer examId) {
         return gradeMapper.getGradeByExamId(username, examId);
     }
 
@@ -50,18 +51,25 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public List<Grade> getGradeByTitle(String title) {
-        if (title == null || title.equals("")){
+        if (title == null || title.equals("")) {
             return gradeMapper.getAllGrade();
         }
         return gradeMapper.getGradeByTitle(title);
     }
 
     @Override
-    public List<Grade> getGradeByUserNameAndTitle(String username, String title) {
-        if (title == null || title.equals("")){
-            return gradeMapper.getGradeByUserName(username);
+    public PageInfo<Grade> getGradeByUserNameAndTitle(Integer currentPage, Integer pageSize, String username, String title) {
+        //设置分页信息保存到threadLocal中
+        PageHelper.startPage(currentPage, pageSize);//一定要放在查询之前
+        if (title == null || title.equals("")) {
+            //所有条件为空
+            List<Grade> list = gradeMapper.getGradeByUserName(username);
+            PageInfo<Grade> pageInfo = new PageInfo<>(list);
+            return pageInfo;
         }
-        return gradeMapper.getGradeByUserNameAndTitle(username, title);
+        List<Grade> list = gradeMapper.getGradeByUserNameAndTitle(username, title);
+        PageInfo<Grade> pageInfo = new PageInfo<>(list);
+        return pageInfo;
     }
 
     @Override
@@ -69,14 +77,14 @@ public class GradeServiceImpl implements GradeService {
         //设置分页信息保存到threadLocal中
         PageHelper.startPage(currentPage, pageSize);//一定要放在查询之前
         List<Grade> list = new ArrayList<>();
-        if ((info == null || info.equals(""))&&(condition == null || condition.equals(""))){
+        if ((info == null || info.equals("")) && (condition == null || condition.equals(""))) {
             //所有条件为空
             list = gradeMapper.getAllGrade();
             PageInfo<Grade> pageInfo = new PageInfo<>(list);
             return pageInfo;
         }
 
-        if ((info == null || info.equals(""))&&(condition != null || !condition.equals(""))){
+        if ((info == null || info.equals("")) && (condition != null || !condition.equals(""))) {
             //查询条件为空
             list = gradeMapper.getAllGrade();
             PageInfo<Grade> pageInfo = new PageInfo<>(list);
@@ -85,16 +93,16 @@ public class GradeServiceImpl implements GradeService {
 
         //紧跟着的第一个select方法会被分页，userMapper会被PageInterceptor截拦,
         // 截拦器会从threadLocal中取出分页信息，把分页信息加到sql语句中，实现了分页查旬
-        if (condition.equals("0")){
+        if (condition.equals("0")) {
             //试卷名称
             list = gradeMapper.getGradeListByTitle(info);
-        }else if (condition.equals("1")){
+        } else if (condition.equals("1")) {
             //班级名称
             list = gradeMapper.getGradeListByGroupName(info);
-        }else if (condition.equals("2")){
+        } else if (condition.equals("2")) {
             //学号
             list = gradeMapper.getGradeListByUserName(info);
-        }else if (condition.equals("3")){
+        } else if (condition.equals("3")) {
             //姓名
             list = gradeMapper.getGradeListByName(info);
         }

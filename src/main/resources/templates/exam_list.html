@@ -174,7 +174,7 @@
                     <form th:action="@{/exam/select}" th:method="post">
                         <div class="input-group">
                             <label style="font-size: 20px" for="exam_name">试卷&nbsp;&nbsp;&nbsp;</label>
-                            <input type="text" id="exam_name" name="exam_name" class="form-control" placeholder="请输入试卷名称">&nbsp;
+                            <input type="text" th:value="${exam_name}" id="exam_name" name="exam_name" class="form-control" placeholder="请输入试卷名称">&nbsp;
                             <span class="input-group-btn">
                                 <button type="submit" class="btn btn-primary"><i class="fa "></i> 搜索试卷</button>
                             </span>
