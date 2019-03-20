@@ -16,7 +16,6 @@
             if (flag == 0){
                 alert("试题未开放，等候老师开放！");
                 return;
-                //window.location.href = ("/exam/exam/select");
             }else {
                 // alert("试题开放");
                 $("#examId").val(id);
@@ -41,7 +40,7 @@
                                 window.location.href = ("/exam/exam/getExam?exam_id=" + $("#examId").val());
                             }else {
                                 alert(value);
-                                window.location.href = ("/exam/exam/select");
+                                return;
                             }
                         });
                     }

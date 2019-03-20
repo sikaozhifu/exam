@@ -29,22 +29,14 @@ public class ModelServiceImpl implements ModelService {
 
     @Override
     public List<ModelVo> selectAll() {
-        List<ModelVo> modelVoList = new ArrayList<>();
         List<Model> list = modelMapper.selectAll();
-        for (Model model:list){
-            modelVoList.add(modelToModelVo(model));
-        }
-        return modelVoList;
+        return modelToModelVo(list);
     }
 
     @Override
     public List<ModelVo> selectByType(Integer type) {
-        List<ModelVo> modelVoList = new ArrayList<>();
         List<Model> list = modelMapper.selectByType(type);
-        for (Model model:list){
-            modelVoList.add(modelToModelVo(model));
-        }
-        return modelVoList;
+        return modelToModelVo(list);
     }
 
     @Override
@@ -65,12 +57,8 @@ public class ModelServiceImpl implements ModelService {
 
     @Override
     public List<ModelVo> selectByTitle(String title) {
-        List<ModelVo> modelVoList = new ArrayList<>();
         List<Model> list = modelMapper.selectByTitle(title);
-        for (Model model:list){
-            modelVoList.add(modelToModelVo(model));
-        }
-        return modelVoList;
+        return modelToModelVo(list);
     }
 
     @Override
@@ -86,41 +74,25 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public PageInfo<ModelVo> selectByTypeAndTitle(Integer currentPage, Integer pageSize,Integer type, String title) {
         PageHelper.startPage(currentPage, pageSize);
-        List<ModelVo> modelVoList = new ArrayList<>();
         if ((type==null||type.equals(0)||type.equals(""))&&(title == null|| title.equals(""))){
-            modelVoList = new ArrayList<>();
             List<Model> list = modelMapper.selectAll();
-            for (Model model:list){
-                modelVoList.add(modelToModelVo(model));
-            }
-            PageInfo<ModelVo> pageInfo = new PageInfo<>(modelVoList);
-            return pageInfo;
+            PageInfo<Model> p = new PageInfo<>(list);
+            return changePageInfo(p);
         }
         if (type != null&&(title == null||title.equals(""))){
 
             List<Model> list = modelMapper.selectByType(type);
-            for (Model model:list){
-                modelVoList.add(modelToModelVo(model));
-            }
-            PageInfo<ModelVo> pageInfo = new PageInfo<>(modelVoList);
-            return pageInfo;
+            PageInfo<Model> p = new PageInfo<>(list);
+            return changePageInfo(p);
         }
         if ((type==null||type.equals(0)||type.equals(""))&&(title != null)){
-            modelVoList = new ArrayList<>();
             List<Model> list = modelMapper.selectByTitle(title);
-            for (Model model:list){
-                modelVoList.add(modelToModelVo(model));
-            }
-            PageInfo<ModelVo> pageInfo = new PageInfo<>(modelVoList);
-            return pageInfo;
+            PageInfo<Model> p = new PageInfo<>(list);
+            return changePageInfo(p);
         }else {
-            modelVoList = new ArrayList<>();
             List<Model> list = modelMapper.selectByTypeAndTitle(type, title);
-            for (Model model:list){
-                modelVoList.add(modelToModelVo(model));
-            }
-            PageInfo<ModelVo> pageInfo = new PageInfo<>(modelVoList);
-            return pageInfo;
+            PageInfo<Model> p = new PageInfo<>(list);
+            return changePageInfo(p);
         }
     }
 
@@ -137,5 +109,78 @@ public class ModelServiceImpl implements ModelService {
         modelVo.setType(type.getType());
         modelVo.setDifficulty(difficulty);
         return modelVo;
+    }
+    /**
+     * 转化为包装类ModelVo的list
+     * @param list
+     * @return
+     */
+    public List<ModelVo> modelToModelVo(List<Model> list){
+        List<ModelVo> modelVoList = new ArrayList<>();
+        for (Model model:list){
+            modelVoList.add(modelToModelVo(model));
+        }
+        return modelVoList;
+    }
+    /**
+     * 转化为包装类ModelVo的PageInfo
+     * @param p
+     * @return
+     */
+    public PageInfo<ModelVo> changePageInfo(PageInfo<Model> p){
+        PageInfo<ModelVo> pageInfo = new PageInfo<>();
+        //当前页
+//        private int pageNum;
+        pageInfo.setPageNum(p.getPageNum());
+        //每页的数量
+//        private int pageSize;
+        pageInfo.setPageSize(p.getPageSize());
+        //当前页的数量
+//        private int size;
+        pageInfo.setSize(p.getSize());
+//        private int startRow;
+        pageInfo.setStartRow(p.getStartRow());
+        //当前页面最后一个元素在数据库中的行号
+//        private int endRow;
+        pageInfo.setEndRow(p.getEndRow());
+        //总页数
+//        private int pages;
+        pageInfo.setPages(p.getPages());
+        //前一页
+//        private int prePage;
+        pageInfo.setPrePage(p.getPrePage());
+        //下一页
+//        private int nextPage;
+        pageInfo.setNextPage(p.getNextPage());
+        //是否为第一页
+//        private boolean isFirstPage = false;
+        pageInfo.setIsFirstPage(p.isIsFirstPage());
+        //是否为最后一页
+//        private boolean isLastPage = false;
+        pageInfo.setIsLastPage(p.isIsLastPage());
+        //是否有前一页
+//        private boolean hasPreviousPage = false;
+        pageInfo.setHasPreviousPage(p.isHasPreviousPage());
+        //是否有下一页
+//        private boolean hasNextPage = false;
+        pageInfo.setHasNextPage(p.isHasNextPage());
+        //导航页码数
+//        private int navigatePages;
+        pageInfo.setNavigatePages(p.getNavigatePages());
+        //所有导航页号
+//        private int[] navigatepageNums;
+        pageInfo.setNavigatepageNums(p.getNavigatepageNums());
+        //导航条上的第一页
+//        private int navigateFirstPage;
+        pageInfo.setNavigateFirstPage(p.getNavigateFirstPage());
+        //导航条上的最后一页
+//        private int navigateLastPage;
+        pageInfo.setNavigateLastPage(p.getNavigateLastPage());
+
+        //设置total
+        pageInfo.setTotal(p.getTotal());
+        //设置list
+        pageInfo.setList(modelToModelVo(p.getList()));
+        return pageInfo;
     }
 }

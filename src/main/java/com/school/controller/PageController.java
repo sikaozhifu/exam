@@ -92,6 +92,16 @@ public class PageController {
         }
     }
 
+    @RequestMapping(value = "/add_model_list")
+    public String toAddModelList(HttpSession session) {
+        String result = isAdmin(session);
+        if (result.equals("success")){
+            return "add_model_list";
+        }else {
+            return result;
+        }
+    }
+
     @RequestMapping(value = "/teacherIndex")
     public String toTeacherIndex() {
         return "teacher_index";

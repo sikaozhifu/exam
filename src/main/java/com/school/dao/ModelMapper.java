@@ -183,6 +183,6 @@ public interface ModelMapper {
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
             @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
     })
-        //根据type和title查询
+        //根据type 和 title查询
     List<Model> selectByTypeAndTitle(Integer type,String title);
 }

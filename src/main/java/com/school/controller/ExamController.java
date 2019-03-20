@@ -101,6 +101,7 @@ public class ExamController {
         return map;
     }
 
+
     @RequestMapping(value = "/select", method = {RequestMethod.GET,RequestMethod.POST})
     public String getAllExam(@RequestParam(value = "currentPage",defaultValue = "1") Integer currentPage,
                              @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,

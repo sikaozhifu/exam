@@ -27,7 +27,7 @@
                             str += '<td>' + value.difficulty + '</td>';
                             str += '<td>' + value.model.author + '</td>';
                             str += '<td>' + value.model.grade + '</td>';
-                            str += '<td><div class=\"checkbox\"><label><input type=\'checkbox\' name=\'add\' value='+value.model.modelId+' onclick=\'checkClick()\' />添加</label></div></td>';
+                            str += '<td><div class=\"checkbox\"><label><input type=\'checkbox\' name=\'add\' value='+value.model.modelId+' />添加</label></div></td>';
                             str += '</tr>';
                             // alert(str);
                             // alert(value.model.answer);
@@ -114,6 +114,8 @@
             });
             // alert(headers);
         }
+
+
         saveExam = function () {
             $("#ids").val(ids);
             // $("#exam_type").val(0);//默认组卷类型
@@ -185,15 +187,16 @@
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="home" role="tabpanel">
-                                        <a id="add-btn" class="btn btn-outline-primary"
-                                                th:onclick="'javascript:addModel('+0+');'">添加试题
+                                        <!--<a id="add-btn" class="btn btn-outline-primary"-->
+                                                <!--th:onclick="'javascript:addModel('+0+');'">添加试题-->
+                                        <!--</a>-->
+                                        <a id="add-btn" class="btn btn-outline-primary" th:href="@{/model/getALLModel(title=null,type=null)}">添加试题
                                         </a>
                                         <!--<button class="btn btn-outline-primary" data-toggle="modal" data-target="#modal-2">添加试题</button>-->
                                     </div>
 
                                     <div class="tab-pane" id="profile" role="tabpanel">
-                                        <a id="random-btn" class="btn btn-outline-primary"
-                                                th:onclick="'javascript:randomModel();'">随机试题
+                                        <a id="random-btn" class="btn btn-outline-primary">随机试题
                                         </a>
                                     </div>
                                 </div>
