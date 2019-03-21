@@ -327,22 +327,8 @@ public class ExamController {
 
         idsSet.add(modelId);
         modelVoSet.add(modelService.getModelVo(modelId));
-        //获取页面信息
-        Integer currentPage = (Integer) session.getAttribute("currentPage");
-        Integer pageSize = (Integer) session.getAttribute("pageSize");
-        Integer type = (Integer) session.getAttribute("pageType");
-        String title = (String) session.getAttribute("title");
-
-        PageInfo<ModelVo> pageInfo = modelService.selectByTypeAndTitle(currentPage, pageSize, type, title);
-        for (ModelVo modelVo:pageInfo.getList()){
-            if (idsSet.contains(modelVo.getModel().getModelId())){
-                modelVo.setAddFlag(1);
-            }
-        }
-
-        session.setAttribute("pageInfo", pageInfo);
-        session.setAttribute("list", new ArrayList<>(modelVoSet));
-        return "forward:/page/add_model_list";
+        //更新页面信息
+        return get_exam_model_list(session);
     }
 
     @RequestMapping(value = "/removeIds",method = RequestMethod.GET)
@@ -350,22 +336,40 @@ public class ExamController {
 
         idsSet.remove(modelId);
         modelVoSet.remove(modelService.getModelVo(modelId));
-        //获取页面信息
+        //更新页面信息
+        return get_exam_model_list(session);
+    }
+
+    /**添加试卷的时候
+     * 添加或者删除model时，刷新页面的记录
+     * @param session
+     * @return
+     */
+    public String get_exam_model_list(HttpSession session){
+
         Integer currentPage = (Integer) session.getAttribute("currentPage");
         Integer pageSize = (Integer) session.getAttribute("pageSize");
         Integer type = (Integer) session.getAttribute("pageType");
         String title = (String) session.getAttribute("title");
 
         PageInfo<ModelVo> pageInfo = modelService.selectByTypeAndTitle(currentPage, pageSize, type, title);
-        for (ModelVo modelVo:pageInfo.getList()){
-            if (idsSet.contains(modelVo.getModel().getModelId())){
-                modelVo.setAddFlag(1);
-            }
-        }
+
+        addFlag(pageInfo);//设置是否为已添加试题的标志
 
         session.setAttribute("pageInfo", pageInfo);
         session.setAttribute("list", new ArrayList<>(modelVoSet));
         return "forward:/page/add_model_list";
     }
 
+    /**
+     * 设置是否为已添加试题的标志
+     * @param pageInfo
+     */
+    public void addFlag(PageInfo<ModelVo> pageInfo){
+        for (ModelVo modelVo:pageInfo.getList()){
+            if (idsSet.contains(modelVo.getModel().getModelId())){
+                modelVo.setAddFlag(1);
+            }
+        }
+    }
 }
