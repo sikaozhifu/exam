@@ -91,7 +91,8 @@ public interface ExamMapper {
             "select",
             "exam_id, exam_name, exam_content, exam_type, need_time, exam_author, create_time, ",
             "update_time, exam_answer, exam_analysis, exam_grade, model_ids, exam_flag",
-            "from exam"
+            "from exam",
+            "order by update_time desc"
     })
     @Results({
             @Result(column="exam_id", property="examId", jdbcType=JdbcType.INTEGER, id=true),
@@ -115,7 +116,8 @@ public interface ExamMapper {
             "exam_id, exam_name, exam_content, exam_type, need_time, exam_author, create_time, ",
             "update_time, exam_answer, exam_analysis, exam_grade, model_ids, exam_flag",
             "from exam",
-            "where exam_name like concat(concat('%',#{exam_name}),'%')"
+            "where exam_name like concat(concat('%',#{exam_name}),'%')",
+            "order by update_time desc"
     })
     @Results({
             @Result(column="exam_id", property="examId", jdbcType=JdbcType.INTEGER, id=true),
@@ -139,7 +141,8 @@ public interface ExamMapper {
             "exam_id, exam_name, exam_content, exam_type, need_time, exam_author, create_time, ",
             "update_time, exam_answer, exam_analysis, exam_grade, model_ids, exam_flag",
             "from exam",
-            "where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(update_time)"
+            "where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(update_time)",
+            "order by update_time desc"
     })
     @Results({
             @Result(column="exam_id", property="examId", jdbcType=JdbcType.INTEGER, id=true),

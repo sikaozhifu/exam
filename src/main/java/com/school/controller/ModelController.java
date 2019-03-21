@@ -25,11 +25,6 @@ public class ModelController {
     @Autowired
     private ModelService modelService;
 
-    //试题的id
-    private Set<Integer> idsSet = new HashSet<>();
-
-    private Set<ModelVo> modelVoSet = new HashSet<>();
-
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> addModel(
@@ -78,67 +73,6 @@ public class ModelController {
         request.setAttribute("pageType", type);
         request.setAttribute("title", title);
         return "forward:/page/modelList";
-    }
-
-    @RequestMapping(value = "/getALLModel",method = {RequestMethod.POST,RequestMethod.GET})
-    public String getAddModelList(@RequestParam(value = "currentPage",defaultValue = "1") Integer currentPage,
-                               @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
-                               @RequestParam("type") Integer type,
-                               @RequestParam("title") String title, HttpSession session){
-        PageInfo<ModelVo> pageInfo = modelService.selectByTypeAndTitle(currentPage, pageSize, type, title);
-        for (ModelVo modelVo:pageInfo.getList()){
-            if (idsSet.contains(modelVo.getModel().getModelId())){
-                modelVo.setAddFlag(1);
-            }
-        }
-        session.setAttribute("currentPage",currentPage);
-        session.setAttribute("pageSize",pageSize);
-        session.setAttribute("pageInfo", pageInfo);
-        session.setAttribute("pageType", type);
-        session.setAttribute("list", new ArrayList<>(modelVoSet));
-        return "forward:/page/add_model_list";
-    }
-
-    @RequestMapping(value = "/saveIds",method = RequestMethod.GET)
-    public String saveIds(@RequestParam("modelId") Integer modelId,HttpSession session){
-        idsSet.add(modelId);
-        modelVoSet.add(modelService.getModelVo(modelId));
-        //获取页面信息
-        Integer currentPage = (Integer) session.getAttribute("currentPage");
-        Integer pageSize = (Integer) session.getAttribute("pageSize");
-        Integer type = (Integer) session.getAttribute("pageType");
-        String title = (String) session.getAttribute("title");
-
-        PageInfo<ModelVo> pageInfo = modelService.selectByTypeAndTitle(currentPage, pageSize, type, title);
-        for (ModelVo modelVo:pageInfo.getList()){
-            if (idsSet.contains(modelVo.getModel().getModelId())){
-                modelVo.setAddFlag(1);
-            }
-        }
-        session.setAttribute("pageInfo", pageInfo);
-        session.setAttribute("list", new ArrayList<>(modelVoSet));
-        return "forward:/page/add_model_list";
-    }
-
-    @RequestMapping(value = "/removeIds",method = RequestMethod.GET)
-    public String removeIds(@RequestParam("modelId") Integer modelId,HttpSession session){
-        idsSet.remove(modelId);
-        modelVoSet.remove(modelService.getModelVo(modelId));
-        //获取页面信息
-        Integer currentPage = (Integer) session.getAttribute("currentPage");
-        Integer pageSize = (Integer) session.getAttribute("pageSize");
-        Integer type = (Integer) session.getAttribute("pageType");
-        String title = (String) session.getAttribute("title");
-
-        PageInfo<ModelVo> pageInfo = modelService.selectByTypeAndTitle(currentPage, pageSize, type, title);
-        for (ModelVo modelVo:pageInfo.getList()){
-            if (idsSet.contains(modelVo.getModel().getModelId())){
-                modelVo.setAddFlag(1);
-            }
-        }
-        session.setAttribute("pageInfo", pageInfo);
-        session.setAttribute("list", new ArrayList<>(modelVoSet));
-        return "forward:/page/add_model_list";
     }
 
     @RequestMapping(value = "/getModel",method = RequestMethod.POST)

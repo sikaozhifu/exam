@@ -5,6 +5,7 @@ import com.school.entity.Exam;
 import com.school.entity.ModelVo;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ExamService {
 
@@ -13,6 +14,9 @@ public interface ExamService {
 
     //整理model
     List<ModelVo>manageModel(String ids);
+
+    //整理model
+    List<ModelVo>manageModel(Set<ModelVo> modelVoSet);
 
     //获取所有exam
     List<Exam> getAllExam();

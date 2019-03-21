@@ -9,7 +9,7 @@
             var pageSize = $("#pageSize").val(); //每页显示条数
             var title = $("#titlePage").val();//试题标题
             var type = $("#pageType").val();//试题类型
-            var str = "/exam/model/getALLModel?currentPage="+currentPage+"&pageSize="+ pageSize+"&title="+ title+"&type="+ type;
+            var str = "/exam/exam/getALLModel?currentPage="+currentPage+"&pageSize="+ pageSize+"&title="+ title+"&type="+ type;
             window.location.href = (str);
         }
         saveIds = function(modelId,addFlag){
@@ -17,7 +17,7 @@
                 alert("您已添加该试题，请勿重复添加！");
                 return;
             }else {
-                var str = "/exam/model/saveIds?modelId="+modelId;
+                var str = "/exam/exam/saveIds?modelId="+modelId;
                 window.location.href = (str);
             }
         }
@@ -42,7 +42,7 @@
                         })
                     }
                     $("#modal-update").modal('hide');
-                    window.location.href = ("/exam/model/getALLModel?title=&type=");
+                    window.location.href = ("/exam/exam/getALLModel?title=&type=");
                 }
             });
         }
@@ -111,7 +111,7 @@
                                                 <td th:text="${modelVo.model.grade}"></td>
                                                 <td>
                                                     <!--<button id="delete-btn" class="btn btn-outline-danger" type="button" name="delete" th:onclick="'javascript:updateModel('+${modelVo.model.modelId}+');'">删除</button>-->
-                                                    <a id="remove-btn" class="btn btn-outline-danger" name="remove" th:href="@{/model/removeIds(modelId=${modelVo.model.modelId})}">删除</a>
+                                                    <a id="remove-btn" class="btn btn-outline-danger" name="remove" th:href="@{/exam/removeIds(modelId=${modelVo.model.modelId})}">删除</a>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -121,7 +121,7 @@
                             </div>
                             <div class="card-footer">
                                 <div style="float: right;margin-right: 140px">
-                                    <a class="btn btn-success btn-lg">确定</a>
+                                    <a class="btn btn-success btn-lg" th:href="@{/page/addExam}" href="add_exam.html">确定</a>
                                 </div>
                             </div>
                         </div>

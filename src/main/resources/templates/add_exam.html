@@ -97,14 +97,7 @@
             });
         }
         checkClick = function () {
-            // alert("click");
-            // alert($(this).is(':checked'));
-            // if ($(this).is(':checked')){
-            //     alert($(this).val());
-            //     arrayObj.push($(this).val());
-            // }
-            // alert($(this).is(':checked'));
-            // var headers = "";
+
             $('input[name="add"]:checked').each(function(i){
                 if(0==i){
                     ids = $(this).val();
@@ -126,7 +119,6 @@
             $.ajax({
                 type:"POST",
                 data:{
-                    ids:$("#ids").val(),
                     exam_name:$("#exam_name").val(),
                     need_time:$("#need_time").val(),
                     exam_author:$("#exam_author").val()
@@ -165,41 +157,50 @@
                         <div class="col-md-4" style="font-size: 20px">
 
                             <div class="form-group">
+                                <label class="form-control-label">组卷类型</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6 mb-4 open">
+                                    <ul class="nav nav-tabs" role="tablist" style="font-size: 15px">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">固定试题&nbsp;&nbsp;<label style="font-size: 10px;color: gray">考生试题相同</label></a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">随机试题&nbsp;&nbsp;<label style="font-size: 10px;color: gray">考生试题不同</label></a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="home" role="tabpanel">
+                                            <!--<a id="add-btn" class="btn btn-outline-primary"-->
+                                            <!--th:onclick="'javascript:addModel('+0+');'">添加试题-->
+                                            <!--</a>-->
+                                            <div class="control-label">
+                                                <a class="btn btn-outline-primary" th:href="@{/exam/getALLModel(title=null,type=null)}">手动添加试题</a>
+                                            </div>
+                                            <br />
+                                            <div class="control-label">
+                                                <a class="btn btn-outline-primary" th:href="@{/exam/getALLModel(title=null,type=null)}">自动添加试题</a>
+                                            </div>
+                                            <!--<button class="btn btn-outline-primary" data-toggle="modal" data-target="#modal-2">添加试题</button>-->
+                                        </div>
+
+                                        <div class="tab-pane" id="profile" role="tabpanel">
+                                            <div class="control-label">
+                                                <a class="btn btn-outline-primary">系统随机试题</a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label for="exam_name" class="form-control-label">试卷名称</label>
                                 <input name="exam_name" id="exam_name" class="form-control" value=""
                                        placeholder="请输入试卷名称" required>
                                 <input name="ids" type="hidden" id="ids" />
                                 <!--默认组卷类型-->
                                 <!--<input name="exam_type" type="hidden" id="exam_type" />-->
-                            </div>
-                            <div class="form-group">
-                                <label for="exam_name" class="form-control-label">组卷类型</label>
-                            </div>
-                            <div class="col-md-6 mb-4 open">
-                                <ul class="nav nav-tabs" role="tablist" style="font-size: 15px">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">固定试题&nbsp;&nbsp;<label style="font-size: 10px;color: gray">考生试题相同</label></a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">随机试题&nbsp;&nbsp;<label style="font-size: 10px;color: gray">考生试题不同</label></a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane active" id="home" role="tabpanel">
-                                        <!--<a id="add-btn" class="btn btn-outline-primary"-->
-                                                <!--th:onclick="'javascript:addModel('+0+');'">添加试题-->
-                                        <!--</a>-->
-                                        <a id="add-btn" class="btn btn-outline-primary" th:href="@{/model/getALLModel(title=null,type=null)}">添加试题
-                                        </a>
-                                        <!--<button class="btn btn-outline-primary" data-toggle="modal" data-target="#modal-2">添加试题</button>-->
-                                    </div>
-
-                                    <div class="tab-pane" id="profile" role="tabpanel">
-                                        <a id="random-btn" class="btn btn-outline-primary">随机试题
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="need_time">所需时间</label>

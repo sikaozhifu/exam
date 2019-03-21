@@ -49,6 +49,25 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
+    public List<ModelVo> manageModel(Set<ModelVo> modelVoSet) {
+        Comparator<ModelVo> comparator = (m1, m2) -> {
+            if (m1.getModel().getType()!=m2.getModel().getType()){
+                return m1.getModel().getType()-m2.getModel().getType();
+            }else {
+                if (!m1.getModel().getTitle().equals(m2.getModel().getTitle())){
+                    return m1.getModel().getTitle().compareTo(m2.getModel().getTitle());
+                }else {
+                    return m1.getModel().getModelId()-m2.getModel().getModelId();
+                }
+            }
+        };
+        List<ModelVo> modelList = new ArrayList<>(modelVoSet);
+
+        Collections.sort(modelList,comparator);
+        return modelList;
+    }
+
+    @Override
     public List<Exam> getAllExam() {
         return examMapper.getAllExam();
     }

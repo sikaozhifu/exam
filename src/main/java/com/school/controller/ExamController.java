@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
@@ -31,10 +28,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ExamController {
 
     //试题map
-    public Map<Integer, ModelVo> modelMap = new ConcurrentHashMap<>();
+    private Map<Integer, ModelVo> modelMap = new ConcurrentHashMap<>();
 
     //答案map
-    public Map<Integer, String> answerMap = new ConcurrentHashMap<>();
+    private Map<Integer, String> answerMap = new ConcurrentHashMap<>();
 
     //当前试题序号
     private static Integer num;
@@ -42,6 +39,11 @@ public class ExamController {
     private static Long startTime;//考试开始时间
 
     private static Long endTime;//考试结束时间
+
+    //试题的id
+    private Set<Integer> idsSet = new HashSet<>();
+    //试题的内容
+    private Set<ModelVo> modelVoSet = new HashSet<>();
 
     @Autowired
     private ExamService examService;
@@ -55,18 +57,17 @@ public class ExamController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> addExam(
-            @RequestParam("ids") String ids,
             @RequestParam("exam_name") String exam_name,
             @RequestParam("need_time") String need_time,
-            @RequestParam("exam_author") String exam_author
-    ) {
+            @RequestParam("exam_author") String exam_author,HttpSession session) {
         Map<String, Object> map = new HashMap<>();
         List<Exam> examExist = examService.getExamByCondition(exam_name);
         if (examExist.size() > 0) {
             map.put("addExam", "试卷名称已存在！");
             return map;
         }
-        List<ModelVo> modelVoList = examService.manageModel(ids);
+
+        List<ModelVo> modelVoList = examService.manageModel(modelVoSet);
         Exam exam = new Exam();
         exam.setExamName(exam_name);//试卷名称
         exam.setExamType(0);//默认组卷类型
@@ -93,6 +94,9 @@ public class ExamController {
         Integer result = examService.insertExam(exam);
         if (result == 1) {
             map.put("addExam", "试卷添加成功！");
+            //清除idsSet和modelVoSet内存中的数据
+            idsSet.clear();
+            modelVoSet.clear();
             return map;
 //            return "redirect:/exam/select";
         }
@@ -100,7 +104,6 @@ public class ExamController {
 //        return "redirect:/page/exam/add";
         return map;
     }
-
 
     @RequestMapping(value = "/select", method = {RequestMethod.GET,RequestMethod.POST})
     public String getAllExam(@RequestParam(value = "currentPage",defaultValue = "1") Integer currentPage,
@@ -291,7 +294,77 @@ public class ExamController {
         Integer result = gradeService.insertGrade(grade);
         if (result == 1){
             map.put("saveExam", "试卷提交成功！");
+            //清除上次考试答题记录
+            answerMap.clear();
+            modelMap.clear();
         }
         return map;
     }
+
+    @RequestMapping(value = "/getALLModel",method = {RequestMethod.POST,RequestMethod.GET})
+    public String getAddModelList(@RequestParam(value = "currentPage",defaultValue = "1") Integer currentPage,
+                                  @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
+                                  @RequestParam("type") Integer type,
+                                  @RequestParam("title") String title, HttpSession session){
+
+        PageInfo<ModelVo> pageInfo = modelService.selectByTypeAndTitle(currentPage, pageSize, type, title);
+        for (ModelVo modelVo:pageInfo.getList()){
+            if (idsSet.contains(modelVo.getModel().getModelId())){
+                modelVo.setAddFlag(1);
+            }
+        }
+        session.setAttribute("currentPage",currentPage);
+        session.setAttribute("pageSize",pageSize);
+        session.setAttribute("pageInfo", pageInfo);
+        session.setAttribute("pageType", type);
+        session.setAttribute("list", new ArrayList<>(modelVoSet));
+        return "forward:/page/add_model_list";
+    }
+
+    @RequestMapping(value = "/saveIds",method = RequestMethod.GET)
+    public String saveIds(@RequestParam("modelId") Integer modelId,HttpSession session){
+
+        idsSet.add(modelId);
+        modelVoSet.add(modelService.getModelVo(modelId));
+        //获取页面信息
+        Integer currentPage = (Integer) session.getAttribute("currentPage");
+        Integer pageSize = (Integer) session.getAttribute("pageSize");
+        Integer type = (Integer) session.getAttribute("pageType");
+        String title = (String) session.getAttribute("title");
+
+        PageInfo<ModelVo> pageInfo = modelService.selectByTypeAndTitle(currentPage, pageSize, type, title);
+        for (ModelVo modelVo:pageInfo.getList()){
+            if (idsSet.contains(modelVo.getModel().getModelId())){
+                modelVo.setAddFlag(1);
+            }
+        }
+
+        session.setAttribute("pageInfo", pageInfo);
+        session.setAttribute("list", new ArrayList<>(modelVoSet));
+        return "forward:/page/add_model_list";
+    }
+
+    @RequestMapping(value = "/removeIds",method = RequestMethod.GET)
+    public String removeIds(@RequestParam("modelId") Integer modelId,HttpSession session){
+
+        idsSet.remove(modelId);
+        modelVoSet.remove(modelService.getModelVo(modelId));
+        //获取页面信息
+        Integer currentPage = (Integer) session.getAttribute("currentPage");
+        Integer pageSize = (Integer) session.getAttribute("pageSize");
+        Integer type = (Integer) session.getAttribute("pageType");
+        String title = (String) session.getAttribute("title");
+
+        PageInfo<ModelVo> pageInfo = modelService.selectByTypeAndTitle(currentPage, pageSize, type, title);
+        for (ModelVo modelVo:pageInfo.getList()){
+            if (idsSet.contains(modelVo.getModel().getModelId())){
+                modelVo.setAddFlag(1);
+            }
+        }
+
+        session.setAttribute("pageInfo", pageInfo);
+        session.setAttribute("list", new ArrayList<>(modelVoSet));
+        return "forward:/page/add_model_list";
+    }
+
 }
