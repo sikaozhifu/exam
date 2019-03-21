@@ -197,11 +197,9 @@ public class ExamController {
         session.setAttribute("exam", exam);
         num = 1;//默认第一题
         //计算当前时间以及考试结束时间
-        if (session.getAttribute("startTime") == null) {
+        if (startTime == null) {
             startTime = System.currentTimeMillis();
-            session.setAttribute("startTime", startTime);
             endTime = startTime + Long.parseLong(exam.getNeedTime()) * 60 * 1000;
-            session.setAttribute("endTime", endTime);
         }
         session.setAttribute("num", num);
         session.setAttribute("modelVo", modelMap.get(1));//第一题
@@ -243,8 +241,8 @@ public class ExamController {
         String title = exam.getExamName();//试卷名称
         Integer examId = exam.getExamId();//试卷id
         String groupName = "15070842";//班级名称    暂不处理
-        Long startExamTime = (Long) session.getAttribute("startTime");//考试开始时间
-        String spendTime = TimeUtil.getTimeReduce(startExamTime, System.currentTimeMillis());//考试所用时间
+//        Long startExamTime = (Long) session.getAttribute("startTime");//考试开始时间
+        String spendTime = TimeUtil.getTimeReduce(startTime, System.currentTimeMillis());//考试所用时间
         Float score = 0f;
         for (Map.Entry<Integer, ModelVo> entry : modelMap.entrySet()) {
             Integer key = entry.getKey();
@@ -294,6 +292,9 @@ public class ExamController {
         Integer result = gradeService.insertGrade(grade);
         if (result == 1){
             map.put("saveExam", "试卷提交成功！");
+            //清除考试开始时间
+            startTime = null;
+            session.removeAttribute("time");
             //清除上次考试答题记录
             answerMap.clear();
             modelMap.clear();

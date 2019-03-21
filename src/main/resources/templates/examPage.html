@@ -12,7 +12,7 @@
         if (window.name == '' || window.name == '-1' || isNaN(window.name)) {
             // maxtime = 150 * 60;
             maxtime = [[${session.time}]];
-            alert(maxtime);
+            // alert(maxtime);
         } else {
             maxtime = window.name;
         }
@@ -115,6 +115,8 @@
                     }else {
                         $.each(data,function (key,value) {
                             alert(value);
+                            //重置倒计时
+                            window.name = '';
                         });
                         window.location.href = ("/exam/grade/getGrade?title=");
                     }
