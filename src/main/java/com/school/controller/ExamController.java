@@ -2,6 +2,7 @@ package com.school.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.school.entity.*;
+import com.school.manager.ExampleManager;
 import com.school.service.ExamService;
 import com.school.service.GradeService;
 import com.school.service.ModelService;
@@ -21,29 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
 @RequestMapping(value = "/exam")
 public class ExamController {
-
-    //试题map
-    private Map<Integer, ModelVo> modelMap = new ConcurrentHashMap<>();
-
-    //答案map
-    private Map<Integer, String> answerMap = new ConcurrentHashMap<>();
-
-    //当前试题序号
-    private static Integer num;
-
-    private static Long startTime;//考试开始时间
-
-    private static Long endTime;//考试结束时间
-
-    //试题的id
-    private Set<Integer> idsSet = new HashSet<>();
-    //试题的内容
-    private Set<ModelVo> modelVoSet = new HashSet<>();
 
     @Autowired
     private ExamService examService;
@@ -53,6 +35,8 @@ public class ExamController {
     private GradeService gradeService;
     @Autowired
     private RecordService recordService;
+    @Autowired
+    private ExampleManager exampleManager;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
@@ -66,8 +50,9 @@ public class ExamController {
             map.put("addExam", "试卷名称已存在！");
             return map;
         }
-
-        List<ModelVo> modelVoList = examService.manageModel(modelVoSet);
+        Role role = (Role) session.getAttribute("role");
+        Example example = exampleManager.getExample(role.getId());
+        List<ModelVo> modelVoList = examService.manageModel(example.getModelVoSet());
         Exam exam = new Exam();
         exam.setExamName(exam_name);//试卷名称
         exam.setExamType(0);//默认组卷类型
@@ -95,8 +80,8 @@ public class ExamController {
         if (result == 1) {
             map.put("addExam", "试卷添加成功！");
             //清除idsSet和modelVoSet内存中的数据
-            idsSet.clear();
-            modelVoSet.clear();
+            example.getIdsSet().clear();
+            example.getModelVoSet().clear();
             return map;
 //            return "redirect:/exam/select";
         }
@@ -178,8 +163,10 @@ public class ExamController {
     }
 
     @RequestMapping(value = "/getExam", method = RequestMethod.GET)
-    public String getExam(@RequestParam("exam_id") Integer exam_id, HttpSession session) {
+    public String getExam(@RequestParam("exam_id") Integer exam_id, HttpSession session,HttpServletRequest request) {
 
+        Role role = (Role) session.getAttribute("role");
+        Example example = exampleManager.getExample(role.getId());
         List<ModelVo> list = new ArrayList<>();
         Exam exam = examService.getExamById(exam_id);
         String[] modelIds = exam.getModelIds().split(",");
@@ -190,19 +177,22 @@ public class ExamController {
             }
         }
         for (int i = 1; i <= list.size(); i++) {
-            modelMap.put(i, list.get(i - 1));
+            example.getModelMap().put(i, list.get(i - 1));
         }
-        session.setAttribute("time", Float.valueOf(exam.getNeedTime()) * 60);
+//        session.setAttribute("time", Float.valueOf(exam.getNeedTime()) * 60);
         session.setAttribute("size", list.size());
         session.setAttribute("exam", exam);
-        num = 1;//默认第一题
+        example.setNum(1);//默认第一题
         //计算当前时间以及考试结束时间
-        if (startTime == null) {
-            startTime = System.currentTimeMillis();
-            endTime = startTime + Long.parseLong(exam.getNeedTime()) * 60 * 1000;
+        if (example.getStartTime() == null) {
+            example.setStartTime(System.currentTimeMillis());
+            example.setEndTime(example.getStartTime() + Long.parseLong(exam.getNeedTime()) * 60 * 1000);
         }
-        session.setAttribute("num", num);
-        session.setAttribute("modelVo", modelMap.get(1));//第一题
+        //获取剩余时间
+        Long timeCountDown = TimeUtil.getTimeCountDown(System.currentTimeMillis(), example.getEndTime());
+        request.setAttribute("time",TimeUtil.getTimeCountDown(System.currentTimeMillis(),example.getEndTime()));
+        session.setAttribute("num", example.getNum());
+        session.setAttribute("modelVo", example.getModelMap().get(1));//第一题
         return "forward:/page/examPage";
     }
 
@@ -211,13 +201,17 @@ public class ExamController {
     public Map<String, Object> getModelVo(
             @RequestParam("key") Integer key,
             @RequestParam("answer") String answer,
-            HttpSession session) {
+            HttpSession session,HttpServletRequest request) {
+        Role role = (Role) session.getAttribute("role");
+        Example example = exampleManager.getExample(role.getId());
         Map<String, Object> map = new HashMap<>();
-        answerMap.put(num, answer);
-        num = key;
-        session.setAttribute("num", num);
-        session.setAttribute("answer", answerMap.get(key));
-        session.setAttribute("modelVo", modelMap.get(key));
+        example.getAnswerMap().put(example.getNum(), answer);
+        example.setNum(key);
+        //获取剩余时间
+        request.setAttribute("time",TimeUtil.getTimeCountDown(System.currentTimeMillis(),example.getEndTime()));
+        session.setAttribute("num", example.getNum());
+        session.setAttribute("answer", example.getAnswerMap().get(key));
+        session.setAttribute("modelVo", example.getModelMap().get(key));
         map.put("saveAnswer", "答案保存成功！");
         return map;
     }
@@ -231,10 +225,11 @@ public class ExamController {
             HttpSession session
     ) {
         Map<String, Object> map = new HashMap<>();
-        answerMap.put(num, answer);
+        Role role = (Role) session.getAttribute("role");
+        Example example = exampleManager.getExample(role.getId());
+        example.getAnswerMap().put(num, answer);
         //比对答案
 
-        Role role = (Role) session.getAttribute("role");
         Exam exam = (Exam) session.getAttribute("exam");
         String username = role.getUsername();//用户名
         String name = role.getName();//姓名
@@ -242,9 +237,9 @@ public class ExamController {
         Integer examId = exam.getExamId();//试卷id
         String groupName = "15070842";//班级名称    暂不处理
 //        Long startExamTime = (Long) session.getAttribute("startTime");//考试开始时间
-        String spendTime = TimeUtil.getTimeReduce(startTime, System.currentTimeMillis());//考试所用时间
+        String spendTime = TimeUtil.getTimeReduce(example.getStartTime(), System.currentTimeMillis());//考试所用时间
         Float score = 0f;
-        for (Map.Entry<Integer, ModelVo> entry : modelMap.entrySet()) {
+        for (Map.Entry<Integer, ModelVo> entry : example.getModelMap().entrySet()) {
             Integer key = entry.getKey();
             ModelVo modelVo = entry.getValue();
             //创建考试试题记录，方便以后查看
@@ -253,7 +248,7 @@ public class ExamController {
             record.setName(name);
             record.setExamId(examId);
             record.setModelId(modelVo.getModel().getModelId());
-            record.setAnswer(answerMap.get(key));
+            record.setAnswer(example.getAnswerMap().get(key));
             recordService.insertRecord(record);
 
             if (modelVo.getModel().getType() == ModelTypeUtil.Type.TRANSLATE.getValue() || modelVo.getModel().getType() == ModelTypeUtil.Type.WRITING.getValue()) {
@@ -263,7 +258,7 @@ public class ExamController {
             Float perGrade = modelVo.getModel().getGrade() / correctAnswer.length;
             //处理userInput
 
-            String userInput = HtmlUtil.delHTMLTag(answerMap.get(key)).trim();
+            String userInput = HtmlUtil.delHTMLTag(example.getAnswerMap().get(key)).trim();
             String[] userAnswer = HtmlUtil.format(userInput).split("(?<!^)(?=[A-Z])");
 
             //用户提交的answer
@@ -293,11 +288,11 @@ public class ExamController {
         if (result == 1){
             map.put("saveExam", "试卷提交成功！");
             //清除考试开始时间
-            startTime = null;
+            example.setStartTime(null);
             session.removeAttribute("time");
             //清除上次考试答题记录
-            answerMap.clear();
-            modelMap.clear();
+            example.getAnswerMap().clear();
+            example.getModelMap().clear();
         }
         return map;
     }
@@ -309,33 +304,34 @@ public class ExamController {
                                   @RequestParam("title") String title, HttpSession session){
 
         PageInfo<ModelVo> pageInfo = modelService.selectByTypeAndTitle(currentPage, pageSize, type, title);
-        for (ModelVo modelVo:pageInfo.getList()){
-            if (idsSet.contains(modelVo.getModel().getModelId())){
-                modelVo.setAddFlag(1);
-            }
-        }
+        addFlag(session, pageInfo);//设置是否为已添加试题的标志
+        Role role = (Role) session.getAttribute("role");
+        Example example = exampleManager.getExample(role.getId());
         session.setAttribute("currentPage",currentPage);
         session.setAttribute("pageSize",pageSize);
         session.setAttribute("pageInfo", pageInfo);
         session.setAttribute("pageType", type);
-        session.setAttribute("list", new ArrayList<>(modelVoSet));
+        session.setAttribute("list", new ArrayList<>(example.getModelVoSet()));
         return "forward:/page/add_model_list";
     }
 
     @RequestMapping(value = "/saveIds",method = RequestMethod.GET)
     public String saveIds(@RequestParam("modelId") Integer modelId,HttpSession session){
-
-        idsSet.add(modelId);
-        modelVoSet.add(modelService.getModelVo(modelId));
+        Role role = (Role) session.getAttribute("role");
+        Example example = exampleManager.getExample(role.getId());
+        example.getIdsSet().add(modelId);
+        example.getModelVoSet().add(modelService.getModelVo(modelId));
         //更新页面信息
         return get_exam_model_list(session);
     }
 
     @RequestMapping(value = "/removeIds",method = RequestMethod.GET)
     public String removeIds(@RequestParam("modelId") Integer modelId,HttpSession session){
+        Role role = (Role) session.getAttribute("role");
+        Example example = exampleManager.getExample(role.getId());
 
-        idsSet.remove(modelId);
-        modelVoSet.remove(modelService.getModelVo(modelId));
+        example.getIdsSet().remove(modelId);
+        example.getModelVoSet().remove(modelService.getModelVo(modelId));
         //更新页面信息
         return get_exam_model_list(session);
     }
@@ -347,6 +343,8 @@ public class ExamController {
      */
     public String get_exam_model_list(HttpSession session){
 
+        Role role = (Role) session.getAttribute("role");
+        Example example = exampleManager.getExample(role.getId());
         Integer currentPage = (Integer) session.getAttribute("currentPage");
         Integer pageSize = (Integer) session.getAttribute("pageSize");
         Integer type = (Integer) session.getAttribute("pageType");
@@ -354,10 +352,10 @@ public class ExamController {
 
         PageInfo<ModelVo> pageInfo = modelService.selectByTypeAndTitle(currentPage, pageSize, type, title);
 
-        addFlag(pageInfo);//设置是否为已添加试题的标志
+        addFlag(session,pageInfo);//设置是否为已添加试题的标志
 
         session.setAttribute("pageInfo", pageInfo);
-        session.setAttribute("list", new ArrayList<>(modelVoSet));
+        session.setAttribute("list", new ArrayList<>(example.getModelVoSet()));
         return "forward:/page/add_model_list";
     }
 
@@ -365,9 +363,11 @@ public class ExamController {
      * 设置是否为已添加试题的标志
      * @param pageInfo
      */
-    public void addFlag(PageInfo<ModelVo> pageInfo){
+    public void addFlag(HttpSession session,PageInfo<ModelVo> pageInfo){
+        Role role = (Role) session.getAttribute("role");
+        Example example = exampleManager.getExample(role.getId());
         for (ModelVo modelVo:pageInfo.getList()){
-            if (idsSet.contains(modelVo.getModel().getModelId())){
+            if (example.getIdsSet().contains(modelVo.getModel().getModelId())){
                 modelVo.setAddFlag(1);
             }
         }

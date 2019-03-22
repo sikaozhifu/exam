@@ -11,6 +11,14 @@ public class TimeUtil {
         return str;
     }
 
+    public static Long getTimeCountDown(Long start,Long end){
+        if (start > end){
+            return 0l;
+        }else {
+            return (end-start)/1000;
+        }
+    }
+
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
         long end = System.currentTimeMillis() + 5*60*1000;

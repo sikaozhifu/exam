@@ -8,25 +8,26 @@
 
     </script>
     <script>
-        var maxtime;
-        if (window.name == '' || window.name == '-1' || isNaN(window.name)) {
-            // maxtime = 150 * 60;
-            maxtime = [[${session.time}]];
-            // alert(maxtime);
-        } else {
-            maxtime = window.name;
-        }
 
+        // if (window.name == '' || window.name == '-1' || isNaN(window.name)) {
+        //     // maxtime = 150 * 60;
+        //     maxtime = [[${time}]];
+        //     // alert(maxtime);
+        // } else {
+        //     maxtime = window.name;
+        // }
+
+        var maxtime = [[${time}]];
         function CountDown() {
             if (maxtime >= 0) {
                 hours = Math.floor(maxtime / 3600);
                 minutes = Math.floor((maxtime - hours * 3600) / 60);
                 seconds = Math.floor(maxtime % 60);
-                msg = hours + "时" + minutes + "分" + seconds + "秒";
+                msg = hours + "小时" + minutes + "分" + seconds + "秒";
                 $("#time").text(msg);
                 if (maxtime == 5 * 60) alert('注意，还有5分钟!');
                 --maxtime;
-                window.name = maxtime;
+                //window.name = maxtime;
             } else {
                 clearInterval(timer);
                 alert("考试时间到，结束!");

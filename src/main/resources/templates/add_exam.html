@@ -116,6 +116,18 @@
 
         }
         addExam = function(){
+            if ($("#exam_name").val() == ""){
+                alert("试卷名称不能为空！");
+                return;
+            }
+            if ($("#need_time").val() == ""){
+                alert("考试时间不能为空！");
+                return;
+            }
+            if ($("#exam_author").val() == ""){
+                alert("发布者不能为空！");
+                return;
+            }
             $.ajax({
                 type:"POST",
                 data:{

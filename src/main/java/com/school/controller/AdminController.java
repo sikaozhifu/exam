@@ -2,7 +2,9 @@ package com.school.controller;
 
 import com.school.entity.Admin;
 import com.school.entity.Exam;
+import com.school.entity.Example;
 import com.school.entity.Role;
+import com.school.manager.ExampleManager;
 import com.school.service.AdminService;
 import com.school.service.ExamService;
 import com.school.service.ModelService;
@@ -31,6 +33,9 @@ public class AdminController {
     @Autowired
     private ModelService modelService;
 
+    @Autowired
+    private ExampleManager exampleManager;
+
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public String adminLogin(@RequestParam("adminUserName") String adminUserName,
                              @RequestParam("adminPassword") String adminPassword,
@@ -51,6 +56,10 @@ public class AdminController {
 
             session.setAttribute("role", role);
             session.setAttribute("admin", admin);
+            //在内存中保存数据
+            if (exampleManager.getExample(admin.getAdminId()) == null){
+                exampleManager.putExampleMap(admin.getAdminId(),new Example());
+            }
             return "redirect:/page/adminIndex";
         }
         return "redirect:/page/adminLogin";

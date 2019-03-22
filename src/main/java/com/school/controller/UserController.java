@@ -2,8 +2,10 @@ package com.school.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.school.entity.Exam;
+import com.school.entity.Example;
 import com.school.entity.Role;
 import com.school.entity.User;
+import com.school.manager.ExampleManager;
 import com.school.service.ExamService;
 import com.school.service.ModelService;
 import com.school.service.UserService;
@@ -28,6 +30,8 @@ public class UserController {
     private ExamService examService;
     @Autowired
     private ModelService modelService;
+    @Autowired
+    private ExampleManager exampleManager;
 
     @RequestMapping(value = "/getUser",method = RequestMethod.POST)
     @ResponseBody
@@ -62,6 +66,10 @@ public class UserController {
                 //获取最近三条考试记录
                 List<Exam> list = examService.getExamRecently();
                 session.setAttribute("list", list);
+                //在内存中保存数据
+                if (exampleManager.getExample(user.getId())==null){
+                    exampleManager.putExampleMap(user.getId(),new Example());
+                }
                 return "redirect:/page/studentIndex";
             }else {
                 request.setAttribute("loginMessage", "您不是学生");
@@ -83,6 +91,10 @@ public class UserController {
                 map.put("modelCount", modelCount);
                 session.setAttribute("map", map);
                 session.setAttribute("list", list);
+                //在内存中保存数据
+                if (exampleManager.getExample(user.getId())==null){
+                    exampleManager.putExampleMap(user.getId(),new Example());
+                }
                 return "redirect:/page/teacherIndex";
             }else {
                 request.setAttribute("loginMessage", "您不是教师");
