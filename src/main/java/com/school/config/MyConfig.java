@@ -2,8 +2,10 @@ package com.school.config;
 
 import com.school.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 @Configuration
@@ -27,5 +29,13 @@ public class MyConfig extends WebMvcConfigurationSupport {
                 .excludePathPatterns("/page/adminForgot")
                 .excludePathPatterns("/page/adminLogin");//管理员页面
         super.addInterceptors(registry);
+    }
+
+    //设置首页
+    @Override
+    protected void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("forward:/page/login");
+        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        super.addViewControllers(registry);
     }
 }
