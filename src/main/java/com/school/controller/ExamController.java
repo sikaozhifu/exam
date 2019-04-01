@@ -101,6 +101,8 @@ public class ExamController {
         Role role = (Role) session.getAttribute("role");
         if (role.getType() == RoleUtil.RoleType.STUDENT) {
             return "forward:/page/studentStart";
+        }else if (role.getType() == RoleUtil.RoleType.TEACHER){
+            return "forward:/page/teacher_exam_list";
         }
         return "forward:/page/exam_list";
     }
@@ -150,8 +152,8 @@ public class ExamController {
         Exam exam = examService.getExamById(examId);
         if (exam.getExamFlag() == 0) {
             exam.setExamFlag(1);
-        } else {
-            exam.setExamFlag(0);
+        } else if (exam.getExamFlag() == 1){
+            exam.setExamFlag(2);
         }
         Integer result = examService.updateExam(exam);
         if (result == 1) {

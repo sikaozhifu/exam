@@ -136,6 +136,16 @@ public class PageController {
         }
     }
 
+    @RequestMapping(value = "/teacher_exam_list")
+    public String toTeacherExamList(HttpSession session){
+        String result = isAdmin(session);
+        if (result.equals("success")){
+            return "teacher_exam_list";
+        }else {
+            return result;
+        }
+    }
+
     @RequestMapping(value = "/record_list")
     public String toRecordList(HttpSession session){
         String result = isAdmin(session);

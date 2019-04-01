@@ -150,7 +150,7 @@
                     <div class="card">
                         <div class="card-header bg-light">
                             考生列表&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button class="btn btn-outline-success" data-toggle="modal" data-target="#modal-add">添加</button>
+                            <!--<button class="btn btn-outline-success" data-toggle="modal" data-target="#modal-add">添加</button>-->
                         </div>
 
                         <div class="card-body">
@@ -163,7 +163,7 @@
                                         <th>学号</th>
                                         <th>邮箱</th>
                                         <th>角色</th>
-                                        <th>操作</th>
+                                        <!--<th>操作</th>-->
                                     </tr>
                                     </thead>
                                     <tbody th:each="user,userStat:${pageInfo.list}">
@@ -173,11 +173,11 @@
                                         <td th:text="${user.username}">31,589</td>
                                         <td th:text="${user.email}">$800</td>
                                         <td th:text="${user.role}==0?'学生':'教师'"></td>
-                                        <td>
-                                            <button id="update-btn" class="btn btn-outline-primary"
-                                                    th:onclick="'javascript:updateUser('+${user.id}+');'">修改
-                                            </button>
-                                        </td>
+                                        <!--<td>-->
+                                            <!--<button id="update-btn" class="btn btn-outline-primary"-->
+                                                    <!--th:onclick="'javascript:updateUser('+${user.id}+');'">修改-->
+                                            <!--</button>-->
+                                        <!--</td>-->
                                     </tr>
                                     </tbody>
                                 </table>

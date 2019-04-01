@@ -134,11 +134,7 @@
         }
 
         //操作model
-        operateModel = function (examId,examFlag) {
-            if (examFlag == 2){
-                alert("考试已停止，请勿重复操作！");
-                return;
-            }
+        operateModel = function (examId) {
             $("#operateId").val(examId);
             $("#modal-operate").modal();
         }
@@ -222,18 +218,6 @@
                                                         <!--th:text="${exam.examFlag}==0?'开始考试':'停止考试'"-->
                                                         <!--th:onclick="'javascript:operateModel('+${exam.examId}+');'">开始-->
                                                 <!--</button>-->
-                                                <button class="btn btn-outline-success" data-toggle="modal"
-                                                        th:if="${exam.examFlag} eq 0"
-                                                        th:onclick="'javascript:operateModel('+${exam.examId}+','+${exam.examFlag}+');'">开始考试
-                                                </button>
-                                                <button class="btn btn-outline-success" data-toggle="modal"
-                                                        th:if="${exam.examFlag} eq 1"
-                                                        th:onclick="'javascript:operateModel('+${exam.examId}+','+${exam.examFlag}+');'">停止考试
-                                                </button>
-                                                <button class="btn btn-outline-success" data-toggle="modal"
-                                                        th:if="${exam.examFlag} eq 2"
-                                                        th:onclick="'javascript:operateModel('+${exam.examId}+','+${exam.examFlag}+');'">考试结束
-                                                </button>
                                                 <!--<button id="delete-btn" class="btn btn-outline-danger" data-toggle="modal"-->
                                                         <!--th:onclick="'javascript:deleteModel('+${exam.examId}+');'">删除-->
                                                 <!--</button>-->
