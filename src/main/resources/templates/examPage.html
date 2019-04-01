@@ -17,7 +17,7 @@
         //     maxtime = window.name;
         // }
 
-        var maxtime = [[${time}]];
+        var maxtime = [[${session.time}]];
         function CountDown() {
             if (maxtime >= 0) {
                 hours = Math.floor(maxtime / 3600);
@@ -172,7 +172,7 @@
                             <div class="timer text-center">
                                 <div class="time-left">
                                     <div>
-                        <span class="timeImg"><img src="https://cdn.youkaoshi.cn/static/images/time.png"
+                        <span class="timeImg"><img src="../static/imgs/time.png"
                                                    class="icon"></span> <br>
                                         总剩余时间
                                     </div>

@@ -189,8 +189,8 @@ public class ExamController {
             example.setEndTime(example.getStartTime() + Long.parseLong(exam.getNeedTime()) * 60 * 1000);
         }
         //获取剩余时间
-        Long timeCountDown = TimeUtil.getTimeCountDown(System.currentTimeMillis(), example.getEndTime());
-        request.setAttribute("time",TimeUtil.getTimeCountDown(System.currentTimeMillis(),example.getEndTime()));
+//        Long timeCountDown = TimeUtil.getTimeCountDown(System.currentTimeMillis(), example.getEndTime());
+        session.setAttribute("time",TimeUtil.getTimeCountDown(System.currentTimeMillis(),example.getEndTime()));
         session.setAttribute("num", example.getNum());
         session.setAttribute("modelVo", example.getModelMap().get(1));//第一题
         return "forward:/page/examPage";
@@ -208,7 +208,8 @@ public class ExamController {
         example.getAnswerMap().put(example.getNum(), answer);
         example.setNum(key);
         //获取剩余时间
-        request.setAttribute("time",TimeUtil.getTimeCountDown(System.currentTimeMillis(),example.getEndTime()));
+        Long timeCountDown = TimeUtil.getTimeCountDown(System.currentTimeMillis(), example.getEndTime());
+        session.setAttribute("time",TimeUtil.getTimeCountDown(System.currentTimeMillis(),example.getEndTime()));
         session.setAttribute("num", example.getNum());
         session.setAttribute("answer", example.getAnswerMap().get(key));
         session.setAttribute("modelVo", example.getModelMap().get(key));
