@@ -18,6 +18,8 @@
     <script src="../static/js/demo.js"></script>
 
     <script type="text/javascript" src="../static/ckeditor/ckeditor.js"></script>
+
+    <link rel="stylesheet" href="../static/css/iconfont.css">
 </head>
 <body>
 <div class="page-wrapper flex-row align-items-center">
@@ -57,15 +59,15 @@
                 <div class="dropdown-header">Settings</div>
 
                 <a href="settings.html" th:href="@{/page/student_settings}" class="dropdown-item">
-                    <i class="fa"></i> 账户管理
+                    <i class="iconfont icon-icon-profile"></i> 账户管理
                 </a>
 
                 <a href="update_password.html" th:href="@{/page/student_update_password}" class="dropdown-item">
-                    <i class="fa"></i> 修改密码
+                    <i class="iconfont icon-icon-re-password"></i> 修改密码
                 </a>
 
                 <a href="#" th:href="@{/common/logout}" class="dropdown-item">
-                    <i class="fa"></i> 退出登录
+                    <i class="iconfont icon-icon-logout"></i> 退出登录
                 </a>
             </div>
         </li>
@@ -80,19 +82,19 @@
 
             <li class="nav-item">
                 <a href="studentIndex.html" th:href="@{/page/studentIndex}" class="nav-link">
-                    <i class="icon"></i> 考生控制台
+                    <i class="iconfont icon-icon-control"></i> 考生控制台
                 </a>
             </li>
 
             <li class="nav-item">
                 <a href="studentStart.html" th:href="@{/exam/select(exam_name=null)}" class="nav-link">
-                    <i class="icon"></i> 开始做题
+                    <i class="iconfont icon-icon-start"></i> 开始做题
                 </a>
             </li>
 
             <li class="nav-item">
                 <a href="studentTable.html" th:href="@{/grade/getGrade(title=null)}" class="nav-link">
-                    <i class="icon"></i> 我的记录
+                    <i class="iconfont icon-record"></i> 我的记录
                 </a>
             </li>
 
