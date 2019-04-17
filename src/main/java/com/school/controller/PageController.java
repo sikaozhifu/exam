@@ -72,6 +72,16 @@ public class PageController {
         }
     }
 
+    @RequestMapping(value = "/examChart")
+    public String toExamChart(HttpSession session) {
+        String result = isAdmin(session);
+        if (result.equals("success")){
+            return "exam_chart";
+        }else {
+            return result;
+        }
+    }
+
     @RequestMapping(value = "/addModel")
     public String toAddModel(HttpSession session) {
         String result = isAdmin(session);
