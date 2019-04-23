@@ -95,7 +95,7 @@
                                         </thead>
                                         <tbody th:each="exam,examStat:${pageInfo.list}">
                                         <tr>
-                                            <td th:text="${examStat.index+1}">1</td>
+                                            <td th:text="${pageInfo.startRow + examStat.index}">1</td>
                                             <td class="text-nowrap" th:text="${exam.examName}">Samsung Galaxy S8</td>
                                             <td th:text="${exam.examType}==0?'随机':'导入'">31,589</td>
                                             <td th:text="${exam.needTime}">$800</td>

@@ -189,7 +189,7 @@
                                     </thead>
                                     <tbody th:each="user,userStat:${pageInfo.list}">
                                     <tr>
-                                        <td th:text="${userStat.index+1}">1</td>
+                                        <td th:text="${pageInfo.startRow + userStat.index}">1</td>
                                         <td class="text-nowrap" th:text="${user.name}">Samsung Galaxy S8</td>
                                         <td th:text="${user.username}">31,589</td>
                                         <td th:text="${user.email}">$800</td>

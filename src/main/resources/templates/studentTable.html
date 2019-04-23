@@ -59,7 +59,7 @@
                                     </thead>
                                     <tbody th:each="grade,gradeStat:${pageInfo.list}">
                                         <tr>
-                                            <td th:text="${gradeStat.index+1}">1</td>
+                                            <td th:text="${pageInfo.startRow + gradeStat.index}">1</td>
                                             <td class="text-nowrap" th:text="${grade.title}">Samsung Galaxy S8</td>
                                             <td th:text="${grade.groupName}">31,589</td>
                                             <td th:text="${grade.spendTime}">$800</td>

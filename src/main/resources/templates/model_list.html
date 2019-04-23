@@ -162,7 +162,7 @@
                                         </thead>
                                         <tbody th:each="modelVo,modelVoStat:${pageInfo.list}">
                                         <tr>
-                                            <td th:text="${modelVoStat.index+1}">1</td>
+                                            <td th:text="${pageInfo.startRow + modelVoStat.index}">1</td>
                                             <td class="text-nowrap" th:text="${modelVo.model.title}">Samsung Galaxy S8</td>
                                             <td th:text="${modelVo.type}">31,589</td>
                                             <td th:text="${modelVo.difficulty}">$800</td>
