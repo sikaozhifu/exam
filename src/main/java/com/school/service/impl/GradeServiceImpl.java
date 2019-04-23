@@ -92,7 +92,7 @@ public class GradeServiceImpl implements GradeService {
         }
 
         //紧跟着的第一个select方法会被分页，userMapper会被PageInterceptor截拦,
-        // 截拦器会从threadLocal中取出分页信息，把分页信息加到sql语句中，实现了分页查旬
+        // 截拦器会从threadLocal中取出分页信息，把分页信息加到sql语句中，实现了分页查询
         if (condition.equals("0")) {
             //试卷名称
             list = gradeMapper.getGradeListByTitle(info);

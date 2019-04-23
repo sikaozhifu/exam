@@ -3,7 +3,10 @@ package com.school.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.school.dao.ExamMapper;
+import com.school.dao.GradeMapper;
+import com.school.entity.ChartsVo;
 import com.school.entity.Exam;
+import com.school.entity.Grade;
 import com.school.entity.ModelVo;
 import com.school.service.ExamService;
 import com.school.service.ModelService;
@@ -19,6 +22,9 @@ public class ExamServiceImpl implements ExamService {
     private ExamMapper examMapper;
     @Autowired
     private ModelService modelService;
+    @Autowired
+    private GradeMapper gradeMapper;
+
     @Override
     public Integer insertExam(Exam exam) {
         return examMapper.insert(exam);
@@ -106,11 +112,65 @@ public class ExamServiceImpl implements ExamService {
         }
     }
 
+    @Override
+    public List<ChartsVo> getAllExamForCharts(Integer examId) {
+        List<ChartsVo> list = new ArrayList<>();
+        if (examId == null){
+            List<Exam> exams = examMapper.getExamListByExamFlag(2);//考试结束的试卷
+            for (Exam exam : exams) {
+                ChartsVo chartsVo = getChartsVoByExam(exam);
+                list.add(chartsVo);
+            }
+        }else {
+            Exam exam = examMapper.selectByPrimaryKey(examId);
+            ChartsVo chartsVo = getChartsVoByExam(exam);
+            list.add(chartsVo);
+        }
+        return list;
+    }
+
+    @Override
+    public PageInfo<Grade> getGradesByCondition(Integer currentPage, Integer pageSize, String condition, String info,Integer examId) {
+        //设置分页信息保存到threadLocal中
+        PageHelper.startPage(currentPage, pageSize);//一定要放在查询之前
+        List<Grade> list = new ArrayList<>();
+        if ((info == null || info.equals("")) && (condition == null || condition.equals(""))) {
+            //所有条件为空
+            list = gradeMapper.getGradesByExamId(examId);
+            PageInfo<Grade> pageInfo = new PageInfo<>(list);
+            return pageInfo;
+        }
+
+        if ((info == null || info.equals("")) && (condition != null || !condition.equals(""))) {
+            //查询条件为空
+            list = gradeMapper.getGradesByExamId(examId);
+            PageInfo<Grade> pageInfo = new PageInfo<>(list);
+            return pageInfo;
+        }
+
+        //紧跟着的第一个select方法会被分页，userMapper会被PageInterceptor截拦,
+        // 截拦器会从threadLocal中取出分页信息，把分页信息加到sql语句中，实现了分页查询
+        //筛选grade并按照成绩由高到底排序
+        if (condition.equals("1")) {
+            //班级名称
+            list = gradeMapper.getGradeForChartByGroupName(examId, info);
+        } else if (condition.equals("2")) {
+            //学号
+            list = gradeMapper.getGradeForChartByUserName(examId, info);
+        } else if (condition.equals("3")) {
+            //姓名
+            list = gradeMapper.getGradeForChartByName(examId,info);
+        }
+
+        PageInfo<Grade> pageInfo = new PageInfo<>(list);
+        return pageInfo;
+    }
+
     /**
      * 获取modelVo的Comparator
      * @return
      */
-    public Comparator<ModelVo> getModelVoComparator(){
+    private Comparator<ModelVo> getModelVoComparator(){
         Comparator<ModelVo> comparator = (m1, m2) -> {
             if (m1.getModel().getType()!=m2.getModel().getType()){
                 return m1.getModel().getType()-m2.getModel().getType();
@@ -123,5 +183,25 @@ public class ExamServiceImpl implements ExamService {
             }
         };
         return comparator;
+    }
+
+    /**
+     * 根据exam获取chartsVo
+     * @param exam
+     * @return
+     */
+    private ChartsVo getChartsVoByExam(Exam exam){
+        ChartsVo chartsVo = new ChartsVo();
+        List<Grade> gradeList = gradeMapper.getGradesByExamId(exam.getExamId());
+        Float scoreSum = 0f;
+        for (Grade grade : gradeList) {
+            scoreSum += grade.getScore();
+        }
+        Float average = scoreSum / gradeList.size();
+        //组装chartsVo
+        chartsVo.setExam(exam);
+        chartsVo.setList(gradeList);
+        chartsVo.setAverage(average);
+        return chartsVo;
     }
 }

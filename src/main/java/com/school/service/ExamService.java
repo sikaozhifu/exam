@@ -1,7 +1,9 @@
 package com.school.service;
 
 import com.github.pagehelper.PageInfo;
+import com.school.entity.ChartsVo;
 import com.school.entity.Exam;
+import com.school.entity.Grade;
 import com.school.entity.ModelVo;
 
 import java.util.List;
@@ -39,4 +41,10 @@ public interface ExamService {
 
     //分页查询
     PageInfo<Exam> getAllExamByCondition(Integer currentPage, Integer pageSize, String condition);
+
+    //获取ChartsVo
+    List<ChartsVo> getAllExamForCharts(Integer examId);
+
+    //根据id获取grade显示到charts页面
+    PageInfo<Grade> getGradesByCondition(Integer currentPage, Integer pageSize, String condition, String info, Integer examId);
 }
