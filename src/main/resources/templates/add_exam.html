@@ -151,6 +151,18 @@
             });
         }
 
+        autoCompose = function () {
+            $.ajax({
+                type:"get",
+                url:"/exam/exam/autoCompose",
+                dataType:"json",
+                success:function (data) {
+                    $.each(data,function (key,value) {
+                        alert(value);
+                    });
+                }
+            });
+        }
 
     </script>
 </section>
@@ -192,7 +204,7 @@
                                             </div>
                                             <br />
                                             <div class="control-label">
-                                                <a class="btn btn-outline-primary" th:href="@{/exam/getALLModel(title=null,type=null)}">自动添加试题</a>
+                                                <a class="btn btn-outline-primary" th:onclick="'javascript:autoCompose()'">自动添加试题</a>
                                             </div>
                                             <!--<button class="btn btn-outline-primary" data-toggle="modal" data-target="#modal-2">添加试题</button>-->
                                         </div>

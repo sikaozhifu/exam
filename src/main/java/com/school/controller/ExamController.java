@@ -375,4 +375,76 @@ public class ExamController {
             }
         }
     }
+
+
+
+    @RequestMapping(value = "/autoCompose",method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String,Object> autoCompose(HttpSession session){
+        Map<String,Object> map = new HashMap<>();
+        Role role = (Role) session.getAttribute("role");
+        Example example = exampleManager.getExample(role.getId());
+        //随机题库中的数据
+        List<ModelVo> modelVoList = modelService.selectAll();
+        List<ModelVo> blankModelVoList = new ArrayList<>();//选词填空
+        List<ModelVo> paragraphModelVoList = new ArrayList<>();//段落匹配
+        List<ModelVo> readingModelVoList = new ArrayList<>();//仔细阅读
+        List<ModelVo> translateModelVoList = new ArrayList<>();//翻译
+        List<ModelVo> writingModelVoList = new ArrayList<>();//写作
+        for (ModelVo modelVo : modelVoList) {
+            if (modelVo.getModel().getType() == ModelTypeUtil.Type.BLANK.getValue()){
+
+                blankModelVoList.add(modelVo);
+            }else if (modelVo.getModel().getType() == ModelTypeUtil.Type.PARAGRAPH.getValue()){
+
+                paragraphModelVoList.add(modelVo);
+            }else if (modelVo.getModel().getType() == ModelTypeUtil.Type.READING.getValue()){
+
+                readingModelVoList.add(modelVo);
+            }else if (modelVo.getModel().getType() == ModelTypeUtil.Type.TRANSLATE.getValue()){
+
+                translateModelVoList.add(modelVo);
+            }else if (modelVo.getModel().getType() == ModelTypeUtil.Type.WRITING.getValue()){
+
+                writingModelVoList.add(modelVo);
+            }
+        }
+        //随机各个类型的列表
+        Random random = new Random(47);
+        Collections.shuffle(blankModelVoList, random);
+        Collections.shuffle(paragraphModelVoList, random);
+        Collections.shuffle(readingModelVoList, random);
+        Collections.shuffle(translateModelVoList, random);
+        Collections.shuffle(writingModelVoList, random);
+
+        example.getModelVoSet().clear();//清空数据
+        //添加数据
+        example.getModelVoSet().add(blankModelVoList.get((int) (Math.random()* blankModelVoList.size())));//获取的时候再次随机
+        example.getModelVoSet().add(paragraphModelVoList.get(getIndex(paragraphModelVoList)));
+        example.getModelVoSet().add(readingModelVoList.get(getIndex(readingModelVoList)));
+        example.getModelVoSet().add(readingModelVoList.get(getIndex(readingModelVoList)));
+        example.getModelVoSet().add(translateModelVoList.get(getIndex(translateModelVoList)));
+        example.getModelVoSet().add(writingModelVoList.get(getIndex(writingModelVoList)));
+
+        while (example.getModelVoSet().size() < 6){
+            //避免阅读理解添加重复
+            example.getModelVoSet().add(readingModelVoList.get(getIndex(readingModelVoList)));
+        }
+        //把modelId添加到IdsSet
+        for (ModelVo modelVo : example.getModelVoSet()) {
+            example.getIdsSet().add(modelVo.getModel().getModelId());
+        }
+        map.put("autoCompose","系统已为您自动组卷");
+        return map;
+    }
+
+    /**
+     * 随机list的索引
+     * @param list
+     * @return
+     */
+    private int getIndex(List<ModelVo> list){
+        int index = (int) (Math.random()* list.size());
+        return index;
+    }
 }
