@@ -314,6 +314,7 @@ public class ExamController {
         session.setAttribute("pageSize",pageSize);
         session.setAttribute("pageInfo", pageInfo);
         session.setAttribute("pageType", type);
+        session.setAttribute("title",title);
         session.setAttribute("list", new ArrayList<>(example.getModelVoSet()));
         return "forward:/page/add_model_list";
     }
@@ -431,6 +432,7 @@ public class ExamController {
             example.getModelVoSet().add(readingModelVoList.get(getIndex(readingModelVoList)));
         }
         //把modelId添加到IdsSet
+        example.getIdsSet().clear();
         for (ModelVo modelVo : example.getModelVoSet()) {
             example.getIdsSet().add(modelVo.getModel().getModelId());
         }
