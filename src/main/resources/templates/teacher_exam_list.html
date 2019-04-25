@@ -157,6 +157,15 @@
                 }
             });
         }
+
+        viewExam = function (examId,examType) {
+            if (examType == 1){
+                alert("该试卷为系统随机组卷，无法查看具体试题！");
+            } else {
+                var str = "/exam/exam/getModelVoList?examId=" + examId;
+                window.location.href = (str);
+            }
+        }
     </script>
 
 </section>
@@ -210,11 +219,12 @@
                                             <td th:text="${pageInfo.startRow + examStat.index}">1</td>
                                             <td class="text-nowrap" th:text="${exam.examName}">Samsung Galaxy S8</td>
                                             <td th:text="${exam.examType}==0?'固定':'随机'">31,589</td>
-                                            <td th:text="${exam.needTime}">$800</td>
+                                            <td th:text="${exam.needTime}+'分钟'">$800</td>
                                             <td th:text="${exam.examAuthor}"></td>
-                                            <td th:text="${exam.examGrade}"></td>
+                                            <td th:if="${exam.examType}==1" th:text="${exam.examGrade}+'(默认)'"></td>
+                                            <td th:if="${exam.examType}==0" th:text="${exam.examGrade}"></td>
                                             <td>
-                                                <a id="update-btn" class="btn btn-outline-primary" th:href="@{/exam/getModelVoList(examId=${exam.examId})}">查看</a>
+                                                <a id="update-btn" class="btn btn-outline-primary" th:onclick="'javascript:viewExam('+${exam.examId}+','+${exam.examType}+')'">查看</a>
                                                 <!--<button id="operate-btn" class="btn btn-outline-success" data-toggle="modal"-->
                                                         <!--th:text="${exam.examFlag}==0?'开始考试':'停止考试'"-->
                                                         <!--th:onclick="'javascript:operateModel('+${exam.examId}+');'">开始-->

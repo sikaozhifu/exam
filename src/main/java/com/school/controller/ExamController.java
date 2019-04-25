@@ -43,7 +43,9 @@ public class ExamController {
     public Map<String, Object> addExam(
             @RequestParam("exam_name") String exam_name,
             @RequestParam("need_time") String need_time,
-            @RequestParam("exam_author") String exam_author,HttpSession session) {
+            @RequestParam("exam_author") String exam_author,
+            @RequestParam("exam_type") Integer exam_type,
+            HttpSession session) {
         Map<String, Object> map = new HashMap<>();
         List<Exam> examExist = examService.getExamByCondition(exam_name);
         if (examExist.size() > 0) {
@@ -55,7 +57,7 @@ public class ExamController {
         List<ModelVo> modelVoList = examService.manageModel(example.getModelVoSet());
         Exam exam = new Exam();
         exam.setExamName(exam_name);//试卷名称
-        exam.setExamType(0);//默认组卷类型
+        exam.setExamType(exam_type);//默认组卷类型0
         exam.setNeedTime(need_time);//所需时间
         exam.setExamAuthor(exam_author);//发布者
         String model_ids = "";//试题ids
@@ -74,7 +76,11 @@ public class ExamController {
         exam.setExamContent(exam_content);
         exam.setExamAnswer(exam_answer);
         exam.setExamAnalysis(exam_analysis);
-        exam.setExamGrade(exam_grade);
+        if (exam_type == 1){
+            exam.setExamGrade(497f);//默认总分
+        }else {
+            exam.setExamGrade(exam_grade);
+        }
         exam.setExamFlag(0);//默认考试未开启
         Integer result = examService.insertExam(exam);
         if (result == 1) {
@@ -169,20 +175,31 @@ public class ExamController {
 
         Role role = (Role) session.getAttribute("role");
         Example example = exampleManager.getExample(role.getId());
-        List<ModelVo> list = new ArrayList<>();
         Exam exam = examService.getExamById(exam_id);
-        String[] modelIds = exam.getModelIds().split(",");
-        for (String s : modelIds) {
-            ModelVo modelVo = modelService.getModelVo(Integer.parseInt(s));
-            if (modelVo != null){
-                list.add(modelVo);
+        //判断试卷是否为随机组卷
+        if (exam.getExamType() == 1){
+            //随机
+            if (example.getModelMap().size() == 0){
+                //检查ModelMap是否为空
+                example = randomModelComposeExam(role);
+                List<ModelVo> list = examService.manageModel(example.getModelVoSet());
+                for (int i = 1; i <= list.size(); i++) {
+                    example.getModelMap().put(i, list.get(i-1));
+                }
+            }
+        }else {
+            //固定
+            String[] modelIds = exam.getModelIds().split(",");
+            for (int i = 1; i <= modelIds.length; i++) {
+                ModelVo modelVo = modelService.getModelVo(Integer.parseInt(modelIds[i - 1]));
+                if (modelVo != null){
+                    example.getModelMap().put(i, modelVo);
+                }
             }
         }
-        for (int i = 1; i <= list.size(); i++) {
-            example.getModelMap().put(i, list.get(i - 1));
-        }
+
 //        session.setAttribute("time", Float.valueOf(exam.getNeedTime()) * 60);
-        session.setAttribute("size", list.size());
+        session.setAttribute("size", example.getModelMap().size());
         session.setAttribute("exam", exam);
         example.setNum(1);//默认第一题
         //计算当前时间以及考试结束时间
@@ -384,6 +401,18 @@ public class ExamController {
     public Map<String,Object> autoCompose(HttpSession session){
         Map<String,Object> map = new HashMap<>();
         Role role = (Role) session.getAttribute("role");
+        Example example = randomModelComposeExam(role);
+        map.put("autoCompose","系统已为您自动组卷");
+        return map;
+    }
+
+
+    /**
+     * 随机抽取数据库中的试题组成试卷
+     * @param role
+     * @return
+     */
+    private Example randomModelComposeExam(Role role){
         Example example = exampleManager.getExample(role.getId());
         //随机题库中的数据
         List<ModelVo> modelVoList = modelService.selectAll();
@@ -436,9 +465,9 @@ public class ExamController {
         for (ModelVo modelVo : example.getModelVoSet()) {
             example.getIdsSet().add(modelVo.getModel().getModelId());
         }
-        map.put("autoCompose","系统已为您自动组卷");
-        return map;
+        return example;
     }
+
 
     /**
      * 随机list的索引

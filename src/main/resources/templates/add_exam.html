@@ -133,7 +133,8 @@
                 data:{
                     exam_name:$("#exam_name").val(),
                     need_time:$("#need_time").val(),
-                    exam_author:$("#exam_author").val()
+                    exam_author:$("#exam_author").val(),
+                    exam_type:$("#exam_type").val()
                 },
                 url:"/exam/exam/add",
                 dataType:"json",
@@ -151,7 +152,15 @@
             });
         }
 
+        //手动组卷
+        handCompose = function(){
+            $("#exam_type").val(0);
+            window.location.href = ("/exam/exam/getALLModel?title=null&&type=null");
+        }
+
+        //系统自动组卷
         autoCompose = function () {
+            $("#exam_type").val(0);
             $.ajax({
                 type:"get",
                 url:"/exam/exam/autoCompose",
@@ -162,6 +171,12 @@
                     });
                 }
             });
+        }
+
+        //系统随机组卷
+        randomCompose = function () {
+            $("#exam_type").val(1);
+            alert("本次考试系统将为您随机组卷！");
         }
 
     </script>
@@ -200,7 +215,7 @@
                                             <!--th:onclick="'javascript:addModel('+0+');'">添加试题-->
                                             <!--</a>-->
                                             <div class="control-label">
-                                                <a class="btn btn-outline-primary" th:href="@{/exam/getALLModel(title=null,type=null)}">手动添加试题</a>
+                                                <a class="btn btn-outline-primary" th:onclick="'javascript:handCompose()'">手动添加试题</a>
                                             </div>
                                             <br />
                                             <div class="control-label">
@@ -211,7 +226,7 @@
 
                                         <div class="tab-pane" id="profile" role="tabpanel">
                                             <div class="control-label">
-                                                <a class="btn btn-outline-primary">系统随机试题</a>
+                                                <a class="btn btn-outline-primary" th:onclick="'javascript:randomCompose()'">系统随机试题</a>
                                             </div>
 
                                         </div>
@@ -224,7 +239,7 @@
                                        placeholder="请输入试卷名称" required>
                                 <input name="ids" type="hidden" id="ids" />
                                 <!--默认组卷类型-->
-                                <!--<input name="exam_type" type="hidden" id="exam_type" />-->
+                                <input name="exam_type" type="hidden" id="exam_type" value="0"/>
                             </div>
                             <div class="form-group">
                                 <label for="need_time">所需时间</label>
