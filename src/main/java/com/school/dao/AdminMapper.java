@@ -85,4 +85,40 @@ public interface AdminMapper {
             @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
     })
     Admin login(String admin_username,String admin_password);
+
+    @Select({
+            "select",
+            "admin_id, admin_username, admin_name, admin_password, admin_email, create_time, ",
+            "update_time",
+            "from admin",
+            "where admin_email = #{admin_email,jdbcType=VARCHAR}"
+    })
+    @Results({
+            @Result(column="admin_id", property="adminId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="admin_username", property="adminUsername", jdbcType=JdbcType.VARCHAR),
+            @Result(column="admin_name", property="adminName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="admin_password", property="adminPassword", jdbcType=JdbcType.VARCHAR),
+            @Result(column="admin_email", property="adminEmail", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
+    })
+    Admin getAdminByEmail(String admin_email);
+
+    @Select({
+            "select",
+            "admin_id, admin_username, admin_name, admin_password, admin_email, create_time, ",
+            "update_time",
+            "from admin",
+            "where admin_username = #{admin_username,jdbcType=VARCHAR}"
+    })
+    @Results({
+            @Result(column="admin_id", property="adminId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="admin_username", property="adminUsername", jdbcType=JdbcType.VARCHAR),
+            @Result(column="admin_name", property="adminName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="admin_password", property="adminPassword", jdbcType=JdbcType.VARCHAR),
+            @Result(column="admin_email", property="adminEmail", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
+    })
+    Admin getAdminByUserName(String admin_username);
 }

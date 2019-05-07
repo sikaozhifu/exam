@@ -45,6 +45,15 @@ public class PageController {
         return "admin_login";
     }
 
+    @RequestMapping(value = "/rePassword")
+    public String toEmailRePassword() {
+        return "email_rePassword";
+    }
+    @RequestMapping(value = "/adminRePassword")
+    public String toAdminEmailRePassword() {
+        return "admin_email_rePassword";
+    }
+
     @RequestMapping(value = "/adminForgot")
     public String toAdminForgot() {
         return "admin_forgot";

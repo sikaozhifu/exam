@@ -1,5 +1,6 @@
 package com.school.controller;
 
+import cn.hutool.extra.mail.MailUtil;
 import com.school.entity.Admin;
 import com.school.entity.Role;
 import com.school.entity.User;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -129,5 +131,92 @@ public class CommonController {
             session.removeAttribute("admin");
         }
         return "redirect:/page/login";
+    }
+
+    @RequestMapping(value = "/sendEmail",method = RequestMethod.POST)
+    public String userSendEmail(@RequestParam("email")String email, HttpServletRequest request){
+
+        User user = userService.getUserByEmail(email);
+        if (user == null){
+            request.setAttribute("userSendEmail","邮箱不存在，请重新输入邮箱！");
+        }else {
+            String subject = "用户重置密码";
+            String resetPassHref = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+ "/page/rePassword?username=" + user.getUsername();
+            String emailContent = "请勿回复本邮件.点击下面的链接,重设密码<br/><a href="
+                    + resetPassHref + " target='_BLANK'>" + resetPassHref
+                    + "</a>  或者    <a href=" + resetPassHref
+                    + " target='_BLANK'>点击我重新设置密码</a>"
+                    + "<br/>tips:请注意保存密码,防止泄露,感谢您对轻考试的支持,祝您生活愉快";
+            MailUtil.send(email, subject, emailContent, true);
+            request.setAttribute("userSendEmail", "重置密码邮件已经发送，请登陆邮箱进行重置！");
+        }
+        return "forward:/page/forgot";
+    }
+
+    //用户修改密码
+    @RequestMapping(value = "/userRePassword",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> userRePassword(
+            @RequestParam("username")String username,
+            @RequestParam("password")String password){
+        Map<String,Object> map = new HashMap<>();
+        User user = userService.getUserByUserName(username);
+        if (user == null){
+            map.put("userRePassword", "修改密码失败！请联系管理员...");
+            return map;
+        }
+        user.setPassword(MD5Utils.md5(password));
+        Integer result = userService.updateUser(user);
+        if (result == 1){
+            map.put("userRePassword", "修改密码成功！");
+        }else {
+            map.put("userRePassword", "修改密码失败！请联系管理员...");
+        }
+        return map;
+
+    }
+
+
+    @RequestMapping(value = "/adminSendEmail",method = RequestMethod.POST)
+    public String adminSendEmail(@RequestParam("email")String email, HttpServletRequest request){
+
+        Admin admin = adminService.getAdminByEmail(email);
+        if (admin == null){
+            request.setAttribute("adminSendEmail","邮箱不存在，请重新输入邮箱！");
+        }else {
+            String subject = "用户重置密码";
+            String resetPassHref = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+ "/page/adminRePassword?username=" + admin.getAdminUsername();
+            String emailContent = "请勿回复本邮件.点击下面的链接,重设密码<br/><a href="
+                    + resetPassHref + " target='_BLANK'>" + resetPassHref
+                    + "</a>  或者    <a href=" + resetPassHref
+                    + " target='_BLANK'>点击我重新设置密码</a>"
+                    + "<br/>tips:请注意保存密码,防止泄露,感谢您对轻考试的支持,祝您生活愉快";
+            MailUtil.send(email, subject, emailContent, true);
+            request.setAttribute("adminSendEmail", "重置密码邮件已经发送，请登陆邮箱进行重置！");
+        }
+        return "forward:/page/adminForgot";
+    }
+
+    //管理员修改密码
+    @RequestMapping(value = "/adminRePassword",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> adminRePassword(
+            @RequestParam("username")String username,
+            @RequestParam("password")String password){
+        Map<String,Object> map = new HashMap<>();
+        Admin admin = adminService.getAdminByUserName(username);
+        if (admin == null){
+            map.put("adminRePassword", "修改密码失败！请联系管理员...");
+            return map;
+        }
+        admin.setAdminPassword(MD5Utils.md5(password));
+        Integer result = adminService.updateAdmin(admin);
+        if (result == 1){
+            map.put("adminRePassword", "修改密码成功！");
+        }else {
+            map.put("adminRePassword", "修改密码失败！请联系管理员...");
+        }
+        return map;
+
     }
 }

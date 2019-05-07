@@ -114,6 +114,11 @@ public class UserController {
             System.out.println("学号已注册！");
             return "redirect:/page/register";
         }
+        User userByEmail = userService.getUserByEmail(email);
+        if (userByEmail != null){
+            System.out.println("邮箱已注册！");
+            return "redirect:/page/register";
+        }
         User user = new User();
         user.setUsername(username);
         user.setName(name);
@@ -159,6 +164,12 @@ public class UserController {
                 return map;
             }else {
                 //修改了学号并且学号没有被注册
+                User userByEmail = userService.getUserByEmail(user.getEmail());
+                if (userByEmail != null){
+                    //邮箱已经注册
+                    map.put("update_user", "邮箱已经注册！");
+                    return map;
+                }
                 Integer result = userService.updateUser(user);
                 if (result == 1){
                     map.put("update_user", "修改成功！");
@@ -181,6 +192,11 @@ public class UserController {
         User exist = userService.getUserByUserName(username);
         if (exist != null) {
             map.put("addUser", "学号已注册！");
+            return map;
+        }
+        User userByEmail = userService.getUserByEmail(email);
+        if (userByEmail != null){
+            map.put("addUser", "邮箱已注册！");
             return map;
         }
         User user = new User();

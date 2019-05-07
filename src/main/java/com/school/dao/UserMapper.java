@@ -251,4 +251,22 @@ public interface UserMapper {
             @Result(column="updatetime", property="updatetime", jdbcType=JdbcType.TIMESTAMP)
     })
     List<User> getUserListByRole(Integer role);
+
+    @Select({
+            "select",
+            "id, username, name, password, email, role, createtime, updatetime",
+            "from user",
+            "where email = #{email,jdbcType=VARCHAR}"
+    })
+    @Results({
+            @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="username", property="username", jdbcType=JdbcType.VARCHAR),
+            @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
+            @Result(column="password", property="password", jdbcType=JdbcType.VARCHAR),
+            @Result(column="email", property="email", jdbcType=JdbcType.VARCHAR),
+            @Result(column="role", property="role", jdbcType=JdbcType.INTEGER),
+            @Result(column="createtime", property="createtime", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="updatetime", property="updatetime", jdbcType=JdbcType.TIMESTAMP)
+    })
+    User getUserByEmail(@Param("email") String email);
 }

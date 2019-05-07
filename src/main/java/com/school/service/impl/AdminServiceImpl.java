@@ -25,4 +25,14 @@ public class AdminServiceImpl implements AdminService {
     public Admin getAdminById(Integer adminId) {
         return adminMapper.selectByPrimaryKey(adminId);
     }
+
+    @Override
+    public Admin getAdminByEmail(String email) {
+        return adminMapper.getAdminByEmail(email);
+    }
+
+    @Override
+    public Admin getAdminByUserName(String username) {
+        return adminMapper.getAdminByUserName(username);
+    }
 }

@@ -12,4 +12,8 @@ public interface AdminService {
 
     //根据id获取admin
     Admin getAdminById(Integer adminId);
+
+    Admin getAdminByEmail(String email);
+
+    Admin getAdminByUserName(String username);
 }

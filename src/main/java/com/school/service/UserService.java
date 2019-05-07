@@ -25,4 +25,6 @@ public interface UserService {
 
     //根据条件查询student
     PageInfo<User> getAllStudentByCondition(Integer currentPage, Integer pageSize,String condition,String info);
+
+    User getUserByEmail(String email);
 }
